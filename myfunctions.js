@@ -636,7 +636,7 @@ function exportGame() {
 
 
 function importGame() {
-    var savegame = JSON.parse(window.prompt("Import Code: "));
+    var savegame = JSON.parse(window.prompt("导入存档: "));
 	if(savegame !== null)
 	{
 		Object.assign(gameData, gameDataBase)
@@ -660,7 +660,7 @@ function autosave() {
 }
 
 function resetGame() {
-    if (window.prompt("Are you sure? Type 'yes' if you are") == "yes") {
+    if (window.prompt("你确定吗? 如果你确定，请输入 'yes'") == "yes") {
         Object.assign(gameData, gameDataBase)
         localStorage.setItem('mathAdventureSave', JSON.stringify(gameData))
         location.reload();

@@ -535,7 +535,7 @@ function hireANutritionist() {
 }
 
 function travelToNextVillage() {
-    if (window.prompt("Are you sure? Type 'yes' if you are") == "yes") {
+    if (window.prompt("你确定吗？如果你确定，请输入 'yes'") == "yes") {
 		
 		if (gameData.increaseJuicePricePermanance == 1) {
 			saveBeforeWipe('juicePricePrice')
@@ -675,7 +675,7 @@ function storageJuicersUnlock() {
 	
 	if(gameData.confirmStorage)
 	{
-		if (window.prompt("Are you sure? Type 'yes' if you are") == "yes")
+		if (window.prompt("你确定吗？如果你确定，请输入 'yes'") == "yes")
 		{	
 			if (gameData.coins >= 100) {
 				gameData.coins -= 100
@@ -698,7 +698,7 @@ function storageJuicersUnlock() {
 function storagePeelersUnlock() {
 	if(gameData.confirmStorage)
 	{
-		if (window.prompt("Are you sure? Type 'yes' if you are") == "yes")
+		if (window.prompt("你确定吗？如果你确定，请输入 'yes'") == "yes")
 		{	
 			if (gameData.coins >= 100) {
 				gameData.coins -= 100
