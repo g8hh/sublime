@@ -1,0 +1,1338 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
+    <meta charset="utf-8">
+    <title>酸橙经营者 - Lime Clicker</title>
+
+    <style>
+	
+		.stat
+		{
+			 font-family: pixelated;  font-size: 20px;
+		}
+		.ar 
+		{
+			float: right;
+		}
+		
+        body {
+            -webkit-user-select: none;
+            -ms-user-select: none;
+            user-select: none;
+        }
+
+        @font-face {
+            font-family: pixelated;
+            src: url('redalertinet.ttf');
+        }
+
+        p {
+            font-family: pixelated;
+            font-size: 20px;
+        }
+
+        button {
+            font-family: pixelated;
+            font-size: 20px;
+        }
+
+        .column {
+            float: left;
+            padding: 10px;
+            height: 300px;
+            width: 100px;
+        }
+
+        .skillProgress {
+            width: 350px;
+            height: 30px;
+        }
+
+        .skillBar {
+            width: 0%;
+            height: 30px;
+            line-height: 30px;
+            font-family: pixelated;
+            font-size: 20px;
+        }
+
+        .verticalProgress {
+            width: 350px;
+            height: 300px;
+            margin: auto;
+            position: relative;
+        }
+
+        .verticalBar {
+            height: 0%;
+            width: 350px;
+            bottom: 0px;
+            right: 0px;
+            position: absolute;
+            font-family: pixelated;
+            font-size: 20px;
+        }
+    </style>
+</head>
+
+<body id="mainBody" , onload="gameStart()">
+<script src="chs.js?202106041511"></script>
+<script src="//g8hh.com/zh/core.js"></script>
+	<div style="float: left;padding: 10px;width: 100px;" id="backgroundForValues">
+		<br>
+		<div class="stat" id="textForLimesDiv"       style="color:#080;display:block ;">Limes       </div><div class="stat ar" id="textForLimes"       style="color:#0F0; display:block; ">0</div><p id="textForLimesP"       style="display:block; "> </p><br  id="textForLimesBr"        style="display:block; "/>
+		<div id="rottenLimesHide">
+			<div class="stat" id="textForRottenLimesDiv" style="color:#030;display:none  ;">Rotten Limes</div><div class="stat ar" id="textForRottenLimes" style="color:#060; display:none ; ">0</div><p id="textForRottenLimesP" style="display:none ; "> </p><br  id="textForRottenLimesBr"  style="display:none ; "/>
+		</div>
+		<div class="stat" id="textForPeeledLimesDiv" style="color:#282;display:none  ;">Peeled Limes </div><div class="stat ar" id="textForPeeledLimes"  style="color:#5F5; display:none ; ">0</div><p id="textForPeeledLimesP"  style="display:none ; "> </p><br  id="textForPeeledLimesBr"   style="display:none ; "/>
+		<div class="stat" id="textForJuiceDiv"       style="color:#484;display:none  ;">Juice        </div><div class="stat ar" id="textForJuice"        style="color:#9F9; display:none ; ">0</div><p id="textForJuiceP"        style="display:none ; "> </p><br  id="textForJuiceBr"         style="display:none ; "/>
+		<div class="stat" id="textForCoinsDiv"       style="color:#880;display:none  ;">Coins        </div><div class="stat ar" id="textForCoins"        style="color:#FF0; display:none ; ">0</div><p id="textForCoinsP"        style="display:none ; "> </p><br  id="textForCoinsBr"         style="display:none ; "/>
+		<div class="stat" id="textForMegaCoinsDiv"   style="color:#800;display:none  ;">Mega Coins   </div><div class="stat ar" id="textForMegaCoins"    style="color:#F00; display:none ; ">0</div><p id="textForMegaCoinsP"    style="display:none ; "> </p><br  id="textForMegaCoinsBr"     style="display:none ; "/>
+		<div class="stat" id="textForAlphaCoinsDiv"  style="color:#880;display:none  ;">Alpha Coins  </div><div class="stat ar" id="textForAlphaCoins"   style="color:#FF0; display:none ; ">0</div><p id="textForAlphaCoinsP"   style="display:none ; "> </p><br  id="textForAlphaCoinsBr"    style="display:none ; "/>
+
+	</div>	
+
+    <div class="row" style="background-color:#bfbfbf;padding-left: 130px;display:block;height:60px;">
+        <p id="newInfo" style="display:inline-block;margin-bottom:none;">You are in a lime forest.</p>
+        <div style="width: 150px;height:50px;float:right;">
+            <button id="optionsButton" style="background:lightgray;width: 150px;height:30px;background-color:#d1d9d9;" , onclick="tab('options')">Options</button>
+            <button id="achievementsButton" , style="background-color:#d1d9d9;display:none;width: 150px;height:30px;float:right;" , onclick="tab('achievements')">Achievements</button>
+        </div>
+
+    </div>
+    <div style="display:block;float: left;margin-left:5px;margin-top:5px;">
+        <button class="basicButtonSize" id="pickUpLimes" style="width:120px" onclick="getLimesButton()">Collect Limes</button>
+        <button class="basicButtonSize" id="lookAroundButton" onclick="lookAround()">Look Around</button>
+        <button class="specialButton" id="stopActionsButton" style="width:120px" onclick="stopActions()">Stop Actions</button>
+
+    </div>
+    <br>
+    <br>
+    <br>
+    <div id="navigateButtons" class="navigateButtons" , style="visibility: hidden;     float: left;
+     padding: 10px;
+	 width: 120px;
+     .row:after {
+     content: "";
+     display: table;
+     clear: both;">
+        <button id="marketButton"           style="width: 120px;" ,              onclick="tab('market')">Market</button>
+        <button id="skillsButton"           style="width: 120px;" ,              onclick="tab('skills')">Skills</button>
+        <button id="inventoryButton"        style="width: 120px;display:none;" , onclick="tab('inventory')">Inventory</button>
+        <button id="forestButton"           style="display:none;width: 120px;" , onclick="tab('forest')">Forest</button>
+        <button id="companyButton"          style="display:none;width: 120px;" , onclick="tab('company')">Lime Inc.</button>
+        <button id="megaCoinUpgradesButton" style="display:none;width: 120px;" , onclick="tab('megaCoinUpgrades')">Upgrades</button>
+        <button id="tasksButton"            style="display:none;width: 120px;" , onclick="tab('tasks')">Tasks</button>
+        <button id="scienceButton"          style="display:none;width: 120px;" , onclick="tab('science')">Science</button>
+
+
+
+
+    </div>
+
+
+    <div id="options" class="basicDiv">
+
+        <p class="basicText">Sublime by Becky</p>
+        <p class="basicText">Alpha Version</p>
+
+        <button class="specialButton" onclick="exportGame()">Export Game</button>
+        <button class="specialButton" onclick="importGame()">Import Game</button><br>
+
+        <button class="basicButtonSize" onclick="resetGame()" style="background-color:#FF999A">Reset Game</button><br>
+		
+        <button class="specialButton" onclick="changeZoomSize()">Change zoom size</button><br>
+
+        <button class="basicButton" id="aestheticButton" onclick="switchValue('aesthetic')" style="display:none">Aesthetic: Modern</button>
+        <button class="specialButton" id="barPercentButton" onclick="switchValue('showBarPercent')">Bar Percent Shown</button>
+        <button class="specialButton" id="hideCompletedSkillsButton" onclick="switchValue('hideCompletedSkills')">Completed Skills Shown</button><br>
+        <button class="specialButton" id="hideMaxedPurchasesButton" onclick="switchValue('hideMaxedPurchases')">Maxed Purchases Shown</button>
+        <button class="specialButton" id="desktopModeButton" onclick="switchValue('desktopMode')">In Desktop Mode</button><br>
+        <button class="specialButton" id="diseaseTileSizeButton" onclick="switchValue('diseaseTileSize')">Disease Tiles Small</button>
+        <button class="specialButton" id="diseaseTileSymbolsButton" onclick="switchValue('diseaseTileSymbols')">Disease Tiles No Symbols</button>
+        <button class="specialButton" id="hideRottenLimesButton" onclick="switchValue('hideRottenLimes')">Hide Rotten Limes</button>
+        <button class="specialButton" id="confirmStorageButton" onclick="switchValue('confirmStorage')">Don't Confirm x5 Storage</button>
+
+
+
+
+
+
+
+
+        <p class="basicText" id="exportCode" , style="background-color:#bfbfbf;width:300px;word-wrap: break-word;-webkit-user-select: all;-ms-user-select: all;user-select: all;">Export Code</p>
+    </div>
+
+    <div id="market" style="padding:0px;margin:0px;">
+
+        <div class="basicDiv" id="marketMainButtonsDiv" style="display:none;width:400px;">
+            <button class="basicButtonSize" id="marketMainButton"  onclick="tabMarket('marketMain')">Main Square</button>
+            <button class="basicButtonSize" id="marketStoreButton" , style="display:none;" , onclick="tabMarket('marketStore')">General Store</button>
+            <button class="basicButtonSize" id="hiringAreaButton" , style="display:none;" , onclick="tabMarket('hiringArea')">Hiring Area</button>
+            <button class="basicButtonSize" id="travelButton" , style="display:none;" , onclick="tabMarket('travel')">Travel</button>
+            <button class="basicButtonSize" id="tradeButton" onclick="tabMarket('trade')">Trade</button>
+
+        </div>
+
+        <div id="marketMain">
+            <div style="display:inline-block;">
+
+
+                <div class="basicDiv" id="sellYourLimesDiv" style="display:none;">
+                    <button class="basicButtonSize" id="sellYourLimesButton" onclick="universalBuy('coins', 50, 'limes')">Sell Your Limes</button>
+                    <p class="basicText" , id="sellYourLimesAmount">You Need 50 Limes</p>
+                    <p class="basicText" , id="sellYourLimesReward">You Will Be Rewarded 1 Coin</p>
+                </div>
+				
+				<div id="nourishment" style="display:none;">
+					<div class="basicDiv" id="collectingUpgrade">
+
+						<button class="specialButton" , id="collectingUpgradeButton" onclick="collectingUpgrade()">Nourishment</button>
+
+						<p class="basicText">Increase auto collect duration</p>
+						<p class="basicText" id="textForNourishmentPrice">You Need: 10 Limes</p>
+
+
+					</div>
+                </div>
+
+                <div class="basicDiv" , id="buyAForkDiv">
+                    <button class="specialButton" onclick="basicBuy('fork', 1)">Buy A Fork</button>
+                    <p class="basicText">Increase eating speed</p>
+                    <p class="basicText">Price: 1 Coin</p>
+                </div>
+				
+                <div class="basicDiv" , id="buyShoesDiv">
+                    <button class="specialButton" onclick="basicBuy('shoes', 1)">Buy Shoes</button>
+                    <p class="basicText">Double auto collect rate</p>
+                    <p class="basicText">Price: 1 Coin</p>
+                </div>
+				
+                <div class="basicDiv" , id="buySkillToggler">
+                    <button class="specialButton" onclick="basicBuy('multitasking', 5)">Multitasking</button>
+                    <p class="basicText">Allow the toggling of skills</p>
+                    <p class="basicText">Price: 5 Coins</p>
+                </div>
+				
+					
+                <div class="basicDiv" , id="buyAJuicerDiv" style="display:none;">
+                    <button class="basicButtonSize" , id="buyAJuicerButton" onclick="bulkableBuyMax('juicers', 1)">Buy A Juicer</button>
+                    <button class="basicButtonSize" id="juicersBulkButton" , style="width:80px;" onclick="toggle('juicersBulkToggle')">x10</button>
+                    <p class="basicText" id="buyAJuicerPrice">Price: 1 Coin</p>
+                </div>
+                <div class="basicDiv" , id="buyAMapDiv" style="display:none;">
+                    <button class="specialButton" onclick="buyAMap()">Buy A Map Of The Town</button>
+                    <p class="basicText">Price: 20 Coins</p>
+                </div>
+                <div class="basicDiv" , id="buyABasketDiv" style="display:none;">
+                    <button class="basicButtonSize" id="buyABasketButton" onclick="buyABasket()">Buy A Basket</button>
+                    <button class="basicButtonSize" id="basketsBulkButton" , style="width:80px;" onclick="toggle('basketsBulkToggle')">x10</button>
+                    <p class="basicText">Price: 2 Coins</p>
+                </div>
+                <div class="basicDiv juiceMarket" , id="juiceMarket" , style="display:none;">
+                    <button class="basicButtonSizeRound" id="sellYourJuiceButton" , onclick="pickCurrentTask('sellYourJuice')">Sell Juice</button>
+                    <button class="pinButton" onclick="pin('sellYourJuiceButton')" style="display:none">+</button>
+
+                    <p class="basicText" , id="sellYourJuicePrice">You Need 2 Coins For Delivery</p>
+                    <p class="basicText" , id="sellYourJuiceAmount">You Need 1 Juice</p>
+                    <p class="basicText" , id="sellYourJuiceReward">You Will Be Rewarded 1 Coin</p>
+
+                    <button class="basicButtonSize" id="decreaseJuiceSoldButton" onclick="decreaseJuiceSold()" , style="width:120px;">Decrease Juice Sold</button>
+                    <button class="basicButtonSize" id="increaseJuiceSoldButton" onclick="increaseJuiceSold()" , style="width:120px;">Increase Juice Sold</button>
+
+                    <button class="basicButtonSize" id="sellMaxJuiceButton" onclick="sellMaxJuice()" , style="width:120px;">Sell Max Juice</button>
+
+                    <br>
+                    <button class="basicButtonSize" id="deliveryToggleStandardButton" , style="width:120px;" , onclick="deliveryToggleStandard()">Standard Delivery</button>
+                    <button class="basicButtonSize" id="deliveryToggleExpressButton" , style="width:120px;" , onclick="deliveryToggleExpress()">Express Delivery</button>
+
+                    <br><br>
+
+                    <div class="skillProgress" , id="deliveryProgress" , style="margin:auto;">
+                        <div class="skillBar" , id="deliveryBar">0%</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+
+        <div id="marketStore" , style="display:none;width:300px;">
+
+
+            <div class="basicDiv" id="storeTypesButtonsDiv" style="display:none;">
+                <button class="basicButtonSize" id="plebianButton" , onclick="tabStore('plebian')">Plebian Area</button>
+                <button class="basicButtonSize" id="patricianButton" , onclick="tabStore('patrician')">Patrician Area</button>
+            </div>
+
+            <div id="plebian">
+
+                <div class="basicDiv" , id="increaseJuicePrice">
+                    <button class="basicButtonSize" id="increaseJuicePriceButton" onclick="increaseJuicePrice()">Increase Juice Price</button>
+                    <button class="basicButtonSize" id="increaseJuicePricex10Button" , style="width:60px;" onclick="toggle('increaseJuicePricex10')">x10</button>
+                    <p class="basicText">'Squeeze' more money from your customers</p>
+                    <p class="basicText">The more you raise the price, the more it takes to convince the customer to still buy</p>
+                    <p class="basicText">+1% Profit</p>
+
+
+                    <p class="basicText" id="textForJuicePricePrice">Price: 1 Coins</p>
+                </div>
+				
+                <div class="basicDiv" , id="pinUnlockDiv">
+                    <button class="specialButton" id="pinUnlock" onclick="basicBuy('pinUnlock', 50)">Unlock Pinning Actions</button>
+                    <p class="basicText">Price: 50 Coins</p>
+                </div>
+
+                <div id="buyKnifeDiv" class="basicDiv">
+                    <button class="specialButton" , id="knifeButton" , onclick="basicBuy('knife', 10)">Buy A Knife</button>
+                    <p class="basicText" , id="knifeInfo">Price: 10 Coins</p>
+                </div>
+
+                <div id="tomeDiv" class="basicDiv">
+                    <button class="specialButton" onclick="buyTome()">Buy A Tome</button>
+                    <p class="basicText">Tomes can teach you new skills!</p>
+                    <p class="basicText">Price: 10 Coins</p>
+                </div>
+
+                <div id="buyAPeelerDiv" class="basicDiv" style="display:none;">
+                    <button class="basicButtonSize" , id="buyAPeelerButton" onclick="bulkableBuyMax('peelers', 2)">Buy A Peeler</button>
+                    <button class="basicButtonSize" id="peelersBulkButton" , style="width:80px;" onclick="toggle('peelersBulkToggle')">x10</button>
+                    <p class="basicText">The knife isnt gonna 'cut' it</p>
+                    <p class="basicText">Price: 2 Coins</p>
+                </div>
+
+                <div id="sharperPeelerDiv" class="basicDiv">
+                    <button class="specialButton" , id="sharperPeelerButton" onclick="basicBuy('sharperPeelers', 500)">Sharper Peelers</button>
+                    <p class="basicText">Peelers can slice faster!</p>
+                    <p class="basicText">Price: 500 Coins</p>
+                </div>
+
+                <div class="basicDiv" , id="buyAnotherMapDiv">
+                    <button class="specialButton" onclick="buyAMap()">Buy Another Map</button>
+                    <p class="basicText">There must be more to this town...</p>
+                    <p class="basicText">Price: 200 Coins</p>
+                </div>
+
+                <div class="basicDiv" , id="bulkBuyUnlockDiv">
+                    <button class="specialButton" onclick="basicBuy('bulkBuyUnlock', 500)">Bulk Buying</button>
+                    <p class="basicText">Pay the entry fee to become a bulk buyer</p>
+                    <p class="basicText">Price: 500 Coins</p>
+                </div>
+				
+                <div class="basicDiv" , id="bulkBuyUnlock2Div" style="display:none;">
+                    <button class="specialButton" onclick="basicBuy('bulkBuyUnlock2', 500)" >Extreme Bulk Buying</button>
+                    <p class="basicText">Normal bulk buying isn't enough!</p>
+                    <p class="basicText">Price: 500 Coins</p>
+                </div>
+
+                <div class="basicDiv" , id="storageUnlockDiv">
+                    <button class="specialButton" onclick="basicBuy('storageUnlock', 200)">Bulk Storage</button>
+                    <p class="basicText">Purchase a warehouse for your tools</p>
+                    <p class="basicText">Price: 200 Coins</p>
+                </div>
+
+                <div id="storageDiv">
+                    <div class="basicDiv" , id="storageJuicersDiv">
+                        <button class="specialButton" onclick="storageJuicersUnlock()">Bulk Juicers Storage</button>
+                        <p class="basicText">Store 5x as many juicers</p>
+                        <p class="basicText">Price: 100 Coins</p>
+                    </div>
+
+                    <div class="basicDiv" , id="storagePeelersDiv">
+                        <button class="specialButton" onclick="storagePeelersUnlock()">Bulk Peelers Storage</button>
+                        <p class="basicText">Store 5x as many peelers</p>
+                        <p class="basicText">Price: 100 Coins</p>
+                    </div>
+                </div>
+
+                <div class="basicDiv" , id="fasterTransportDiv">
+                    <button class="specialButton" onclick="basicBuy('fasterTransport', 2000)">Better Transport</button>
+                    <p class="basicText">Add a new delivery type</p>
+                    <p class="basicText">Price: 2,000 Coins</p>
+                </div>
+
+
+                <div class="basicDiv" , id="buyADeliveryManager">
+                    <button class="specialButton" onclick="basicBuy('deliveryManager', 100)">Buy A Delivery Manager</button>
+                    <p class="basicText">Option to deliver maximum juice</p>
+                    <p class="basicText">Price: 100 Coins</p>
+
+
+                </div>
+
+                <div class="basicDiv" , id="buyThirdMapDiv">
+                    <button class="specialButton" onclick="buyAMap()">Buy A Bigger Map</button>
+                    <p class="basicText">There must be more *than* this town...</p>
+                    <p class="basicText">Price: 2,000 Coins</p>
+                </div>
+
+
+                <div class="basicDiv" , id="buyFourthMapDiv">
+                    <button class="specialButton" onclick="buyAMap()">Buy A Giant Map</button>
+                    <p class="basicText">Find places only the rich can go</p>
+                    <p class="basicText">Price: 200,000 Coins</p>
+                </div>
+
+
+            </div>
+
+            <div id="patrician">
+
+                <div id="buyARobe" class="basicDiv">
+
+                    <button class="specialButton" , id="robeButton" , onclick="buyARobe()">Buy A Robe</button>
+                    <p class="basicText">Guaranteed to make you look rich!</p>
+                    <p class="basicText">Respect +50</p>
+                    <p class="basicText">Price: 100,000 Coins</p>
+
+                </div>
+				
+                <div id="increaseJuicePricePermanance" class="basicDiv">
+
+                    <button class="basicButtonSize", style="background-color:#FF999A;" onclick="basicBuy('increaseJuicePricePermanance', 5e5)">Unlock Permanance</button>
+                    <p class="basicText">Make 'Increase juice price' stay after travelling!</p>
+                    <p class="basicText">Price: 500,000 Coins</p>
+
+                </div>
+
+                <div id="unlockDiseaseAreaSwamp" class="basicDiv">
+
+                    <button class="specialButton" , id="unlockDiseaseAreaSwampButton" , onclick="basicBuy('unlockDiseaseAreaSwamp', 1e5)">Unlock Swamp Area</button>
+                    <p class="basicText">The civilians in the swamp have lime disease too!</p>
+                    <p class="basicText">Price: 100,000 Coins</p>
+
+                </div>
+
+                <div class="basicDiv" , id="unlockBenevolence">
+                    <button class="specialButtonTravel" onclick="basicBuy('unlockBenevolence', 5e5)">Buy a conscience</button>
+                    <p class="basicText">Think about those less fortuanate than you - unlocks Benevolence.</p>
+                    <p class="basicText">Price: 500,000 Coins</p>
+                </div>
+
+            </div>
+
+
+
+        </div>
+
+        <div id="hiringArea" , style="display:none;">
+            <div style="display:inline-block;width:380px;">
+                <div class="basicDiv">
+				
+					<div id="hireToggleButtons">
+					
+						<button class="basicButtonSize" id="hireEmployeeToggleButton" onclick="typeToHire(0)">Basic Employees</button>
+						<button class="basicButtonSize" id="hireBrokerToggleButton" onclick="typeToHire(1)">Currency Brokers</button>
+					
+					</div>
+				
+                    <button class="specialButton" , id="advertiseButton" , style="display:block" onclick="advertise()">Advertise your lime business</button>
+
+					<div id="autoAdvertiseBrokerDiv">
+					
+					    <button class="basicButtonSize" id="autoAdvertiseBrokerButton" style="display:inline-block" onclick="switchValue('autoAdvertiseBroker')">Auto</button>
+						<p class="basicText" style="display:block;">Rule:</p>
+						<p class="basicText" id="textForAdvertisingBrokerRule">Auto advertise unless speed is under 30 seconds.</p>
+						<button class="specialButton" onclick="decreaseValue('autoAdvertiseSpeedValue')" style="width:168px">Decrease</button>
+						<button class="specialButton" onclick="increaseValue('autoAdvertiseSpeedValue')" style="width:168px">Increase</button>
+
+					<div id="smarterAdvertisingBrokerRule">
+						<p class="basicText" id="textForSmarterAdvertisingBrokerRule">Auto advertise unless speed is under 30 seconds.</p>
+						<button class="specialButton" onclick="decreaseValue('autoAdvertiseAmountValue')" style="width:168px">Decrease</button>
+						<button class="specialButton" onclick="increaseValue('autoAdvertiseAmountValue')" style="width:168px">Increase</button>
+					</div>
+
+					
+					</div>
+					
+
+
+					<div class="skillProgress" id="advertiseProgress">
+                        <div class="skillBar" , id="advertiseBar">0%</div>
+                    </div>
+
+                    <p class="basicText" id="advertisePrice" , style="display:block;">Price: 10 Coins</p>
+                    <button id="application" , style="display:block;width:300px;margin:auto;" , onclick="hireApplicant()">Pin applications here</button>
+                    <p class="basicText" id="applicationInfo" , style="display:block;">Click the application to accept.</p>
+                    <p class="basicText" id="textForCurrentEmployees" , style="display:block;">Current Employees: 0/1</p>
+                </div>
+				
+				
+                <div id="autoBrokerAdvertiser" class="basicDiv">
+
+                    <button class="specialButton" onclick="buyAdvertisingManager()">Advertising Manager</button>
+                    <p class="basicText">Take on a manager to help you advertise for brokers</p>
+                    <p class="basicText">Price: 10 Alpha Coins</p>
+
+                </div>
+				
+                <div id="smarterAutoBrokerAdvertiser" class="basicDiv">
+
+                    <button class="specialButton" onclick="universalBuy('smarterAdvertisingManagerBroker', 50 , 'alphaCoins')">Smarter Advertising Manager</button>
+                    <p class="basicText">Add a new rule for your advertising manager</p>
+                    <p class="basicText">Price: 50 Alpha Coins</p>
+
+                </div>
+
+
+                <div class="basicDiv" id="researchBetterAdvertising">
+                    <button class="specialButton" onclick="basicBuy('advertisingLevel1', 10)">Research Better Advertising Methods</button>
+                    <p class="basicText">Price: 10 Coins</p>
+                </div>
+
+                <div id="advertisingMethods" style="display:none">
+                    <div class="basicDiv" id="advertisingLeaflets">
+                        <button class="specialButton" onclick="basicBuy('advertisingLevel2', 10)">Hand Out Leaflets</button>
+                        <p class="basicText">Doubles advertising speed</p>
+                        <p class="basicText">Price: 10 Coins</p>
+                    </div>
+                    <div class="basicDiv" id="advertisingBillboard">
+                        <button class="specialButton" onclick="basicBuy('advertisingLevel3', 100)">Buy A Billboard</button>
+                        <p class="basicText">Triples advertising speed</p>
+                        <p class="basicText">Price: 100 Coins</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+        <div id="travel" , style="display:none;width:380px;">
+            <div id="travellingArea">
+                <div class="basicDiv">
+
+                    <p class="basicText" style="display:block;">Travelling</p>
+                    <p class="basicText" style="display:block;">Leave your items behind in search of a better town</p>
+                    <p class="basicText" style="display:block;">All purchases with red buttons stay with you after travels</p>
+
+                </div>
+				
+                <div class="basicDiv">
+					<div id="alphaCoinToMegaCoinDiv">
+
+						<button class="specialButton" onclick="buyMegaCoinsWithAlphaCoins()">Transfer Alpha Coins</button>
+						<p class="basicText" style="display:block;">10 Alpha Coins -> 1 Mega Coin</p>
+
+					</div>
+                    <button class="specialButton" onclick="buyMegaCoins()">Transfer Coins</button>
+                    <p class="basicText" style="display:block;">10,000 Coins -> 5 Mega Coins in the bank</p>
+					
+                    <p class="basicText" style="display:block;">Transfer money to a bank account in the next town</p>
+                    <p class="basicText" style="display:block;">You can only spend this money once you arrive</p>
+                    <p class="basicText" id="buyMegaCoinsTimes" style="display:block;">Transfer times: 0 / 10</p>
+
+                    <p class="basicText" id="textForMegaCoinsInBank" style="display:block;">0 Mega Coins In Bank</p>
+
+                    <button class="specialButton" onclick="convertCoinsNow()">Convert Coins</button>
+                    <p class="basicText" style="display:block;">100,000 Coins -> 1 Mega Coin now</p>
+			        <p class="basicText" style="display:block;">Get instant access to mega coins</p>
+					<div class="skillProgress" id="convertCoinsNowProgress">
+						<div class="skillBar" , id="convertCoinsNowBar">0%</div>
+					</div>
+
+
+
+                </div>
+
+
+
+                <div class="basicDiv">
+
+                    <button class="specialButton" onclick="travelToNextVillage()">Travel To Next Village</button>
+
+                    <!--
+					 <p class="basicText" style="display:block;">Lime Demand: 200%</p>	
+					 <p class="basicText" style="display:block;">People are willing to pay double for limes</p>	
+					 <p class="basicText" style="display:block;">Distance: Very Close</p>	
+					 <p class="basicText" style="display:block;">Free to travel to, just walking</p>					 
+					 <p class="basicText" style="display:block;">Familiarity: None</p>		
+					 <p class="basicText" style="display:block;">You have to relearn skills</p>		
+
+
+					-->
+
+                </div>
+            </div>
+			
+            <div class="basicDiv" id="buyBigGloves">
+                <button class="specialButtonTravel" onclick="universalBuy('bigGloves', 5, 'megaCoins')">Buy Big Gloves</button>
+                <p class="basicText" style="display:block;">Helps you pick up double limes!</p>
+                <p class="basicText" style="display:block;">Price: 5 Mega Coins</p>
+            </div>
+
+            <div class="basicDiv" id="hireANutritionist">
+                <button class="specialButtonTravel" onclick="universalBuy('nutritionists', 5, 'megaCoins')">Hire A Nutritionist</button>
+                <p class="basicText" style="display:block;">Get double the nutrition from eating</p>
+                <p class="basicText" style="display:block;">Price: 5 Mega Coins</p>
+            </div>
+
+            <div class="basicDiv" id="increaseCreditScore">
+                <button class="specialButtonTravel" onclick="increaseCreditScore()">Increase Credit Score</button>
+                <p class="basicText" style="display:block;">Store up to 50 Mega Coins in your bank account</p>
+                <p class="basicText" style="display:block;">Price: 2 Mega Coins</p>
+            </div>
+			
+            <div class="basicDiv" id="juiceMarketing">
+                <button class="specialButtonTravel" onclick="basicBuyMegaCoins('nationalJuiceMarketing', 10)">National Juice Marketing</button>
+                <p class="basicText" style="display:block;">Convince the country that juice can be added to anything!</p>
+                <p class="basicText" style="display:block;">Doubles juice sale price.</p>
+                <p class="basicText" style="display:block;">Price: 10 Mega Coins</p>
+            </div>
+
+            <div class="basicDiv" id="betterTraining">
+                <button class="specialButtonTravel" onclick="buyBetterTraining()">Search For Specialised Workers</button>
+                <p class="basicText" style="display:block;">Increases maximum applicant speed by 100%</p>
+                <p class="basicText" style="display:block;">The search gets more difficult the more you find</p>
+
+                <p class="basicText" id="betterTrainingPrice" style="display:block;">Price: 1 Mega Coins</p>
+            </div>
+			
+            <div class="basicDiv" id="upgradeMoreStorage">
+                <button class="specialButtonTravel" onclick="upgradeMoreStorage()">Buy More Land</button>
+                <p class="basicText" style="display:block;">Increases maximum juicers by 500</p>
+                <p class="basicText" style="display:block;">Increases maximum peelers by 2,500</p>
+                <p class="basicText" id="upgradeMoreStoragePrice" style="display:block;"></p>
+            </div>
+			
+            <div class="basicDiv" id="earnBachelorFinance">
+                <button class="specialButtonTravel" onclick="basicBuyMegaCoins('bachelorsDegreeFinance', 20)">'Earn' A Bachelors Degree In Finance</button>
+                <p class="basicText" style="display:block;">Access the Currency Exchange market</p>
+                <p class="basicText" style="display:block;">Price: 20 Mega Coins</p>
+            </div>
+
+            <div class="basicDiv" id="increaseCreditScore2">
+                <button class="specialButtonTravel" onclick="increaseCreditScore2()">Increase Credit Score</button>
+                <p class="basicText" style="display:block;">Store up to 200 Mega Coins in your bank account</p>
+                <p class="basicText" style="display:block;">Price: 5 Mega Coins</p>
+            </div>
+			
+            <div class="basicDiv" id="increaseCreditScore3">
+                <button class="specialButtonTravel" onclick="increaseCreditScore3()">Increase Credit Score</button>
+                <p class="basicText" style="display:block;">Store up to 1,000 Mega Coins in your bank account</p>
+                <p class="basicText" style="display:block;">Price: 50 Mega Coins</p>
+            </div>
+			
+            <div class="basicDiv" id="buyABiggerWallet">
+                <button class="specialButtonTravel" onclick="buyABiggerWallet()">Buy A Bigger Wallet</button>
+                <p class="basicText" style="display:block;">Store up to +1,000,000 coins</p>
+                <p class="basicText" style="display:block;">Price: 50 Mega Coins</p>
+            </div>
+
+
+        </div>
+		
+		
+        <div id="trade" style="width:380px" >
+
+            <div class="basicDiv" id="earnAlphaCoins">
+                <button class="currencyButton" id="currencyConvertAlphaCoinsButton" style="display:block;background-color:#FDFF9A" onclick="coinsToAlphaStart()">Convert Coins to Alpha Coins</button>
+
+				<div class="skillProgress" id="coinsToAlphaProgress">
+					<div class="skillBar" , id="coinsToAlphaBar">0%</div>
+				</div>
+
+                <p class="basicText" id="alphaCoinExhangeRate" >Exchange Rate: 100 Coins -> 1 Alpha Coin</p>
+                <p class="basicText" id="alphaCoinTransactionFee" >Transfer Fee: 1,000 Coins</p>
+                <p class="basicText" id="alphaCoinTotalPrice" >Total Price: 1,100 Coins</p>
+
+
+
+            </div>
+			
+			
+			<div id="unlockCurrencyBrokers" class="basicDiv">
+
+				<button class="specialButton" onclick="universalBuy('unlockCurrencyBrokers', 5 , 'alphaCoins')">Unlock currency brokers</button>
+				<p class="basicText">This fee seems a little unfair!</p>
+				<p class="basicText">Unlock the ability to hire currency brokers in the Hiring Area.</p>
+
+				<p class="basicText">Price: 5 Alpha Coins</p>
+
+			</div>
+			
+			<div id="brokerApplicantUpgrades">
+				<div class="basicDiv">
+					<p class="basicTextYellow">Applicant Speed</p>
+					
+					<button class="specialButton" onclick="brokerApplicant('Speed', 'min')" style="width:168px">Decrease Minimum</button>
+					<button class="specialButton" onclick="brokerApplicant('Speed', 'max')" style="width:168px">Decrease Maximum</button>
+
+					<p class="basicText" id="textForBrokerApplicantSpeed">Currently 20 - 100 Seconds</p>
+					<p class="basicText" id="brokerApplicantSpeedPrice">Price: 1 Alpha Coins</p>
+				</div>
+				
+				<div class="basicDiv">
+					<p class="basicTextYellow">Applicant Fee</p>
+					<button class="specialButton" onclick="brokerApplicant('Fee', 'min100')" style="width:168px">Decrease Minimum</button>
+					<button class="specialButton" onclick="brokerApplicant('Fee', 'max100')" style="width:168px">Decrease Maximum</button>
+
+					<p class="basicText" id="textForBrokerApplicantFee">Currently 10,000 - 200,000 Coins</p>
+					<p class="basicText" id="brokerApplicantFeePrice">Price: 1 Alpha Coins</p>
+				</div>
+				
+				<div class="basicDiv">
+					<p class="basicTextYellow">Applicant Alpha Coin Transfer Amount</p>
+					<button class="specialButton" onclick="brokerApplicant('Amount', 'minup')" style="width:168px">Increase Minimum</button>
+					<button class="specialButton" onclick="brokerApplicant('Amount', 'maxup')" style="width:168px">Increase Maximum</button>
+
+					<p class="basicText" id="textForBrokerApplicantAmount">Currently 1 - 5 Alpha Coins</p>
+					<p class="basicText" id="brokerApplicantAmountPrice">Price: 1 Alpha Coins</p>
+				</div>
+				
+                <div id="autoCurrencyConversion" class="basicDiv">
+
+                    <button class="specialButton" onclick="universalBuy('autoCurrencyConversionBuy', 10, 'alphaCoins')">Auto Converter</button>
+                    <p class="basicText">Make currency conversion a togglable task</p>
+                    <p class="basicText">Price: 10 Alpha Coins</p>
+
+                </div>
+				
+				
+                <div id="tomeDiv2" class="basicDiv">
+                    <button class="specialButton" onclick="buyTome()">Buy A Tome</button>
+                    <p class="basicText">Tomes can teach you new skills!</p>
+                    <p class="basicText">Price: 100 Alpha Coins</p>
+                </div>
+				
+				
+
+			</div>
+
+			
+			
+        </div>
+
+    </div>
+
+    <div id="company" style="width:380px;" >
+		<div class="basicDiv" style="display:block">
+        <button class="specialButton" id="employeeButton" , style="width:250px;display:inline-block;" , onclick="tabEmployees('employeeOne')">John McLime</button>
+        <button class="basicButtonSize" id="employeeStatsInfoButton" , style="width:80px;" onclick="toggle('employeeStatsInfoToggle')">Stats</button>
+
+        <div id="employeeOne">
+
+            <p class="basicText employeeStatsInfo" id="skillsEmployee" , style="display:block;">Skills: Can collect limes.</p>
+            <p class="basicText employeeStatsInfo" id="speedEmployee" , style="display:block;">Speed: 20% Of What I'm Taught.</p>
+            <p class="basicText" id="currentSpeedEmployee" , style="display:block;">Current Speed: 0 limes per minute.</p>
+            <p class="basicText employeeStatsInfo" id="wageEmployee" , style="display:block;">Wage: 10 Coins Per Minute.</p>
+            <p class="basicText employeeStatsInfo" id="hungerEmployee" , style="display:block;">Hunger: 10 Limes Per Second.</p>
+
+            <button class="specialButton" id="teachEmployee" , style="width:250px;display:inline-block;" , onclick="teach()">Teach Employee</button>
+
+
+            <button class="basicButtonSize" id="teachInfoButton" , style="width:80px;" onclick="toggle('teachInfoToggle')">Info</button>
+
+            <p class="basicText teachInfo">Click the 'Teach' button to start a timer.</p>
+            <p class="basicText teachInfo">Collect as many limes as possible before time runs out!</p>
+            <p class="basicText teachInfo">Your employee learns from your abilities.</p>
+
+            <div class="skillProgress" id="teachProgress">
+                <div class="skillBar" , id="teachBar">0%</div>
+            </div>
+
+            <p class="basicText" id="workingEmployee" , style="background-color:#bfbfbf;display:block;">Employee is idle.</p>
+
+            <div class="skillProgress" id="workingProgress">
+                <div class="skillBar" , id="workingBar">0%</div>
+            </div>
+            <button class="specialButton" id="payEmployee" , style="width:250px;display:block;" , onclick="payEmployee()">Pay Employee Their Wages</button>
+
+        </div>
+        </div>
+
+		
+		
+		<div class="basicDiv" id="currencyBroker" style="width:360px;" >
+		
+            <p class="basicText" id="currencyBrokerFee" ,            style="display:block;"></p>
+            <p class="basicText" id="currencyBrokerSpeed" ,          style="display:block;"></p>
+            <p class="basicText" id="currencyBrokerTransferAmount" , style="display:block;"></p>
+
+        </div>
+
+    </div>
+
+
+    <div id="inventory">
+        <div class="basicDiv pin" id="useJuicersDiv">
+            <p class="basicText" id="juicersAmount">1 Juicers</p>
+			
+            <br>	
+            <button class="basicButtonSizeRound" id="makeJuiceButton" style="width:150px;" , onclick="pickCurrentTask('makeJuice')">Use Juicer</button>
+            <button class="basicButtonSizeRound" id="makeMaxJuiceButton" , onclick="pickCurrentTask('makeMaxJuice')" , style="visibility: hidden;width:150px;">Max Juicers</button>
+			
+
+            <br>
+            <button class="basicButtonSize" id="juiceLimesToggleButton" , style="display:none;width:150px;" , onclick="juiceLimesToggle()">On Limes</button>
+            <button class="basicButtonSize" id="juicePeeledLimesToggleButton" , style="display:none;width:150px;" , onclick="juicePeeledLimesToggle()">On Peeled Limes</button>
+            <p class="basicText" id="juicerInfo" , style="background-color:#bfbfbf;padding: 5px;"></p>
+            <div class="skillProgress" id="myProgress">
+                <div class="skillBar" id="juicerBar">0%</div>
+            </div>
+        </div>
+
+        <div class="basicDiv" id="peelerDiv" style="display:none">
+            <p class="basicText" id="peelersAmount">1 Peeler</p>
+            <button class="basicButtonSizeRound" id="usePeelersButton" style="width:150px;" , onclick="pickCurrentTask('usePeelers')">Use Peeler</button>
+            <button class="basicButtonSizeRound" id="useMaxPeelersButton" onclick="pickCurrentTask('useMaxPeelers')" , style="display:none;width:150px;">Max Peelers</button>
+            <br>
+            <div class="skillProgress" id="peelerProgress">
+                <div class="skillBar" id="peelerBar">0%</div>
+            </div>
+        </div>
+
+        <div class="basicDiv" , id="knifeDiv" , style="display:none;">
+            <p class="basicText" id="inventoryKnife">Use Knife:</p>
+            <button class="specialButton" id="inventoryKnifeLime" , onclick="peelLime()">On Limes</button>
+        </div>
+    </div>
+	
+    <div id="achievements">
+		<div style="width:380px;">
+			<div class="basicDiv">
+				<div class="skillProgress" id="achievementProgress">
+					<div class="skillBar" id="achievementBar">0%</div>
+				</div>
+			</div>
+		
+			<div id="achievements" class="basicDiv">
+				<p class="achievement">Collect 10 Coins.</p>
+				<p class="achievement">Collect 100 Coins.</p>
+				<p class="achievement">Collect 1,000 Coins.</p>
+				<p class="achievement">Collect 10,000 Coins.</p>
+				<p class="achievement">Collect 100,000 Coins.</p>
+				<p class="achievement">Collect 1,000,000 Coins.</p>
+				<p class="achievement">Collect 10,000,000 Coins.</p>
+
+
+			</div>
+		</div>
+    </div>
+
+
+    <div id="forest">
+        <div class="basicDiv">
+            <p class="basicText" id="basketsAmount" , style="background-color:#bfbfbf;padding: 5px;">1 Basket</p>
+            <button class="specialButton" style="background-color:#87a7b3;" , onclick="basket()">Empty Baskets</button>
+            <button class="basicButtonSize" id="basketInfoButton" , onclick="toggle('basketInfoToggle')">Info</button>
+            <p class="basicText basketInfo">Baskets collect 5 Limes per minute each.</p>
+            <p class="basicText basketInfo">Baskets collect up to 25 Limes each.</p>
+            <p class="basicText basketInfo" id="maxBaskets">20 baskets fit under the current tree.</p>
+
+            <p class="basicText" id="limesInBaskets">0 Limes.</p>
+
+            <div class="verticalProgress" id="basketProgress">
+                <div class="verticalBar" id="basketBar">0%</div>
+            </div>
+        </div>
+    </div>
+
+    <div id="megaCoinUpgrades">
+
+        <div class="basicDiv" id="upgradeNutritionist">
+            <p class="basicTextSize" style="background-color:#FF999A;" >Nutritionist</p>
+            <p class="basicText">Doubles food points from eating.</p>
+        </div>
+		
+        <div class="basicDiv" id="upgradeJuicePricePermanance">
+            <p class="basicTextSize" style="background-color:#FF999A;" >Juice Price Permanance</p>
+            <p class="basicText">Juice price is saved after travelling.</p>
+        </div>
+
+        <div class="basicDiv" id="upgradeCreditScore">
+            <p class="basicTextSize" style="background-color:#FF999A;" >Credit Score</p>
+            <p class="basicText">Increases max Mega Coins in the bank.</p>
+        </div>
+
+        <div class="basicDiv" id="upgradeBigGloves">
+            <p class="basicTextSize" style="background-color:#FF999A;" >Big Gloves</p>
+            <p class="basicText">Helps you pick up double limes!</p>
+        </div>
+		
+        <div class="basicDiv" id="upgradeManuscripts">
+            <p class="basicTextSize" style="background-color:#FF999A;" >Manuscripts</p>
+            <p class="basicText">Keep 1,000 respect milestone after travelling</p>
+        </div>
+
+        <div class="basicDiv" id="upgradeBetterTraining">
+            <p class="basicTextSize" style="background-color:#FF999A;" >Better Training</p>
+            <p class="basicText">Increases maximum applicant speed by 100%</p>
+            <p class="basicText" id="textForBetterTraining">Current increase: 100%</p>
+
+        </div>
+		
+        <div class="basicDiv" id="upgradeJuiceMarketing">
+            <p class="basicTextSize" style="background-color:#FF999A;" >National Juice Marketing</p>
+            <p class="basicText">Doubles juice sale price</p>
+
+        </div>
+		
+        <div class="basicDiv" id="upgradeWallet">
+            <p class="basicTextSize" style="background-color:#FF999A;" >Wallet</p>
+            <p class="basicText">Increases maximum coin storage by 1,000,000</p>
+            <p class="basicText" id="textForCoinsMax">Current maximum: 1,000,000 Coins</p>
+
+        </div>
+		
+        <div class="basicDiv" id="upgradeBroker">
+            <p class="basicTextSize" style="background-color:#FF999A;" >Bachelors Degree In Finance</p>
+            <p class="basicText">Access the Currency Exchange market</p>
+        </div>
+		
+        <div class="basicDiv" id="upgradeMoreLand">
+            <p class="basicTextSize" style="background-color:#FF999A;" >More Land</p>
+                <p class="basicText" style="display:block;">Increases maximum juicers and peelers.</p>
+
+        </div>
+
+		
+		
+		
+
+    </div>
+
+
+    <div id="tasks">
+
+        <div class="basicDiv" id="tasksButtonsDiv">
+            <button class="basicButtonSize" id="earnButton" style="background-color:lightgray;" , onclick="tabTasks('earn')">Earn Respect</button>
+            <button class="basicButtonSize" id="milestonesButton" style="background-color:lightgray;" , onclick="tabTasks('milestones')">Respect Milestones</button>
+        </div>
+
+        <div class="basicDiv">
+            <p class="basicTextSize" id="textForRespect" style="color:#FF00AA;background-color:#000000">0 Respect</p>
+        </div>
+
+
+        <div id="earn">
+
+
+            <div class="basicDiv" id="diseaseControl">
+                <p class="basicText">Disease Control</p>
+
+                <div class="unlockDiseaseAreaSwamp">
+                    <p class="basicText" id="textForLakes">0 Lakes</p>
+                </div>
+
+                <div class="limeDiseaseControlInfo">
+                    <p class="basicText">Help the citizens quarantine from Lime Disease</p>
+
+                    <div class="unlockDiseaseAreaSwamp">
+                        <p class="basicText">For every lake used, gain / lose +1 respect</p>
+
+                    </div>
+
+
+
+
+                </div>
+
+                <div class="unlockDiseaseAreaSwamp">
+                    <button class="basicButtonSize" id="decreaseLakesButton" onclick="changeLakeAmount(-1)" , style="width:120px;background:lightgray;">Decrease Lakes</button>
+                    <button class="basicButtonSize" id="increaseLakesButton" onclick="changeLakeAmount(1)" , style="width:120px;background:lightgray;">Increase Lakes</button>
+                </div>
+
+
+
+                <button class="specialButton" id="startDiseaseTask" style="display:inline-block" onclick="diseaseControlTask()">Start Task</button>
+                <button class="basicButtonSize" id="autoStartTaskButton" style="display:inline-block" onclick="switchValue('autoStartTask')">Auto</button>
+                <button class="basicButtonSize" id="limeDiseaseControlInfoButton" , onclick="toggle('limeDiseaseControlInfoToggle')">Info</button>
+
+
+
+
+
+            </div>
+
+            <div class="basicDiv" id="diseaseControlStart">
+
+                <div class="limeDiseaseInfo">
+                    <p class="basicText">Disease type: Lime Disease</p>
+                    <p class="basicText">Goal: Dont let it spread from any civilian to any other</p>
+                </div>
+
+
+                <p class="basicText" id="numberOfCivilians">Number of civilians: 2</p>
+                <button class="basicButtonSize" id="autoPlaceACivilianButton" style="display:inline-block" onclick="switchValue('autoPlaceACivilian')">Auto Place A Civilian</button><br>
+                <p class="basicText">Rule: Random empty spot</p>
+
+                <button class="specialButton" onclick="startSimulation()" style="width:150px">Start Simulation</button>
+                <button class="basicButtonSize" id="autoStartSimulationButton" style="display:inline-block" onclick="switchValue('autoStartSimulation')">Auto</button>
+                <button class="specialButton" onclick="diseaseControlReset()">Reset</button>
+                <button class="specialButton" onclick="diseaseControlQuit()">Quit</button>
+
+				<br>
+				
+                <button class="basicButtonSize" id="checkResultsButton" style="width:150px" onclick="checkResults()">Check Results</button>
+                <button class="basicButtonSize" id="autoCheckSimulationButton" style="display:inline-block" onclick="switchValue('autoCheckSimulation')">Auto</button>
+                <button class="basicButtonSize" id="limeDiseaseInfoButton" , onclick="toggle('limeDiseaseInfoToggle')">Info</button>
+
+            </div>
+
+
+
+
+            <div class="basicDiv" id="diseaseControlMap">
+			
+				<div style="position: relative; left: 50%;display:inline-block;transform: translate(-50%, 0%);">
+				
+					<button class="mapTile" id="mapTile-0-4" onclick="mapTile(0, 4)" style="display:none;"></button>
+					<button class="mapTile" id="mapTile-1-4" onclick="mapTile(1, 4)" style="display:none;"></button>
+					<button class="mapTile" id="mapTile-2-4" onclick="mapTile(2, 4)" style="display:none;"></button>
+					<button class="mapTile" id="mapTile-3-4" onclick="mapTile(3, 4)" style="display:none;"></button>
+					<button class="mapTile" id="mapTile-4-4" onclick="mapTile(4, 4)" style="display:none;"></button>
+					<br style="display:none;">
+					
+					
+					<button class="mapTile" id="mapTile-0-3" onclick="mapTile(0, 3)"></button>
+					<button class="mapTile" id="mapTile-1-3" onclick="mapTile(1, 3)"></button>
+					<button class="mapTile" id="mapTile-2-3" onclick="mapTile(2, 3)"></button>
+					<button class="mapTile" id="mapTile-3-3" onclick="mapTile(3, 3)"></button>
+					<button class="mapTile" id="mapTile-4-3" onclick="mapTile(4, 3)" style="display:none;"></button>
+					<br>
+
+					<button class="mapTile" id="mapTile-0-2" onclick="mapTile(0, 2)"></button>
+					<button class="mapTile" id="mapTile-1-2" onclick="mapTile(1, 2)"></button>
+					<button class="mapTile" id="mapTile-2-2" onclick="mapTile(2, 2)"></button>
+					<button class="mapTile" id="mapTile-3-2" onclick="mapTile(3, 2)"></button>
+					<button class="mapTile" id="mapTile-4-2" onclick="mapTile(4, 2)" style="display:none;"></button>
+
+					<br>
+
+					<button class="mapTile" id="mapTile-0-1" onclick="mapTile(0, 1)"></button>
+					<button class="mapTile" id="mapTile-1-1" onclick="mapTile(1, 1)"></button>
+					<button class="mapTile" id="mapTile-2-1" onclick="mapTile(2, 1)"></button>
+					<button class="mapTile" id="mapTile-3-1" onclick="mapTile(3, 1)"></button>
+					<button class="mapTile" id="mapTile-4-1" onclick="mapTile(4, 1)" style="display:none;"></button>
+
+					<br>
+
+					<button class="mapTile" id="mapTile-0-0" onclick="mapTile(0, 0)"></button>
+					<button class="mapTile" id="mapTile-1-0" onclick="mapTile(1, 0)"></button>
+					<button class="mapTile" id="mapTile-2-0" onclick="mapTile(2, 0)"></button>
+					<button class="mapTile" id="mapTile-3-0" onclick="mapTile(3, 0)"></button>
+					<button class="mapTile" id="mapTile-4-0" onclick="mapTile(4, 0)" style="display:none;"></button>
+
+				</div>
+            </div>
+			
+            <div class="basicDiv" id="benevolence">
+
+				<button class="basicButtonSize" id="benevolenceToggleButton" onclick="benevolenceToggle()">Benevolence</button>
+                <p class="basicText" id="benevolenceRespectIncrease">Respect increase: </p>
+
+
+            </div>
+
+
+        </div>
+
+        <div id="milestones">
+
+
+
+            <div class="basicDiv">
+
+                <p class="basicTextSize" id="10RespectMilestone"    >10 Respect: ???</p>
+                <p class="basicTextSize" id="25RespectMilestone"    >25 Respect: ???</p>
+                <p class="basicTextSize" id="50RespectMilestone"    >50 Respect: ???</p>
+                <p class="basicTextSize" id="100RespectMilestone"   >100 Respect: ???</p>
+                <p class="basicTextSize" id="500RespectMilestone"   >500 Respect: ???</p>
+                <p class="basicTextSize" id="1000RespectMilestone"  >1,000 Respect: ???</p>
+                <p class="basicTextSize" id="10000RespectMilestone" >10,000 Respect: ???</p>
+
+
+            </div>
+
+        </div>
+
+    </div>
+
+
+    <div id="science">
+        <div style="width:380px">
+		
+			<div class="basicDiv" id="scienceButtonsDiv">
+				<button class="basicButtonSize" id="researchButton" style="background-color:lightgray;" , onclick="tabScience('research')">Research</button>
+				<button class="basicButtonSize" id="researchersButton" style="background-color:lightgray;" , onclick="tabScience('researchers')">Aquire Researchers</button>
+			</div>
+			
+			<div class="basicDiv">
+				<p class="basicTextSize" id="textForResearchers" style="color:#00AAFF;background-color:#000000">0 Researchers</p>
+			</div>
+		
+			<div id="research">
+			
+				<div class="basicDiv" id="watertightDiv">
+
+					<button class="specialButton" onclick="watertight()">Watertight Seal</button>
+					
+					<p class="basicTextSize" id="textForWatertightResearchers" style="color:#00AAFF;background-color:#000000">0 Researchers</p>
+					
+					<button class="basicButtonSize" style="background-color:#00AAFF;width:30px;" onclick="addResearchers('watertight', -1)">-</button>
+					<button class="basicButtonSize" style="background-color:#00AAFF;width:30px;" onclick="addResearchers('watertight', 1)">+</button>
+
+					
+					
+					<div class="scienceInfo">
+						<p class="basicText">Decreases peeled limes needed to make juice by 1.</p>
+					</div>
+					<div class="skillProgress" id="watertightProgress">
+						<div class="skillBar" , id="watertightBar">0%</div>
+					</div>
+					
+					<p class="basicText" , id="watertightText">Currently: 5 Peeled Limes -> 1 Juice</p>
+					<p class="basicText" , id="watertightTime">Estimated Time: 20,000 seconds.</p>
+
+
+				</div>
+				
+				<div class="basicDiv" id="surveyingDiv">
+
+					<button class="specialButton" onclick="surveying()">Surveying</button>
+					
+					<p class="basicTextSize" id="textForSurveyingResearchers" style="color:#00AAFF;background-color:#000000">0 Researchers</p>
+					
+					<button class="basicButtonSize" style="background-color:#00AAFF;width:30px;" onclick="addResearchers('surveying', -1)">-</button>
+					<button class="basicButtonSize" style="background-color:#00AAFF;width:30px;" onclick="addResearchers('surveying', 1)">+</button>
+
+					
+					
+					<div class="scienceInfo">
+						<p class="basicText">Increase disease tiles by 1.</p>
+					</div>
+					<div class="skillProgress" id="surveyingProgress">
+						<div class="skillBar" , id="surveyingBar">0%</div>
+					</div>
+					
+					<p class="basicText" , id="surveyingText">Currently: 16 Tiles</p>
+					<p class="basicText" , id="surveyingTime">Estimated Time: 20,000 seconds.</p>
+
+
+				</div>
+				
+				<div class="basicDiv" id="benevolenceDiv">
+
+					<button class="specialButton" onclick="barStartGranular('benevolence')">Benevolence</button>
+					
+					<p class="basicTextSize" id="textForBenevolenceResearchers" style="color:#00AAFF;background-color:#000000">0 Researchers</p>
+					
+					<button class="basicButtonSize" style="background-color:#00AAFF;width:30px;" onclick="addResearchers('benevolence', -1)">-</button>
+					<button class="basicButtonSize" style="background-color:#00AAFF;width:30px;" onclick="addResearchers('benevolence', 1)">+</button>
+
+					
+					
+					<div class="scienceInfo">
+						<p class="basicText">Increase respect change from helping civilians with more lakes.</p>
+					</div>
+					<div class="skillProgress" id="benevolenceProgress">
+						<div class="skillBar" , id="benevolenceBar">0%</div>
+					</div>
+					
+					<p class="basicText" , id="benevolenceText">Currently: Level 1</p>
+					<p class="basicText" , id="benevolenceTime">Estimated Time: 20,000 seconds.</p>
+
+
+				</div>
+
+
+			</div>
+			
+			<div id="researchers">
+	
+                <div class="basicDiv" id="buyManuscriptsDiv" >
+                    <button class="specialButtonTravel" onclick="basicBuy('manuscripts', 5e5)">Buy Manuscripts</button>
+                    <p class="basicText" id="hireResearcherMegaCoins" >Keep 1,000 respect milestone after travelling</p>
+                    <p class="basicText" >Price: 500,000 Coins</p>
+
+                </div>	
+				
+				
+                <div class="basicDiv">
+                    <button class="specialButtonTravel" onclick="hireResearcher('megaCoins')">Pay with mega coins</button>
+                    <p class="basicText" id="hireResearcherMegaCoins" >Price: 1 Mega Coin</p>
+                </div>	
+
+			</div>
+			
+        </div>
+    </div>
+
+
+    <div id="skills" style="position: relative;">
+		<div id="skillsSection1" style="width:380px;">
+
+		
+		
+        <div class="basicDiv" id="eatFoodDiv" style="display:none" >
+            <button class="basicButtonSizeRound" id="eatFoodButton" onclick="pickCurrentTask('eatFood')">   Eat Food   </button>
+
+            <button class="basicButtonSize" id="foodToggleLimesButton" onclick="foodToggleLimes()">Limes</button>
+            <button class="basicButtonSize" id="foodToggleRottenLimesButton" onclick="foodToggleRottenLimes()">Rotten Limes</button>
+            <div class="skillInfo">
+                <p class="basicText">You use 1 food point per skill level.</p>
+            </div>
+            <div class="skillProgress" id="eatProgress">
+                <div class="skillBar" , id="eatBar">0%</div>
+            </div>
+            <p class="basicText" , id="eat"></p>
+        </div>
+
+
+
+        <div class="basicDiv autoCollectingDiv" id="autoCollectingDiv" style="display:none" >
+            <button id="autoCollectingButton" onclick="autoCollecting()">Auto Collect</button>
+            <button class="pinButton" onclick="pin('autoCollectingButton')" style="display:none" >+</button>
+
+            <div class="skillInfo">
+
+                <p class="basicText">Collect limes without the pesky clicking</p>
+                <p class="basicText" id="textForAutomaticallyCollectsLimes" ></p>
+                <p class="basicText">Disables the Collect Limes button</p>
+
+
+            </div>
+            <div class="skillProgress" id="autoCollectingProgress">
+                <div class="skillBar" , id="autoCollectingBar">0%</div>
+            </div>
+        </div>
+
+
+
+
+
+        <div class="basicDiv">
+            <button class="specialButton" , id="learnANewSkillButton" , onclick="learnANewSkill()">Learn A New Skill</button>
+            <button class="basicButtonSize" id="skillInfoButton"  style="display:none" onclick="toggle('skillInfoToggle')">Info</button>
+            <div class="skillProgress" id="learnANewSkillProgress">
+                <div class="skillBar" , id="learnANewSkillBar">0%</div>
+            </div>
+        </div>
+    </div>
+    <div id="skillsSection2" style="width:380px">	
+	
+	
+	
+        <div class="basicDiv" id="keenEyeDiv" style="display:none" >
+
+            <button class="skillButton" , id="keenEyeButton" , onclick="pickCurrentSkill('keenEye')">Keen Eye</button>
+            <div class="skillInfo">
+                <p class="basicText">Get better at finding limes / rotten limes.</p>
+            </div>
+            <div class="skillProgress" id="keenEyeProgress">
+                <div class="skillBar" , id="keenEyeBar">0%</div>
+            </div>
+            <p class="basicText" , id="keenEye"></p>
+            <p class="basicText" , id="keenEyeSkillLevel"></p>
+
+
+
+        </div>
+
+
+        <div class="basicDiv" , id="rottenWisdomDiv" , style="display:none;">
+
+            <button class="skillButton" , id="rottenWisdomButton" , onclick="pickCurrentSkill('rottenWisdom')">Rotten Wisdom</button>
+            <div class="skillInfo">
+                <p class="basicText">Pick up limes rather than rotten limes: +2% Chance.</p>
+            </div>
+            <div class="skillProgress" id="rottenWisdomProgress">
+                <div class="skillBar" , id="rottenWisdomBar">0%</div>
+            </div>
+            <p class="basicText" , id="rottenWisdom"></p>
+            <p class="basicText" , id="rottenWisdomSkillLevel"></p>
+
+
+
+        </div>
+
+        <div class="basicDiv" , id="limebidextrousDiv" , style="display:none;">
+
+
+
+            <button class="skillButton" , id="limebidextrousButton" , onclick="pickCurrentSkill('limebidextrous')">Limebidextrous</button>
+            <div class="skillInfo">
+                <p class="basicText" , id="limebidextrousInfo">Pick up 2 limes rather than 1: +2% Chance.</p>
+            </div>
+            <div class="skillProgress" id="limebidextrousProgress">
+                <div class="skillBar" , id="limebidextrousBar">0%</div>
+            </div>
+            <p class="basicText" , id="limebidextrous"></p>
+            <p class="basicText" , id="limebidextrousSkillLevel"></p>
+        </div>
+
+        <div class="basicDiv" , id="intelligenceDiv" , style="display:none;">
+
+
+            <button class="skillButton" , id="intelligenceButton" , onclick="pickCurrentSkill('intelligence')">Intelligence</button>
+            <div class="skillInfo">
+                <p class="basicText" , id="intelligenceInfo">Skilling speed: +10%.</p>
+            </div>
+            <div class="skillProgress" id="intelligenceProgress">
+                <div class="skillBar" , id="intelligenceBar">0%</div>
+            </div>
+            <p class="basicText" , id="intelligence"></p>
+            <p class="basicText" , id="intelligenceSkillLevel"></p>
+
+        </div>
+
+        <div class="basicDiv" , id="knifebidextrousDiv" , style="display:none;">
+
+
+            <button class="skillButton" , id="knifebidextrousButton" , onclick="pickCurrentSkill('knifebidextrous')">Knifebidextrous</button>
+            <div class="skillInfo">
+                <p class="basicText" , id="knifebidextrousInfo">Chance to peel 2 limes rather than 1: +5%.</p>
+                <p class="basicText" , id="knifebidextrousInfo">Unlock something special for completing this!</p>
+
+            </div>
+            <div class="skillProgress" id="knifebidextrousProgress">
+                <div class="skillBar" , id="knifebidextrousBar">0%</div>
+            </div>
+            <p class="basicText" , id="knifebidextrous"></p>
+            <p class="basicText" , id="knifebidextrousSkillLevel"></p>
+
+        </div>
+		
+        <div class="basicDiv" , id="ambidextrousDiv" , style="display:none;">
+
+            <button class="skillButton" , id="ambidextrousButton" , onclick="pickCurrentSkill('ambidextrous')">Ambidextrous</button>
+            <div class="skillInfo">
+                <p class="basicText">Yes, i made a skill without a lime pun.</p>
+                <p class="basicText">Reach level 100 to be able to toggle two actions at once.</p>
+            </div>
+            <div class="skillProgress" id="ambidextrousProgress">
+                <div class="skillBar" , id="ambidextrousBar">0%</div>
+            </div>
+            <p class="basicText" , id="ambidextrousSkillLevel"></p>
+
+
+
+        </div>
+    </div>
+    </div>
+<script src="//g8hh.com/static/js/jquery.min.js"></script>
+	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+    <script src="aesthetic.js?v=               105" charset="utf-8" type="text/javascript"></script>
+    <script src="myfunctions.js?v=             105" charset="utf-8" type="text/javascript"></script>
+    <script src="main.js?v=                    105" charset="utf-8" type="text/javascript"></script>
+    <script src="diseasetask.js?v=             105" charset="utf-8" type="text/javascript"></script>
+    <script src="technical.js?v=               105" charset="utf-8" type="text/javascript"></script>
+    <script src="bars.js?v=                    105" charset="utf-8" type="text/javascript"></script>
+    <script src="update.js?v=                  105" charset="utf-8" type="text/javascript"></script>
+    <script src="oldupdatefixes.js?v=          105" charset="utf-8" type="text/javascript"></script>
+
+
+<!--客服 开始-->
+<link rel="stylesheet" href="//g8hh.com/static/css/kf.css" type="text/css" media="screen" charset="utf-8">
+<script src="//g8hh.com/static/js/kf.js"></script>
+<!-- 客服 结束 -->
+<!--站长统计-->
+    <div style="display: none">
+        <script type="text/javascript" src="https://v1.cnzz.com/z_stat.php?id=1279902880&web_id=1279902880"></script>
+    </div>
+</body>
+
+</html>
