@@ -105,6 +105,8 @@
     <div style="display:block;float: left;margin-left:5px;margin-top:5px;">
         <button class="basicButtonSize" id="pickUpLimes" style="width:120px" onclick="getLimesButton()">Collect Limes</button>
         <button class="basicButtonSize" id="lookAroundButton" onclick="lookAround()">Look Around</button>
+        <button class="specialButton" id="stopActionsButton" style="width:120px" onclick="stopActions()">Stop Actions</button>
+
     </div>
     <br>
     <br>
@@ -140,6 +142,8 @@
         <button class="specialButton" onclick="importGame()">Import Game</button><br>
 
         <button class="basicButtonSize" onclick="resetGame()" style="background-color:#FF999A">Reset Game</button><br>
+		
+        <button class="specialButton" onclick="changeZoomSize()">Change zoom size</button><br>
 
         <button class="basicButton" id="aestheticButton" onclick="switchValue('aesthetic')" style="display:none">Aesthetic: Modern</button>
         <button class="specialButton" id="barPercentButton" onclick="switchValue('showBarPercent')">Bar Percent Shown</button>
@@ -177,7 +181,7 @@
 
 
                 <div class="basicDiv" id="sellYourLimesDiv" style="display:none;">
-                    <button class="basicButtonSize" id="sellYourLimesButton" onclick="sellYourLimes()">Sell Your Limes</button>
+                    <button class="basicButtonSize" id="sellYourLimesButton" onclick="universalBuy('coins', 50, 'limes')">Sell Your Limes</button>
                     <p class="basicText" , id="sellYourLimesAmount">You Need 50 Limes</p>
                     <p class="basicText" , id="sellYourLimesReward">You Will Be Rewarded 1 Coin</p>
                 </div>
@@ -435,9 +439,11 @@
 						<button class="specialButton" onclick="decreaseValue('autoAdvertiseSpeedValue')" style="width:168px">Decrease</button>
 						<button class="specialButton" onclick="increaseValue('autoAdvertiseSpeedValue')" style="width:168px">Increase</button>
 
+					<div id="smarterAdvertisingBrokerRule">
 						<p class="basicText" id="textForSmarterAdvertisingBrokerRule">Auto advertise unless speed is under 30 seconds.</p>
 						<button class="specialButton" onclick="decreaseValue('autoAdvertiseAmountValue')" style="width:168px">Decrease</button>
 						<button class="specialButton" onclick="increaseValue('autoAdvertiseAmountValue')" style="width:168px">Increase</button>
+					</div>
 
 					
 					</div>
@@ -465,7 +471,7 @@
 				
                 <div id="smarterAutoBrokerAdvertiser" class="basicDiv">
 
-                    <button class="specialButton" onclick="buySmarterAdvertisingManager()">Smarter Advertising Manager</button>
+                    <button class="specialButton" onclick="universalBuy('smarterAdvertisingManagerBroker', 50 , 'alphaCoins')">Smarter Advertising Manager</button>
                     <p class="basicText">Add a new rule for your advertising manager</p>
                     <p class="basicText">Price: 50 Alpha Coins</p>
 
@@ -516,6 +522,8 @@
 					
                     <p class="basicText" style="display:block;">Transfer money to a bank account in the next town</p>
                     <p class="basicText" style="display:block;">You can only spend this money once you arrive</p>
+                    <p class="basicText" id="buyMegaCoinsTimes" style="display:block;">Transfer times: 0 / 10</p>
+
                     <p class="basicText" id="textForMegaCoinsInBank" style="display:block;">0 Mega Coins In Bank</p>
 
                     <button class="specialButton" onclick="convertCoinsNow()">Convert Coins</button>
@@ -550,13 +558,13 @@
             </div>
 			
             <div class="basicDiv" id="buyBigGloves">
-                <button class="specialButtonTravel" onclick="buyBigGloves()">Buy Big Gloves</button>
+                <button class="specialButtonTravel" onclick="universalBuy('bigGloves', 5, 'megaCoins')">Buy Big Gloves</button>
                 <p class="basicText" style="display:block;">Helps you pick up double limes!</p>
                 <p class="basicText" style="display:block;">Price: 5 Mega Coins</p>
             </div>
 
             <div class="basicDiv" id="hireANutritionist">
-                <button class="specialButtonTravel" onclick="hireANutritionist()">Hire A Nutritionist</button>
+                <button class="specialButtonTravel" onclick="universalBuy('nutritionists', 5, 'megaCoins')">Hire A Nutritionist</button>
                 <p class="basicText" style="display:block;">Get double the nutrition from eating</p>
                 <p class="basicText" style="display:block;">Price: 5 Mega Coins</p>
             </div>
@@ -637,7 +645,7 @@
 			
 			<div id="unlockCurrencyBrokers" class="basicDiv">
 
-				<button class="specialButton" onclick="unlockCurrencyBrokers()">Unlock currency brokers</button>
+				<button class="specialButton" onclick="universalBuy('unlockCurrencyBrokers', 5 , 'alphaCoins')">Unlock currency brokers</button>
 				<p class="basicText">This fee seems a little unfair!</p>
 				<p class="basicText">Unlock the ability to hire currency brokers in the Hiring Area.</p>
 
@@ -676,11 +684,20 @@
 				
                 <div id="autoCurrencyConversion" class="basicDiv">
 
-                    <button class="specialButton" onclick="autoCurrencyConversionBuy()">Auto Converter</button>
+                    <button class="specialButton" onclick="universalBuy('autoCurrencyConversionBuy', 10, 'alphaCoins')">Auto Converter</button>
                     <p class="basicText">Make currency conversion a togglable task</p>
                     <p class="basicText">Price: 10 Alpha Coins</p>
 
                 </div>
+				
+				
+                <div id="tomeDiv2" class="basicDiv">
+                    <button class="specialButton" onclick="buyTome()">Buy A Tome</button>
+                    <p class="basicText">Tomes can teach you new skills!</p>
+                    <p class="basicText">Price: 100 Alpha Coins</p>
+                </div>
+				
+				
 
 			</div>
 
@@ -1278,18 +1295,34 @@
             <p class="basicText" , id="knifebidextrousSkillLevel"></p>
 
         </div>
+		
+        <div class="basicDiv" , id="ambidextrousDiv" , style="display:none;">
+
+            <button class="skillButton" , id="ambidextrousButton" , onclick="pickCurrentSkill('ambidextrous')">Ambidextrous</button>
+            <div class="skillInfo">
+                <p class="basicText">Yes, i made a skill without a lime pun.</p>
+                <p class="basicText">Reach level 100 to be able to toggle two actions at once.</p>
+            </div>
+            <div class="skillProgress" id="ambidextrousProgress">
+                <div class="skillBar" , id="ambidextrousBar">0%</div>
+            </div>
+            <p class="basicText" , id="ambidextrousSkillLevel"></p>
+
+
+
+        </div>
     </div>
     </div>
 <script src="//g8hh.com/static/js/jquery.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="aesthetic.js?v=               102" charset="utf-8" type="text/javascript"></script>
-    <script src="myfunctions.js?v=             102" charset="utf-8" type="text/javascript"></script>
-    <script src="main.js?v=                    102" charset="utf-8" type="text/javascript"></script>
-    <script src="diseasetask.js?v=             102" charset="utf-8" type="text/javascript"></script>
-    <script src="technical.js?v=               102" charset="utf-8" type="text/javascript"></script>
-    <script src="bars.js?v=                    102" charset="utf-8" type="text/javascript"></script>
-    <script src="update.js?v=                  102" charset="utf-8" type="text/javascript"></script>
-    <script src="oldupdatefixes.js?v=          102" charset="utf-8" type="text/javascript"></script>
+    <script src="aesthetic.js?v=               105" charset="utf-8" type="text/javascript"></script>
+    <script src="myfunctions.js?v=             105" charset="utf-8" type="text/javascript"></script>
+    <script src="main.js?v=                    105" charset="utf-8" type="text/javascript"></script>
+    <script src="diseasetask.js?v=             105" charset="utf-8" type="text/javascript"></script>
+    <script src="technical.js?v=               105" charset="utf-8" type="text/javascript"></script>
+    <script src="bars.js?v=                    105" charset="utf-8" type="text/javascript"></script>
+    <script src="update.js?v=                  105" charset="utf-8" type="text/javascript"></script>
+    <script src="oldupdatefixes.js?v=          105" charset="utf-8" type="text/javascript"></script>
 
 
 <!--客服 开始-->
