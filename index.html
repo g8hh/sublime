@@ -4,10 +4,15 @@
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
     <meta charset="utf-8">
-    <title>酸橙经营者 - Lime Clicker</title>
+    <title>酸橙经营者 - Sublime</title>
 
     <style>
-	
+
+		.highlight {
+			background-color: #fff2ac;
+			background-image: linear-gradient(to right, #ffe359 0%, #fff2ac 100%);
+		}
+
 		.stat
 		{
 			 font-family: pixelated;  font-size: 20px;
@@ -82,9 +87,9 @@
 <script src="https://g8hh.github.io/zh/core.js"></script>
 	<div style="float: left;padding: 10px;width: 100px;" id="backgroundForValues">
 		<br>
-		<div class="stat" id="textForLimesDiv"       style="color:#080;display:block ;">Limes       </div><div class="stat ar" id="textForLimes"       style="color:#0F0; display:block; ">0</div><p id="textForLimesP"       style="display:block; "> </p><br  id="textForLimesBr"        style="display:block; "/>
+		<div class="stat" id="textForLimesDiv"       style="display:block ;">Limes       </div><div class="stat ar" id="textForLimes"       style="display:block; ">0</div><p id="textForLimesP"       style="display:block; "> </p><br  id="textForLimesBr"        style="display:block; "/>
 		<div id="rottenLimesHide">
-			<div class="stat" id="textForRottenLimesDiv" style="color:#030;display:none  ;">Rotten Limes</div><div class="stat ar" id="textForRottenLimes" style="color:#060; display:none ; ">0</div><p id="textForRottenLimesP" style="display:none ; "> </p><br  id="textForRottenLimesBr"  style="display:none ; "/>
+		<div class="stat" id="textForRottenLimesDiv" style="color:#006600;display:none  ;">Rotten Limes</div><div class="stat ar" id="textForRottenLimes" style="color:#00B300; display:none ; ">0</div><p id="textForRottenLimesP" style="display:none ; "> </p><br  id="textForRottenLimesBr"  style="display:none ; "/>
 		</div>
 		<div class="stat" id="textForPeeledLimesDiv" style="color:#282;display:none  ;">Peeled Limes </div><div class="stat ar" id="textForPeeledLimes"  style="color:#5F5; display:none ; ">0</div><p id="textForPeeledLimesP"  style="display:none ; "> </p><br  id="textForPeeledLimesBr"   style="display:none ; "/>
 		<div class="stat" id="textForJuiceDiv"       style="color:#484;display:none  ;">Juice        </div><div class="stat ar" id="textForJuice"        style="color:#9F9; display:none ; ">0</div><p id="textForJuiceP"        style="display:none ; "> </p><br  id="textForJuiceBr"         style="display:none ; "/>
@@ -94,7 +99,7 @@
 
 	</div>	
 
-    <div class="row" style="background-color:#bfbfbf;padding-left: 130px;display:block;height:60px;">
+    <div class="row" id="newInfoBox" style="background-color:#bfbfbf;padding-left: 130px;display:block;height:60px;">
         <p id="newInfo" style="display:inline-block;margin-bottom:none;">You are in a lime forest.</p>
         <div style="width: 150px;height:50px;float:right;">
             <button id="optionsButton" style="background:lightgray;width: 150px;height:30px;background-color:#d1d9d9;" , onclick="tab('options')">Options</button>
@@ -139,6 +144,7 @@
         <p class="basicText">Alpha Version</p>
 
         <button class="specialButton" onclick="exportGame()">Export Game</button>
+        <button class="specialButton" onclick="exportGamePT()">Export Game (Plain)</button>
         <button class="specialButton" onclick="importGame()">Import Game</button><br>
 
         <button class="basicButtonSize" onclick="resetGame()" style="background-color:#FF999A">Reset Game</button><br>
@@ -147,6 +153,7 @@
 
         <button class="basicButton" id="aestheticButton" onclick="switchValue('aesthetic')" style="display:none">Aesthetic: Modern</button>
         <button class="specialButton" id="barPercentButton" onclick="switchValue('showBarPercent')">Bar Percent Shown</button>
+        <button class="specialButton" onclick="changeVariablesColor()">Switch Variable Colors</button><br>
         <button class="specialButton" id="hideCompletedSkillsButton" onclick="switchValue('hideCompletedSkills')">Completed Skills Shown</button><br>
         <button class="specialButton" id="hideMaxedPurchasesButton" onclick="switchValue('hideMaxedPurchases')">Maxed Purchases Shown</button>
         <button class="specialButton" id="desktopModeButton" onclick="switchValue('desktopMode')">In Desktop Mode</button><br>
@@ -167,7 +174,7 @@
 
     <div id="market" style="padding:0px;margin:0px;">
 
-        <div class="basicDiv" id="marketMainButtonsDiv" style="display:none;width:400px;">
+        <div class="basicDiv" id="marketMainButtonsDiv" style="display:none;">
             <button class="basicButtonSize" id="marketMainButton"  onclick="tabMarket('marketMain')">Main Square</button>
             <button class="basicButtonSize" id="marketStoreButton" , style="display:none;" , onclick="tabMarket('marketStore')">General Store</button>
             <button class="basicButtonSize" id="hiringAreaButton" , style="display:none;" , onclick="tabMarket('hiringArea')">Hiring Area</button>
@@ -177,7 +184,7 @@
         </div>
 
         <div id="marketMain">
-            <div style="display:inline-block;">
+            <div style="display:inline-block;width:380px;">
 
 
                 <div class="basicDiv" id="sellYourLimesDiv" style="display:none;">
@@ -222,14 +229,19 @@
                     <button class="basicButtonSize" id="juicersBulkButton" , style="width:80px;" onclick="toggle('juicersBulkToggle')">x10</button>
                     <p class="basicText" id="buyAJuicerPrice">Price: 1 Coin</p>
                 </div>
-                <div class="basicDiv" , id="buyAMapDiv" style="display:none;">
-                    <button class="specialButton" onclick="buyAMap()">Buy A Map Of The Town</button>
-                    <p class="basicText">Price: 20 Coins</p>
-                </div>
                 <div class="basicDiv" , id="buyABasketDiv" style="display:none;">
                     <button class="basicButtonSize" id="buyABasketButton" onclick="buyABasket()">Buy A Basket</button>
                     <button class="basicButtonSize" id="basketsBulkButton" , style="width:80px;" onclick="toggle('basketsBulkToggle')">x10</button>
                     <p class="basicText">Price: 2 Coins</p>
+                </div>
+                <div class="basicDiv" , id="offlineBasket" style="display:none;">
+                    <button class="specialButton" id="buyAScarecrowButton" onclick="basicBuy('basketScarecrow', 10)">Buy A Scarecrow</button>
+                    <p class="basicText">Allows your baskets to collect limes while you're away (offline).</p>
+                    <p class="basicText">Price: 10 Coins</p>
+                </div>
+                <div class="basicDiv" , id="buyAMapDiv" style="display:none;">
+                    <button class="specialButton" onclick="buyAMap()">Buy A Map Of The Town</button>
+                    <p class="basicText">Price: 20 Coins</p>
                 </div>
                 <div class="basicDiv juiceMarket" , id="juiceMarket" , style="display:none;">
                     <button class="basicButtonSizeRound" id="sellYourJuiceButton" , onclick="pickCurrentTask('sellYourJuice')">Sell Juice</button>
@@ -1191,7 +1203,6 @@
 
                 <p class="basicText">Collect limes without the pesky clicking</p>
                 <p class="basicText" id="textForAutomaticallyCollectsLimes" ></p>
-                <p class="basicText">Disables the Collect Limes button</p>
 
 
             </div>
@@ -1220,7 +1231,7 @@
 
             <button class="skillButton" , id="keenEyeButton" , onclick="pickCurrentSkill('keenEye')">Keen Eye</button>
             <div class="skillInfo">
-                <p class="basicText">Get better at finding limes / rotten limes.</p>
+                <p class="basicText">Increase the chance of finding something rather than nothing when collecting limes.</p>
             </div>
             <div class="skillProgress" id="keenEyeProgress">
                 <div class="skillBar" , id="keenEyeBar">0%</div>
@@ -1237,7 +1248,7 @@
 
             <button class="skillButton" , id="rottenWisdomButton" , onclick="pickCurrentSkill('rottenWisdom')">Rotten Wisdom</button>
             <div class="skillInfo">
-                <p class="basicText">Pick up limes rather than rotten limes: +2% Chance.</p>
+                <p class="basicText">Increase the chance of finding limes rather than rotten limes.</p>
             </div>
             <div class="skillProgress" id="rottenWisdomProgress">
                 <div class="skillBar" , id="rottenWisdomBar">0%</div>
@@ -1255,7 +1266,7 @@
 
             <button class="skillButton" , id="limebidextrousButton" , onclick="pickCurrentSkill('limebidextrous')">Limebidextrous</button>
             <div class="skillInfo">
-                <p class="basicText" , id="limebidextrousInfo">Pick up 2 limes rather than 1: +2% Chance.</p>
+                <p class="basicText" , id="limebidextrousInfo">Increase the chance of picking up double limes.</p>
             </div>
             <div class="skillProgress" id="limebidextrousProgress">
                 <div class="skillBar" , id="limebidextrousBar">0%</div>
@@ -1315,14 +1326,14 @@
     </div>
 <script src="//g8hh.github.io/static/js/jquery.min.js"></script>
 	<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
-    <script src="aesthetic.js?v=               105" charset="utf-8" type="text/javascript"></script>
-    <script src="myfunctions.js?v=             105" charset="utf-8" type="text/javascript"></script>
-    <script src="main.js?v=                    105" charset="utf-8" type="text/javascript"></script>
-    <script src="diseasetask.js?v=             105" charset="utf-8" type="text/javascript"></script>
-    <script src="technical.js?v=               105" charset="utf-8" type="text/javascript"></script>
-    <script src="bars.js?v=                    105" charset="utf-8" type="text/javascript"></script>
-    <script src="update.js?v=                  105" charset="utf-8" type="text/javascript"></script>
-    <script src="oldupdatefixes.js?v=          105" charset="utf-8" type="text/javascript"></script>
+    <script src="aesthetic.js?v=               107" charset="utf-8" type="text/javascript"></script>
+    <script src="myfunctions.js?v=             107" charset="utf-8" type="text/javascript"></script>
+    <script src="main.js?v=                    107" charset="utf-8" type="text/javascript"></script>
+    <script src="diseasetask.js?v=             107" charset="utf-8" type="text/javascript"></script>
+    <script src="technical.js?v=               107" charset="utf-8" type="text/javascript"></script>
+    <script src="bars.js?v=                    107" charset="utf-8" type="text/javascript"></script>
+    <script src="update.js?v=                  107" charset="utf-8" type="text/javascript"></script>
+    <script src="oldupdatefixes.js?v=          107" charset="utf-8" type="text/javascript"></script>
 
 
 <!--客服 开始-->
