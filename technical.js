@@ -258,6 +258,9 @@ var gameDataBase = {
 	smarterAdvertisingManagerBroker: 0,
 	convertedCoinsSinceTravel: 0,
 	
+	lastSaveTime: Date.now(),
+
+	
 	buyMegaCoinsTimes: 0,
 	buyMegaCoinsTimesMax: 10,
 	
@@ -304,7 +307,9 @@ var gameDataBase = {
 	autoAdvertiseAmountValue: 5, 
 	advertisePrice: 10,
 	isAdvertising: 0,
-
+	basketScarecrow: 0,
+	mainTab: 'null',
+	moreVisibleVariables: 0,
 
 
     isOptionsOpen: 0,
@@ -328,22 +333,24 @@ function gameStart() {
 	watertightBarDoMove = 0
 
 
-    addAestheticBase()
-
 
     Object.assign(gameData, gameDataBase)
 
     loadGame()
 	
+	calculateOfflineProgress()
+
     mainGameLoop()
 	
     mainGameLoopSlow()
+
+	addAestheticBase()
 
 	
     updateValues()
     autosave()
 	
-	tab("null")
+	tab(gameData.mainTab)
     tabMarket("marketMain")
     tabStore("plebian")
     tabTasks("earn")
@@ -353,7 +360,7 @@ function gameStart() {
 
 
 function tab(tabby) {
-
+	gameData.mainTab = tabby
 
     tabs("options", "none")
     tabs("market", "none")
