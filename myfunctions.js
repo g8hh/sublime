@@ -3,12 +3,19 @@ function loadStuff(savegame) {
 
     if (savegame !== null) {
         Object.assign(gameData, savegame);
-        backwardsCompatibility(savegame.versionNumber)
-        gameData.versionNumber = 107
+
+        backwardsCompatibility(gameData.versionNumber)
+        gameData.versionNumber = 112
         updateValues()
         updateAfterLoad()
     } else {
         update("newInfo", "Save File Empty.")
+    }
+}
+
+function preventNegative(id){
+    if (gameData[id] < 0) {
+        gameData[id] 
     }
 }
 
@@ -508,7 +515,7 @@ function sleep(milliseconds) {
 
 function restartBar(x) {
     y = eval("gameData." + x + "Bar")
-    if (y <= 99 && y != 0) {
+    if (y < 100 && y != 0) {
         eval(x + "Bar()")
     }
 	
@@ -516,7 +523,7 @@ function restartBar(x) {
 
 function restartBarNoMovement(x) {
     y = eval("gameData." + x + "Bar")
-    if (y <= 99 && y != 0) {
+    if (y < 100 && y != 0) {
         eval(x + "Bar(0)")
     }
 }
@@ -537,10 +544,8 @@ function barStartGranularSkillBasic(variable) {
     variableBar = variable + "Bar"
 
     i = eval("gameData." + variableBar)
-    if ((i == 100 || i == 0) && (eval("gameData." + variable + "SkillLevel") < eval("gameData." + variable + "SkillLevelMax") && gameData.eat >= eval("gameData." + variable + "SkillLevel")) || variable == "eat") {
-        if (variable != "eat") {
-            eval("gameData.eat -= gameData." + variable + "SkillLevel")
-        }
+    if ((i == 100 || i == 0) && (eval("gameData." + variable + "SkillLevel") < eval("gameData." + variable + "SkillLevelMax") && gameData.eat >= eval("gameData." + variable + "SkillLevel"))) {
+        eval("gameData.eat -= gameData." + variable + "SkillLevel")
         eval("gameData." + variableBar + " = 0")
         eval(variableBar + "()")
     }
@@ -674,10 +679,6 @@ function saveGame() {
 
 function exportGame() {
     update("exportCode", btoa(JSON.stringify(gameData)))
-}
-
-function exportGamePT() {
-    update("exportCode", JSON.stringify(gameData))
 }
 
 

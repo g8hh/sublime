@@ -1,15 +1,22 @@
 function updateAfterLoad() {
+	
+	for (let i = 0; i < mainSkills.length; i++) {
+		restartBar(mainSkills[i])
+		
+		if(gameData[mainSkills[i] + 'SkillLevel'] > gameData[mainSkills[i] + 'SkillLevelMax'])
+		{
+			gameData[mainSkills[i] + 'SkillLevel'] = gameData[mainSkills[i] + 'SkillLevelMax']
+		}
+	}
+
+
+
     restartBar("learnANewSkill")
-    restartBar("rottenWisdom")
-    restartBar("limebidextrous")
-    restartBar("knifebidextrous")
-    restartBar("intelligence")
     restartBar("juicer")
     restartBar("peeler")
     restartBar("advertise")
     restartBar("working")
     restartBar("eat")
-    restartBar("keenEye")
     restartBar("teach")
     restartBar("watertight")
     restartBar("surveying")
@@ -18,11 +25,6 @@ function updateAfterLoad() {
     restartBar("convertCoinsNow")
 
 
-
-
-	
-	normalizeButtons()
-	pinButton()
 
     if (gameData.autoCollectingBar !== 0) {
         autoCollectingBar()
@@ -33,7 +35,6 @@ function updateAfterLoad() {
     if (gameData.deliveryBar <= 99 && gameData.deliveryBar != 0) {
         sellYourJuiceBar()
     }
-	updateLearnANewSkill()
     updateValues()
 }
 
@@ -71,25 +72,23 @@ function updateValues() {
         gameData.basketBar = 100
     }
 	
+    if (gameData.eatBar > 100) {
+        gameData.eatBar = 100
+    }
+	
     if (gameData.megaCoinsInBank > gameData.megaCoinsInBankMax) {
         gameData.megaCoinsInBank = gameData.megaCoinsInBankMax
     }
 	
-    if (gameData.coins < 0) {
-        gameData.coins = 0
-    }
+	preventNegative('coins')
+	preventNegative('limes')
+	preventNegative('respect')
 
-    if (gameData.deliveryBar > 99.9999) {
+
+    if (gameData.deliveryBar > 100) {
         gameData.deliveryBar = 100
     }
 
-    if (gameData.limes < 0) {
-        gameData.limes = 0
-    }
-
-    if (gameData.respect < 0) {
-        gameData.respect = 0
-    }
 
     if (gameData.learnANewSkillBar > 100) {
         gameData.learnANewSkillBar = 100
@@ -167,10 +166,7 @@ function updateValues() {
 		update("benevolenceText", "Currently: Level " + gameData.benevolence)
 
 		update("textForResearchers", researchersAvailable + " Available Researchers")
-		
-		update("textForWatertightResearchers", gameData.watertightResearchers + " Researchers")
-		update("textForSurveyingResearchers", gameData.surveyingResearchers + " Researchers")
-		update("textForBenevolenceResearchers", gameData.benevolenceResearchers + " Researchers")
+				
 		
 		if (gameData.limeDiseaseLakes < 10)
 			benevolenceRespectIncrease = 0
@@ -183,10 +179,12 @@ function updateValues() {
 		
 		update("benevolenceRespectIncrease", "Respect increase:  " + benevolenceRespectIncrease.toLocaleString())
 
-		
-		timeToShowScience('watertight')
-		timeToShowScience('surveying')
-		timeToShowScience('benevolence')
+		for (let i = 0; i < mainSciences.length; i++) {
+			
+			update("textFor" + jsUcfirst(mainSciences[i]) + "Researchers", gameData[mainSciences[i] + "Researchers"] + " Researchers")
+			timeToShowScience(mainSciences[i])
+			
+		}	
 		
 	}
 	
@@ -432,22 +430,22 @@ function updateValues() {
     moveBasket()
     moveAutoCollecting()
 	
-	update("ambidextrousSkillLevel", gameData.ambidextrousSkillLevel + " / " + gameData.ambidextrousSkillLevelMax)
+	for (let i = 0; i < mainSkills.length; i++) {
+		update(mainSkills[i] + "SkillLevel", gameData[mainSkills[i] + "SkillLevel"] + " / " + gameData[mainSkills[i] + "SkillLevelMax"])
 
+	}
+	
 	update("rottenWisdom", gameData.rottenWisdom + "% Chance")
-	update("rottenWisdomSkillLevel", gameData.rottenWisdomSkillLevel + " / " + gameData.rottenWisdomSkillLevelMax)
 	
 	update("keenEye", gameData.keenEyeSkillLevel * 5 + "% Chance")
-	update("keenEyeSkillLevel", gameData.keenEyeSkillLevel + " / " + gameData.keenEyeSkillLevelMax)
 
 	update("limebidextrous", gameData.limebidextrous + "% Chance")
-	update("limebidextrousSkillLevel", gameData.limebidextrousSkillLevel + " / " + gameData.limebidextrousSkillLevelMax)
 
 	update("intelligence", Math.floor(((gameData.intelligenceSkillLevel * 2)/ gameData.intelligenceSkillLevelMax) * 100) + "% Faster")
-	update("intelligenceSkillLevel", gameData.intelligenceSkillLevel + " / " + gameData.intelligenceSkillLevelMax)
 
 	update("knifebidextrous", gameData.knifebidextrous * 2.5 + "% Chance")
-	update("knifebidextrousSkillLevel", gameData.knifebidextrousSkillLevel + " / " + gameData.knifebidextrousSkillLevelMax)
+
+
 
 	update("eat", gameData.eat + " / 100")
 
@@ -807,13 +805,13 @@ function updateValues() {
 	
 	
 
-    if (gameData.fork == 0 && gameData.learnANewSkill > -1) {
+    if (gameData.fork == 0 && gameData.learnANewSkill > -2) {
         showBasicDiv('buyAForkDiv')
     } else {
         hide('buyAForkDiv')
     }
 	
-    if (gameData.shoes == 0 && gameData.learnANewSkill > -2) {
+    if (gameData.shoes == 0 && gameData.learnANewSkill > -1) {
         showBasicDiv('buyShoesDiv')
     } else {
         hide('buyShoesDiv')
@@ -1100,11 +1098,7 @@ function updateValues() {
 	}
 	
     moveBar("learnANewSkill")
-
-}
-
-function updateLearnANewSkill(){
-
+	
 	if (gameData.learnANewSkill >= -1) {	
 		showBasicDiv("eatFoodDiv")
 		showOrHideSkill("keenEye")
@@ -1152,4 +1146,6 @@ function updateLearnANewSkill(){
         gameData.learnANewSkillBar = 100;
         document.getElementById('learnANewSkillButton').style.backgroundColor = 'darkgray';
     }
+
 }
+
