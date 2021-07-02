@@ -4,6 +4,12 @@ var loopNumbercurrentTask = 0;
 mainVariables = ['limes', 'rottenLimes', 'coins', 'juice', 'megaCoins', 'alphaCoins', 'peeledLimes'];
 //Main variables change color in options and are updated as numbers.
 
+mainSkills = ['rottenWisdom', 'limebidextrous', 'knifebidextrous', 'intelligence', 'ambidextrous', 'keenEye'];
+//Uses: Restart bar after reloading. Sets the level to the max level if it somehow goes above. Updates test for level / levelMax.
+
+mainSciences = ['watertight', 'surveying', 'benevolence'];
+//Uses: Updates time to complete science. Updates number of researchers allocated.
+
 function mainGameLoopSlow() {
 	
 	if (gameData.autoStartSimulation)
@@ -364,6 +370,15 @@ function typeToHire(id) {
 	updateValues()
 }
 
+function buyAFork() {
+    if (gameData.coins >= 1) {
+        gameData.coins -= 1
+        gameData.fork = 1
+        gameData.eatBar = 0
+    }
+    updateValues()
+}
+
 function buyARobe() {
     if (gameData.coins >= 1e5) {
         gameData.coins -= 1e5
@@ -538,6 +553,7 @@ function travelToNextVillage() {
 		
         megaCoinsNow = gameData.megaCoinsInBank
 		
+		saveBeforeWipe('versionNumber')
 		saveBeforeWipe('alphaCoins')
 		saveBeforeWipe('nationalJuiceMarketing')
 		saveBeforeWipe('creditScore2')
@@ -573,7 +589,8 @@ function travelToNextVillage() {
 		if (gameData.manuscripts > 0) {
 			saveAfterWipe('respectMilestone1000')
 		} 
-	
+		
+		saveAfterWipe('versionNumber')	
 	    saveAfterWipe('upgradeMoreStorage')
 		saveAfterWipe('alphaCoins')
 		saveAfterWipe('creditScore2')
@@ -595,12 +612,15 @@ function travelToNextVillage() {
         saveAfterWipe('hideCompletedSkills')
         saveAfterWipe('hideMaxedPurchases')
 
+
 		gameData.juicersMax = 100 + gameData.upgradeMoreStorage * 500
 		gameData.peelersMax = 500 + gameData.upgradeMoreStorage * 2500
 
 
         gameData.villageNumber = 2
         saveGame()
+
+
         location.reload();
     }
 }
