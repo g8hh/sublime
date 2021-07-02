@@ -188,7 +188,7 @@ var cnItems = {
     'Transfer money to a bank account in the next town': '转账到隔壁镇的银行账户',
     'Pin applications here': '在此处固定应用程序',
     'Pay with mega coins': '用超级硬币支付',
-    'On Peeled Limes': '在去皮的酸橙上',
+    'On Peeled Limes': '在去皮的酸橙',
     'Nutritionist': '营养师',
     'Modern': '现代',
     'Knife': '刀',
@@ -532,7 +532,7 @@ var cnExcludePostfix = [
 var cnRegReplace = new Map([
     [/^You Need ([\d\.,]+) Coins For Delivery$/, '您需要 $1 枚硬币才能交付'],
     [/^ ([\d\.,]+) \/ ([\d\.,]+) minutes.$/, ' $1 \/ $2 分钟。'],
-    [/^([\d\.,]+) limes per minute.$/, '$1 酸橙每分钟。'],
+    [/^\-([\d\.,]+) limes per minute.$/, '\-$1 酸橙每分钟。'],
     [/^([\d\.,]+)\% Profit$/, '$1\% 利润'],
     [/^([\d\.,]+) limes per minute.$/, '$1 酸橙每秒。'],
     [/^([\d\.,]+) Limes per second.$/, '$1 酸橙每秒。'],
