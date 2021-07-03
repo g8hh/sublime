@@ -446,7 +446,7 @@ var cnPrefix = {
     "Exchange Rate: ": "汇率：",
     "Working time left:": "工作时间剩余:",
     "Respect increase:": "尊重增加：",
-    "": "",
+    "Increases maximum juicers by ": "增加最大榨汁机 ",
     "": "",
     "": "",
     "": "",
