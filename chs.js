@@ -539,7 +539,7 @@ var cnRegReplace = new Map([
     [/^ ([\d\.,]+) \/ ([\d\.,]+) minutes.$/, ' $1 \/ $2 分钟。'],
     [/^\-([\d\.,]+) limes per minute.$/, '\-$1 酸橙每分钟。'],
     [/^([\d\.,]+)\% Profit$/, '$1\% 利润'],
-    [/^([\d\.,]+) limes per minute.$/, '$1 酸橙每秒。'],
+    [/^([\d\.,]+) limes per minute.$/, '$1 酸橙分钟。'],
     [/^([\d\.,]+) Limes per second.$/, '$1 酸橙每秒。'],
     [/^([\d\.,]+) Limes Per Second.$/, '$1 酸橙每秒。'],
     [/^([\d\.,]+) Coins Per Minute.$/, '$1 硬币每分钟。'],
