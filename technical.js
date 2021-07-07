@@ -311,6 +311,8 @@ var gameDataBase = {
 	mainTab: 'null',
 	moreVisibleVariables: 0,
 	invertText: 0,
+	surveillanceCamera: 0,
+	timePlayed: 0,
 
 
     isOptionsOpen: 0,
@@ -340,8 +342,6 @@ function gameStart() {
 
     loadGame()
 	
-	calculateOfflineProgress()
-
     mainGameLoop()
 	
     mainGameLoopSlow()
@@ -357,12 +357,14 @@ function gameStart() {
     tabStore("plebian")
     tabTasks("earn")
     tabScience("research")
+	tabOptions("gameOptions")
 
 }
 
 
 function tab(tabby) {
 	gameData.mainTab = tabby
+    update("exportCode", "")
 
     tabs("options", "none")
     tabs("market", "none")
@@ -472,6 +474,16 @@ function tabScience(tabby) {
 	colorChanger('researchersButton', '#BBBBBB')		
 	
 	colorChanger(tabby + "Button", "#898989")
+	
+    document.getElementById(tabby).style.display = "block"
+}
+
+
+function tabOptions(tabby) {
+    tabs("gameOptions", "none")
+    tabs("uiOptions", "none")
+    tabs("statsOptions", "none")
+
 	
     document.getElementById(tabby).style.display = "block"
 }

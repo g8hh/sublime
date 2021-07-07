@@ -1,4 +1,5 @@
 var loopNumberBasket = 0;
+var loopNumberTimePlayed = 0;
 var loopNumbercurrentTask = 0;
 
 mainVariables = ['limes', 'rottenLimes', 'coins', 'juice', 'megaCoins', 'alphaCoins', 'peeledLimes'];
@@ -75,7 +76,13 @@ function mainGameLoopSlow() {
 	}
 	
 	gameData.lastSaveTime = Date.now()
-	
+	loopNumberTimePlayed += 1
+	if(loopNumberTimePlayed == 2)
+	{
+		gameData.timePlayed += 1 
+		loopNumberTimePlayed = 0
+	}
+
 	moveBar('achievement')
 	updateMapTileAesthetic()
 	setTimeout(mainGameLoopSlow, 500)
@@ -98,7 +105,6 @@ function mainGameLoop() {
 function calculateOfflineProgress(){
 	secondsOffline = Math.floor((Date.now() - gameData.lastSaveTime) / 1000)
 	secondsOfflineThree = Math.floor(secondsOffline / 3)
-	
 	if(gameData.basketScarecrow)
 	{
 		if(gameData.basketBar + secondsOfflineThree < 100)
@@ -106,6 +112,21 @@ function calculateOfflineProgress(){
 		else
 			gameData.basketBar = 100
 	}
+	if(gameData.surveillanceCamera && secondsOffline > 60 && gameData.employeeWorking > 0)
+	{
+		for (i = 0; i < Math.floor(secondsOffline / 60) && gameData.employeeWorking > 0; i++) {
+			
+			gameData.employeeWorking -= 1
+			gameData.limes += gameData.employeeCurrentSpeed
+
+		}
+
+		gameData.workingBar = 0
+
+	}
+	
+	saveGame()
+
 }
 
 function sellMaxJuice() {
@@ -250,6 +271,7 @@ function hireApplicant() {
 }
 
 function getLimesButton() {
+
 	if (gameData.lookAround < 1)
 		gameData.collectLimesAtBeginning += 1
 	
@@ -554,6 +576,7 @@ function travelToNextVillage() {
         megaCoinsNow = gameData.megaCoinsInBank
 		
 		saveBeforeWipe('versionNumber')
+		saveBeforeWipe('timePlayed')	
 		saveBeforeWipe('alphaCoins')
 		saveBeforeWipe('nationalJuiceMarketing')
 		saveBeforeWipe('creditScore2')
@@ -591,6 +614,7 @@ function travelToNextVillage() {
 		} 
 		
 		saveAfterWipe('versionNumber')	
+		saveAfterWipe('timePlayed')	
 	    saveAfterWipe('upgradeMoreStorage')
 		saveAfterWipe('alphaCoins')
 		saveAfterWipe('creditScore2')
@@ -765,10 +789,9 @@ function increaseJuicePrice() {
 		for (i = 0; i < 10; i++) {
 			if (gameData.coins >= gameData.juicePricePrice) {
 				gameData.coins -= gameData.juicePricePrice
-
-
-
 				gameData.juicePriceCents += 1
+				gameData.juicePricePrice = gameData.juicePriceCents + 1
+
 			}
 		}
 	}
