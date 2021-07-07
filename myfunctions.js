@@ -5,7 +5,7 @@ function loadStuff(savegame) {
         Object.assign(gameData, savegame);
 
         backwardsCompatibility(gameData.versionNumber)
-        gameData.versionNumber = 112
+        gameData.versionNumber = 117
         updateValues()
         updateAfterLoad()
     } else {
@@ -193,30 +193,30 @@ function pickCurrentSkill(x) {
 
 function startCurrentTask(x) {
 		
-	 if (x == 'eatFood') {
+	if (x == 'eatFood') {
 		eat()
 	}
 	
-	 else if (x == 'sellYourJuice') {
+	else if (x == 'sellYourJuice') {
 		sellYourJuice()
 	}
 
-	 else if (x == 'makeMaxJuice') {
+	else if (x == 'makeMaxJuice') {
 		makeMaxJuice()
 	}	
 
-	 else if (x == 'makeJuice') {
+	else if (x == 'makeJuice') {
 		makeJuice()
 	}	
 
-	 else if (x == 'usePeelers') {
+	else if (x == 'usePeelers') {
 		peelerPeel()
 	}	
 
-	 else if (x == 'useMaxPeelers') {
+	else if (x == 'useMaxPeelers') {
 		peelerPeelMax()
 	}
-	 else if (x == 'autoCurrencyConversionBuy') {
+	else if (x == 'autoCurrencyConversionBuy') {
 		coinsToAlphaClick()
 	}	
 	
@@ -624,7 +624,7 @@ function checkShow(i, n, txt) {
 
 //Checks if a value is higher than 0, and hides an element if so.
 function checkHide(i, txt) {
-    if (i >= 1) {
+    if (i > 0) {
         hide(txt)
     }
 
@@ -707,7 +707,7 @@ function autosave() {
     if (gameData.autosave == 1) {
         saveGame()
     }
-    setTimeout(autosave, 3000)
+    setTimeout(autosave, 500)
 }
 
 function resetGame() {

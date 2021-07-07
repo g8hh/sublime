@@ -1,5 +1,6 @@
 function updateAfterLoad() {
-	
+	calculateOfflineProgress()
+
 	for (let i = 0; i < mainSkills.length; i++) {
 		restartBar(mainSkills[i])
 		
@@ -15,7 +16,6 @@ function updateAfterLoad() {
     restartBar("juicer")
     restartBar("peeler")
     restartBar("advertise")
-    restartBar("working")
     restartBar("eat")
     restartBar("teach")
     restartBar("watertight")
@@ -24,7 +24,9 @@ function updateAfterLoad() {
     restartBar("coinsToAlpha")
     restartBar("convertCoinsNow")
 
-
+    if (gameData.workingBar < 100 && (gameData.workingBar != 0 || gameData.employeeWorking > 0)) {
+        workingBar()
+    }
 
     if (gameData.autoCollectingBar !== 0) {
         autoCollectingBar()
@@ -263,6 +265,8 @@ function updateValues() {
     update("limesInBaskets", gameData.limesInBaskets.toLocaleString() + " Limes")
 
     update("textForRespect", gameData.respect.toLocaleString() + " Respect")
+	
+    update("textForTimePlayed", "Total Time Played: " + gameData.timePlayed.toLocaleString() + " Seconds")
 
 
 
@@ -506,23 +510,47 @@ function updateValues() {
         hide("smarterAutoBrokerAdvertiser")
     }
 
-    if (gameData.respectMilestone10) {
-        tabs("autoStartTaskButton", "inline-block")
-    } else {
-        hide("autoStartTaskButton")
-	}
+	//Respect Milstones
+		checkRespectMilestone(10,    'lime',  'Automatically start tasks',                        'autoStartTaskButton')
+		checkRespectMilestone(25,    'lime',  'Automatically start simulation',                   'autoStartSimulationButton')
+		checkRespectMilestone(50,    'lime',  'Allow entrance to the Special Shopping District')
+		checkRespectMilestone(100,   'lime',  'Automatically check simulation',                   'autoCheckSimulationButton')
+		checkRespectMilestone(500,   'lime',  'Automatically situate a civilian',                 'autoPlaceACivilianButton')
+		checkRespectMilestone(1000,  'lime',  'Unlock scientific research',                       'scienceButton')
+		checkRespectMilestone(10000, 'red' ,  'Unlock more mega coin upgrades')
+
+
+
+		function checkRespectMilestone(number, color, text, id){
+			
+			i = 'respectMilestone' + number
+			
+			if (gameData.respect >= number) {
+				gameData[i] = 1
+			}
+
+			
+			if (gameData[i]) {
+				if(id !== undefined)
+					tabs(id, "inline-block")
 	
-    if (gameData.respectMilestone25) {
-        tabs("autoStartSimulationButton", "inline-block")
-    } else {
-        hide("autoStartSimulationButton")
-	}
-	
-    if (gameData.respectMilestone100) {
-        tabs("autoCheckSimulationButton", "inline-block")
-    } else {
-        hide("autoCheckSimulationButton")
-	}
+				update(number + 'RespectMilestone', number.toLocaleString() + ' Respect: ' + text)
+				
+				if(color == 'lime')
+					colorChanger(number + 'RespectMilestone', limesRelatedAccent)
+				if(color == 'red')
+					colorChanger(number + 'RespectMilestone', '#FF999A')
+				
+				
+			} else {
+				if(id !== undefined)
+					hide(id)
+				
+				colorChanger(number + 'RespectMilestone', grayAccentLight)
+			}
+			
+		}
+	//Respect Milstones End
 	
     if (gameData.increaseJuicePricePermanance < 1) {
         tabs("increaseJuicePricePermanance", "inline-block")
@@ -540,12 +568,7 @@ function updateValues() {
         hide("stopActionsButton")
 	}
 	
-    if (gameData.respectMilestone500) {
-        tabs("autoPlaceACivilianButton", "inline-block")
-    } else {
-        hide("autoPlaceACivilianButton")
-	}
-	
+
     if (gameData.manuscripts) {
         hide("buyManuscriptsDiv")
         showBasicDiv("upgradeManuscripts")
@@ -556,16 +579,6 @@ function updateValues() {
 		
 		}
 	
-	
-    if (gameData.respectMilestone1000) {
-        tabs("scienceButton", "inline-block")
-
-		
-    } else {
-        hide("scienceButton")
-
-		
-	}
 	
 	checkShowOrHide(gameData.doesHaveCurrencyBroker, "currencyBroker")
 
@@ -923,6 +936,15 @@ function updateValues() {
 
 
 
+	if (gameData.hasAdvertised && !gameData.surveillanceCamera) {
+		showBasicDiv("offlineEmployee")
+	} 
+	else 
+	{
+		hide("offlineEmployee")
+	}
+	
+	
 
     if (gameData.advertisingLevel1 == 0) {
         hide("advertisingMethods")
@@ -931,11 +953,13 @@ function updateValues() {
             showBasicDiv("researchBetterAdvertising")
         } else {
             hide("researchBetterAdvertising")
+
         }
 
     } else {
         tabs("advertisingMethods", "block")
         hide("researchBetterAdvertising")
+
     }
 	
 
@@ -997,7 +1021,9 @@ function updateValues() {
 		gameData.isAutoCollecting = 1
     }
 	
-
+    if (gameData.villageNumber > 1) {
+        tabs("marketMainButtonsDiv", "inline-block")
+    }
 
     if (gameData.maps >= 1) {
         tabs("marketMainButtonsDiv", "inline-block")
@@ -1096,9 +1122,7 @@ function updateValues() {
 			gameData['achievement' + i] = 1
 		}
 	}
-	
-    moveBar("learnANewSkill")
-	
+		
 	if (gameData.learnANewSkill >= -1) {	
 		showBasicDiv("eatFoodDiv")
 		showOrHideSkill("keenEye")
