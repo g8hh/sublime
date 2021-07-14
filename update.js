@@ -952,6 +952,13 @@ function updateValues() {
 		hide("offlineScience")
 		showBasicDiv("upgradeHighTechSurveillance")
 	} 
+	
+	if (gameData.respectMilestone10000) {
+		update("specialAchievement1", "Get a 5x multplier with Buy More Land purchased")
+	} 
+	if (gameData.maps > 3) {
+		update("specialAchievement2", "Buy a Giant Map after only sending one delivery in that town")
+	} 
 
 
     if (gameData.advertisingLevel1 == 0) {
@@ -1017,12 +1024,14 @@ function updateValues() {
 
 	checkHide(gameData.tomes, "tomeDiv")
 
-
+    if (gameData.tomes < 1) {
+        hide("tomeDiv2")
+    }
     if (gameData.tomes > 1) {
         hide("tomeDiv2")
 		showBasicDiv("motivateEmployeeButton")
     }
-    if (gameData.tomes > 2) {
+    if (gameData.tomes > 2 || gameData.tomes < 2) {
         hide("tomeDiv3")
     }
 
@@ -1124,7 +1133,7 @@ function updateValues() {
 	
 
 	
-    for (i = 1; i < 8; i++) {
+    for (i = 1; i <= numberOfBasicAchievements; i++) {
 		
 		if (gameData.coins >= Math.pow(10, i)) {
 			gameData['achievement' + i] = 1
