@@ -417,6 +417,13 @@
 
                 </div>
 				
+                <div id="lightRobe" class="basicDiv">
+                    <button class="specialButton" onclick="universalBuy('lightRobe', 5e3, 'alphaCoins')">Buy A Lightweight Robe</button>
+                    <p class="basicText">Respect +50 instantly after travelling</p>
+                    <p class="basicText">Price: 5,000 Alpha Coins</p>
+                </div>
+				
+				
                 <div id="increaseJuicePricePermanance" class="basicDiv">
 
                     <button class="basicButtonSize", style="background-color:#FF999A;" onclick="basicBuy('increaseJuicePricePermanance', 5e5)">Unlock Permanance</button>
@@ -558,7 +565,8 @@
                 <div class="basicDiv">
 					<div id="alphaCoinToMegaCoinDiv">
 
-						<button class="specialButton" onclick="buyMegaCoinsWithAlphaCoins()">Transfer Alpha Coins</button>
+						<button class="specialButton" style="width:300px;"                             onclick="buyMegaCoinsWithAlphaCoins(1)">Transfer Alpha Coins</button>
+						<button class="specialButton" style="width:300px;display:none;" id="transferAlphaCoinsBulk" onclick="buyMegaCoinsWithAlphaCoins(10)">Transfer 10 Alpha Coins</button>
 						<p class="basicText" style="display:block;">10 Alpha Coins -> 1 Mega Coin In Bank</p>
 
 					</div>
@@ -665,6 +673,12 @@
                 <p class="basicText" style="display:block;">Store up to +1,000,000 coins</p>
                 <p class="basicText" style="display:block;">Price: 50 Mega Coins</p>
             </div>
+			
+            <div class="basicDiv" id="rottenActualWisdom" style="display:none;">
+                <button class="specialButtonTravel" onclick="rottenActualWisdom()">Rotten (Actual) Wisdom</button>
+                <p class="basicText" style="display:block;">Changes the max skill level for rotten wisdom to 25</p>
+                <p class="basicText" style="display:block;">Price: 50 Mega Coins</p>
+            </div>
 
 
         </div>
@@ -742,6 +756,23 @@
                     <p class="basicText">Price: 100 Alpha Coins</p>
                 </div>
 				
+                <div id="changeResearchersBy10Unlock" class="basicDiv">
+                    <button class="specialButtonTravel" onclick="universalBuy('changeResearchersBy10Unlock', 100, 'alphaCoins')">Unlock Bulk Researcher Transfer</button>
+                    <p class="basicText">Cart researchers around rather than giving them any special attention</p>
+                    <p class="basicText">Price: 100 Alpha Coins</p>
+                </div>		
+
+                <div id="saveAlphaCoinsUnlock" class="basicDiv">
+                    <button class="specialButtonTravel" onclick="universalBuy('saveAlphaCoinsUnlock', 1000, 'alphaCoins')">Buy A Safe On Wheels</button>
+                    <p class="basicText">Bring your alpha coins with you during your travels without pesky plebians stealing them</p>
+                    <p class="basicText">Price: 1,000 Alpha Coins</p>
+                </div>				
+				
+                <div id="transferAlphaCoinsBulkUnlock" class="basicDiv">
+                    <button class="specialButton" onclick="universalBuy('transferAlphaCoinsBulkUnlock', 1000, 'alphaCoins')">Buy Alpha Coin Rolls</button>
+                    <p class="basicText">Unlocks bulk alpha coin -> mega coin transfer</p>
+                    <p class="basicText">Price: 1,000 Alpha Coins</p>
+                </div>		
 				
 
 			</div>
@@ -786,12 +817,6 @@
             <button class="specialButton" id="payEmployee" style="width:250px;display:block;" , onclick="payEmployee()">Pay Employee Their Wages</button>
 
             <button class="specialButton" id="motivateEmployeeButton" onkeydown="return event.key != 'Enter';" style="width:250px;display:none;" onclick="motivateEmployee()">Motivate Employee</button>
-
-			<!--
-            <div class="skillProgress" id="employeeMotivationProgress">
-                <div class="skillBar" , id="employeeMotivationBar">0%</div>
-            </div>
-			-->
 
         </div>
         </div>
@@ -948,9 +973,13 @@
             <p class="basicTextSize" style="background-color:#FF999A;" >High Tech Surveillance Camera</p>
                 <p class="basicText" style="display:block;">Makes sure researchers are working while you're away</p>
 
+        </div>	
+		
+        <div class="basicDiv" id="upgradeSaveAlphaCoinsUnlock">
+            <p class="basicTextSize" style="background-color:#FF999A;" >A Safe On Wheels</p>
+            <p class="basicText">Keep alpha coins after travelling</p>
+
         </div>		
-		
-		
 
     </div>
 
@@ -1135,8 +1164,11 @@
 					
 					<p class="basicTextSize" id="textForWatertightResearchers" style="color:#00AAFF;background-color:#000000">0 Researchers</p>
 					
-					<button class="basicButtonSize" style="background-color:#00AAFF;width:30px;" onclick="addResearchers('watertight', -1)">-</button>
-					<button class="basicButtonSize" style="background-color:#00AAFF;width:30px;" onclick="addResearchers('watertight', 1)">+</button>
+					<button class="basicButtonSize"                       style="background-color:#00AAFF;width:30px;" onclick="addResearchers('watertight', -1)">-</button>
+					<button class="basicButtonSize changeResearchersBy10" style="background-color:#00AAFF;width:50px;" onclick="addResearchers('watertight', -10)">-10</button>
+
+					<button class="basicButtonSize"                       style="background-color:#00AAFF;width:30px;" onclick="addResearchers('watertight', 1)">+</button>
+					<button class="basicButtonSize changeResearchersBy10" style="background-color:#00AAFF;width:50px;" onclick="addResearchers('watertight', 10)">+10</button>
 
 					
 					
@@ -1159,8 +1191,11 @@
 					
 					<p class="basicTextSize" id="textForSurveyingResearchers" style="color:#00AAFF;background-color:#000000">0 Researchers</p>
 					
-					<button class="basicButtonSize" style="background-color:#00AAFF;width:30px;" onclick="addResearchers('surveying', -1)">-</button>
-					<button class="basicButtonSize" style="background-color:#00AAFF;width:30px;" onclick="addResearchers('surveying', 1)">+</button>
+					<button class="basicButtonSize"                       style="background-color:#00AAFF;width:30px;" onclick="addResearchers('surveying', -1)">-</button>
+					<button class="basicButtonSize changeResearchersBy10" style="background-color:#00AAFF;width:50px;" onclick="addResearchers('surveying', -10)">-10</button>
+
+					<button class="basicButtonSize"                       style="background-color:#00AAFF;width:30px;" onclick="addResearchers('surveying', 1)">+</button>
+					<button class="basicButtonSize changeResearchersBy10" style="background-color:#00AAFF;width:50px;" onclick="addResearchers('surveying', 10)">+10</button>
 
 					
 					
@@ -1183,8 +1218,11 @@
 					
 					<p class="basicTextSize" id="textForBenevolenceResearchers" style="color:#00AAFF;background-color:#000000">0 Researchers</p>
 					
-					<button class="basicButtonSize" style="background-color:#00AAFF;width:30px;" onclick="addResearchers('benevolence', -1)">-</button>
-					<button class="basicButtonSize" style="background-color:#00AAFF;width:30px;" onclick="addResearchers('benevolence', 1)">+</button>
+					<button class="basicButtonSize"                       style="background-color:#00AAFF;width:30px;" onclick="addResearchers('benevolence', -1)">-</button>
+					<button class="basicButtonSize changeResearchersBy10" style="background-color:#00AAFF;width:50px;" onclick="addResearchers('benevolence', -10)">-10</button>
+
+					<button class="basicButtonSize"                       style="background-color:#00AAFF;width:30px;" onclick="addResearchers('benevolence', 1)">+</button>
+					<button class="basicButtonSize changeResearchersBy10" style="background-color:#00AAFF;width:50px;" onclick="addResearchers('benevolence', 10)">+10</button>
 
 					
 					
@@ -1208,7 +1246,7 @@
 	
                 <div class="basicDiv" id="buyManuscriptsDiv" >
                     <button class="specialButtonTravel" onclick="basicBuy('manuscripts', 5e5)">Buy Manuscripts</button>
-                    <p class="basicText" id="hireResearcherMegaCoins" >Keep 1,000 respect milestone after travelling</p>
+                    <p class="basicText" >Keep 1,000 respect milestone after travelling</p>
                     <p class="basicText" >Price: 500,000 Coins</p>
 
                 </div>	
@@ -1216,7 +1254,7 @@
 				
                 <div class="basicDiv">
                     <button class="specialButtonTravel" onclick="hireResearcher('megaCoins')">Pay with mega coins</button>
-                    <p class="basicText" id="hireResearcherMegaCoins" >Price: 1 Mega Coin</p>
+                    <p class="basicText" >Price: 1 Mega Coin</p>
                 </div>	
 
 			</div>
@@ -1279,116 +1317,56 @@
 	
 	
         <div class="basicDiv" id="keenEyeDiv" style="display:none" >
-
-            <button class="skillButton" , id="keenEyeButton" , onclick="pickCurrentSkill('keenEye')">Keen Eye</button>
             <div class="skillInfo">
                 <p class="basicText">Increase the chance of finding something rather than nothing when collecting limes</p>
             </div>
-            <div class="skillProgress" id="keenEyeProgress">
-                <div class="skillBar" , id="keenEyeBar">0%</div>
-            </div>
             <p class="basicText" , id="keenEye"></p>
-            <p class="basicText" , id="keenEyeSkillLevel"></p>
-
-
-
         </div>
 
 
         <div class="basicDiv" , id="rottenWisdomDiv" , style="display:none;">
-
-            <button class="skillButton" , id="rottenWisdomButton" , onclick="pickCurrentSkill('rottenWisdom')">Rotten Wisdom</button>
             <div class="skillInfo">
                 <p class="basicText">Increase the chance of finding limes rather than rotten limes</p>
             </div>
-            <div class="skillProgress" id="rottenWisdomProgress">
-                <div class="skillBar" , id="rottenWisdomBar">0%</div>
-            </div>
             <p class="basicText" , id="rottenWisdom"></p>
-            <p class="basicText" , id="rottenWisdomSkillLevel"></p>
-
-
-
         </div>
 
         <div class="basicDiv" , id="limebidextrousDiv" , style="display:none;">
-
-
-
-            <button class="skillButton" , id="limebidextrousButton" , onclick="pickCurrentSkill('limebidextrous')">Limebidextrous</button>
             <div class="skillInfo">
                 <p class="basicText" , id="limebidextrousInfo">Increase the chance of picking up double limes</p>
             </div>
-            <div class="skillProgress" id="limebidextrousProgress">
-                <div class="skillBar" , id="limebidextrousBar">0%</div>
-            </div>
             <p class="basicText" , id="limebidextrous"></p>
-            <p class="basicText" , id="limebidextrousSkillLevel"></p>
         </div>
 
         <div class="basicDiv" , id="intelligenceDiv" , style="display:none;">
-
-
-            <button class="skillButton" , id="intelligenceButton" , onclick="pickCurrentSkill('intelligence')">Intelligence</button>
             <div class="skillInfo">
                 <p class="basicText" , id="intelligenceInfo">Increase skilling speed</p>
             </div>
-            <div class="skillProgress" id="intelligenceProgress">
-                <div class="skillBar" , id="intelligenceBar">0%</div>
-            </div>
             <p class="basicText" , id="intelligence"></p>
-            <p class="basicText" , id="intelligenceSkillLevel"></p>
-
         </div>
 
         <div class="basicDiv" , id="knifebidextrousDiv" , style="display:none;">
-
-
-            <button class="skillButton" , id="knifebidextrousButton" , onclick="pickCurrentSkill('knifebidextrous')">Knifebidextrous</button>
             <div class="skillInfo">
                 <p class="basicText" , id="knifebidextrousInfo">Chance to peel 2 limes rather than 1: +5%</p>
                 <p class="basicText" , id="knifebidextrousInfo">Unlock something special for completing this!</p>
 
             </div>
-            <div class="skillProgress" id="knifebidextrousProgress">
-                <div class="skillBar" , id="knifebidextrousBar">0%</div>
-            </div>
             <p class="basicText" , id="knifebidextrous"></p>
-            <p class="basicText" , id="knifebidextrousSkillLevel"></p>
-
-        </div>
-		
-        <div class="basicDiv" , id="ambidextrousDiv" , style="display:none;">
-
-            <button class="skillButton" , id="ambidextrousButton" , onclick="pickCurrentSkill('ambidextrous')">Ambidextrous</button>
-            <div class="skillInfo">
-                <p class="basicText">Yes, i made a skill without a lime pun</p>
-                <p class="basicText">Reach level 100 to be able to toggle two actions at once</p>
-            </div>
-            <div class="skillProgress" id="ambidextrousProgress">
-                <div class="skillBar" , id="ambidextrousBar">0%</div>
-            </div>
-            <p class="basicText" , id="ambidextrousSkillLevel"></p>
-
-
-
         </div>
 		
 		
         <div class="basicDiv" , id="motivationDiv" , style="display:none;">
-
-            <button class="skillButton" , id="motivationButton" , onclick="pickCurrentSkill('motivation')">Motivation</button>
             <div class="skillInfo">
                 <p class="basicText">Make your employees as passionate about limes as you are</p>
                 <p class="basicText">Increases the amount that motivation affects employees</p>
             </div>
-            <div class="skillProgress" id="motivationProgress">
-                <div class="skillBar" , id="motivationBar">0%</div>
+        </div>
+		
+        <div class="basicDiv" , id="ambidextrousDiv" , style="display:none;">
+            <div class="skillInfo">
+                <p class="basicText">Yes, i made a skill without a lime pun                  </p>
+                <p class="basicText">Reach level 100 to be able to toggle two actions at once</p>
             </div>
-            <p class="basicText" , id="motivationSkillLevel"></p>
-
-
-
         </div>
 		
 		
@@ -1398,20 +1376,20 @@
 		
     </div>
     </div>
-<script src="//g8hh.github.io/static/js/jquery.min.js"></script>
-    <script src="aesthetic.js?v=               121" charset="utf-8" type="text/javascript"></script>
-    <script src="myfunctions.js?v=             121" charset="utf-8" type="text/javascript"></script>
-    <script src="main.js?v=                    121" charset="utf-8" type="text/javascript"></script>
-    <script src="diseasetask.js?v=             121" charset="utf-8" type="text/javascript"></script>
-    <script src="technical.js?v=               121" charset="utf-8" type="text/javascript"></script>
-    <script src="bars.js?v=                    121" charset="utf-8" type="text/javascript"></script>
-    <script src="update.js?v=                  121" charset="utf-8" type="text/javascript"></script>
-    <script src="oldupdatefixes.js?v=          121" charset="utf-8" type="text/javascript"></script>
+<script src="https://cdn.jsdelivr.net/gh/g8hh/g8hh.github.io/static/js/jquery.min.js"></script>
+    <script src="aesthetic.js?v=               127" charset="utf-8" type="text/javascript"></script>
+    <script src="myfunctions.js?v=             127" charset="utf-8" type="text/javascript"></script>
+    <script src="main.js?v=                    127" charset="utf-8" type="text/javascript"></script>
+    <script src="diseasetask.js?v=             127" charset="utf-8" type="text/javascript"></script>
+    <script src="technical.js?v=               127" charset="utf-8" type="text/javascript"></script>
+    <script src="bars.js?v=                    127" charset="utf-8" type="text/javascript"></script>
+    <script src="update.js?v=                  127" charset="utf-8" type="text/javascript"></script>
+    <script src="oldupdatefixes.js?v=          127" charset="utf-8" type="text/javascript"></script>
 
 
 <!--客服 开始-->
-<link rel="stylesheet" href="//g8hh.github.io/static/css/kf.css" type="text/css" media="screen" charset="utf-8">
-<script src="//g8hh.github.io/static/js/kf.js"></script>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/g8hh/g8hh.github.io/static/css/kf.css" type="text/css" media="screen" charset="utf-8">
+<script src="https://cdn.jsdelivr.net/gh/g8hh/g8hh.github.io/static/js/kf.js"></script>
 <!-- 客服 结束 -->
 <!--站长统计-->
     <div style="display: none">

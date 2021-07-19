@@ -5,7 +5,7 @@ function loadStuff(savegame) {
         Object.assign(gameData, savegame);
 
         backwardsCompatibility(gameData.versionNumber)
-        gameData.versionNumber = 121
+        gameData.versionNumber = 127
         updateValues()
         updateAfterLoad()
     } else {
@@ -116,30 +116,43 @@ function pickCurrentTask(x) {
 	
 	if (!event.shiftKey){
 		
+		if (gameData.ambidextrousSkillLevel == gameData.ambidextrousSkillLevelMax)
+		{
+			if(gameData.currentTask == x && gameData.currentTask !== "none" && gameData.currentTask2 !== x)
+			{
+				gameData.currentTask = "none"
+			}
+			
 
-		if(gameData.currentTask == x && gameData.currentTask !== "none" && gameData.currentTask2 !== x)
-		{
-			gameData.currentTask = "none"
-		}
-		
+			else if (gameData.currentTask == "none" && gameData.currentTask2 !== x)
+			{
+				if(!((gameData.currentTask2 == 'makeJuice' && x == 'makeMaxJuice') || (gameData.currentTask2 == 'makeMaxJuice' && x == 'makeJuice') || (gameData.currentTask2 == 'usePeelers' && x == 'useMaxPeelers') || (gameData.currentTask2 == 'useMaxPeelers' && x == 'usePeelers')))
+				gameData.currentTask = x
+			}
+			
+			else if(gameData.currentTask2 == x && gameData.currentTask2 !== "none")
+			{
+				gameData.currentTask2 = "none"
+			}
 
-		else if (gameData.currentTask == "none" && gameData.currentTask2 !== x)
-		{
-			if(!((gameData.currentTask2 == 'makeJuice' && x == 'makeMaxJuice') || (gameData.currentTask2 == 'makeMaxJuice' && x == 'makeJuice') || (gameData.currentTask2 == 'usePeelers' && x == 'useMaxPeelers') || (gameData.currentTask2 == 'useMaxPeelers' && x == 'usePeelers')))
-			gameData.currentTask = x
+			else if (gameData.currentTask2 == "none")
+			{
+				if(!((gameData.currentTask == 'makeJuice' && x == 'makeMaxJuice') || (gameData.currentTask == 'makeMaxJuice' && x == 'makeJuice') || (gameData.currentTask == 'usePeelers' && x == 'useMaxPeelers') || (gameData.currentTask == 'useMaxPeelers' && x == 'usePeelers')))
+				gameData.currentTask2 = x
+			}
 		}
-		
-		else if(gameData.currentTask2 == x && gameData.currentTask2 !== "none")
+		else
 		{
-			gameData.currentTask2 = "none"
+			if(gameData.currentTask == x && gameData.currentTask !== "none")
+			{
+				gameData.currentTask = "none"
+			}
+			
+			else
+			{
+				gameData.currentTask = x
+			}
 		}
-
-		else if (gameData.currentTask2 == "none")
-		{
-			if(!((gameData.currentTask == 'makeJuice' && x == 'makeMaxJuice') || (gameData.currentTask == 'makeMaxJuice' && x == 'makeJuice') || (gameData.currentTask == 'usePeelers' && x == 'useMaxPeelers') || (gameData.currentTask == 'useMaxPeelers' && x == 'usePeelers')))
-			gameData.currentTask2 = x
-		}
-		
 	}
 	
 	
@@ -352,37 +365,44 @@ function basicBuyMegaCoins(x, price) {
 
 function addResearchers(id, amount) {
 
-	if (amount > 0 && (researchersAvailable - amount >= 0))
+	if (amount > 0)
 	{
-		gameData[id + "Researchers"] += amount
-		researchersAvailable -= amount
+		if (researchersAvailable - amount >= 0)
+		{
+			gameData[id + "Researchers"] += amount
+			researchersAvailable -= amount
+		}
+		else
+		{
+			gameData[id + "Researchers"] += researchersAvailable
+			researchersAvailable = 0
+		}
 	}
-	else if (amount < 0 && (researchersAvailable - amount <= gameData.researchers) && gameData[id + "Researchers"] > 0)
+	else if (amount < 0 && gameData[id + "Researchers"] > 0)
 	{
-		gameData[id + "Researchers"]  += amount
-		researchersAvailable -= amount
+		if (researchersAvailable - amount <= gameData.researchers)
+		{
+			gameData[id + "Researchers"]  += amount
+			researchersAvailable -= amount
+		}
+		else
+		{
+			researchersAvailable += gameData[id + "Researchers"]
+			gameData[id + "Researchers"]  = 0
+		}
 	}
 
     updateValues()
 }
 
 function hireResearcher(id) {
-	
-    if (id == 'coins') {
-		if (gameData[id] >= 1e5) {
-			gameData[id] -= 1e5
-			gameData.researchers += 1
 
-		}
-    }
-	
-    else if (id == 'megaCoins') {
-		if (gameData[id] >= 1) {
-			gameData[id] -= 1
-			gameData.researchers += 1
+	if (gameData[id] >= 1) {
+		gameData[id] -= 1
+		gameData.researchers += 1
 
-		}
-    }
+	}
+
 
     updateValues()
 }
@@ -527,7 +547,7 @@ function barStartGranular(variable) {
 function barStartGranularSkillBasic(variable) {
     variableBar = variable + "Bar"
 
-    i = eval("gameData." + variableBar)
+    i = gameData[variableBar]
     if ((i == 100 || i == 0) && (eval("gameData." + variable + "SkillLevel") < eval("gameData." + variable + "SkillLevelMax") && gameData.eat >= eval("gameData." + variable + "SkillLevel"))) {
         eval("gameData.eat -= gameData." + variable + "SkillLevel")
         eval("gameData." + variableBar + " = 0")
@@ -643,6 +663,16 @@ function checkShowOrHide(i, txt) {
         tabs(txt, "block")
     } else {
         tabs(txt, "none")
+    }
+
+}
+
+//Checks if a value is higher than 0, and hides an element if so. If not, shows the element.
+function checkHideOrShow(i, txt) {
+    if (i >= 1) {
+        tabs(txt, "none")
+    } else {
+        tabs(txt, "block")
     }
 
 }

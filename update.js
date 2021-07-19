@@ -40,6 +40,56 @@ function updateAfterLoad() {
     updateValues()
 }
 
+function addHTML(){
+	
+	for (let i = 0; i < mainSkills.length; i++) {
+	
+		var name = mainSkills[i]
+		var div = document.getElementById(name + "Div")
+		var title = ''
+		
+		if(name == 'rottenWisdom')
+			title = 'Rotten Wisdom'
+		else if(name == 'keenEye')
+			title = 'Keen Eye'
+		else
+		    title = jsUcfirst(name)
+		
+		
+		
+		
+		var skillLevel       = document.createElement("p");
+		    skillLevel.id    = name + "SkillLevel";
+		    skillLevel.classList.add("basicText");
+		    div.appendChild(skillLevel);
+			
+		var skillProgressSpan                = document.createElement("span")
+		skillProgressSpan.innerHTML          = '<div class="skillProgress" id="' + name + 'Progress"><div class="skillBar" , id="' + name + 'Bar">0%</div></div>';
+		insert(div, skillProgressSpan)
+		
+		
+		var skillButtonSpan                  = document.createElement("span")
+		skillButtonSpan.innerHTML            = '<button class="skillButton" id="' + name + "Button" + '" onclick="pickCurrentSkill(&apos;' + name + '&apos;)">' + title + '</button>';
+		insert(div, skillButtonSpan)
+
+
+	}
+	
+	
+	function insert(div, thing)
+	{
+		div.insertBefore(thing, div.firstChild);
+
+	}
+
+	
+}
+
+			
+			
+			
+			
+			
 
 function updateValues() {
 
@@ -86,6 +136,10 @@ function updateValues() {
 	
     if (gameData.workingBar > 100) {
         gameData.workingBar = 100
+    }
+	
+    if (gameData.coinsToAlphaBar > 100) {
+        gameData.coinsToAlphaBar = 100
     }
 	
     if (gameData.megaCoinsInBank > gameData.megaCoinsInBankMax) {
@@ -446,7 +500,7 @@ function updateValues() {
 
 	}
 	
-	update("rottenWisdom", gameData.rottenWisdom + "% Chance")
+	update("rottenWisdom", 100 * gameData.rottenWisdomSkillLevel / gameData.rottenWisdomSkillLevelMax + "% Chance")
 	
 	update("keenEye", gameData.keenEyeSkillLevel * 5 + "% Chance")
 
@@ -780,6 +834,8 @@ function updateValues() {
 		else
 			hide('earnBachelorFinance')
 
+		checkHideOrShow(gameData.rottenActualWisdom, "rottenActualWisdom")
+
 		
 		if (!gameData.creditScore2)
 			showBasicDiv('increaseCreditScore2')
@@ -1000,6 +1056,11 @@ function updateValues() {
 	checkHide(gameData.advertisingLevel3, "advertisingBillboard")
 	checkHide(gameData.storagePeelersUnlock, "storagePeelersDiv")
 	checkHide(gameData.storageJuicersUnlock, "storageJuicersDiv")
+	checkHide(gameData.changeResearchersBy10Unlock, "changeResearchersBy10Unlock")
+	checkHide(gameData.saveAlphaCoinsUnlock, "saveAlphaCoinsUnlock")
+	checkShow(gameData.saveAlphaCoinsUnlock, "upgradeSaveAlphaCoinsUnlock")
+
+
 
     if (gameData.lookAround >= 2) {
         tabs("sellYourLimesDiv", "block")
@@ -1024,17 +1085,18 @@ function updateValues() {
 
 	checkHide(gameData.tomes, "tomeDiv")
 
-    if (gameData.tomes < 1) {
-        hide("tomeDiv2")
-    }
-    if (gameData.tomes > 1) {
-        hide("tomeDiv2")
-		showBasicDiv("motivateEmployeeButton")
-    }
-    if (gameData.tomes > 2 || gameData.tomes < 2) {
-        hide("tomeDiv3")
-    }
+    if (gameData.tomes == 1) 
+        showBasicDiv("tomeDiv2")
+	else
+		hide("tomeDiv2")
 
+
+
+    if (gameData.tomes == 2)
+        showBasicDiv("tomeDiv3")
+	else
+		hide("tomeDiv3")
+	
 	
     if (gameData.autoCollectingBar == (gameData.nourishment + 1) * 100 || gameData.autoCollectingBar == 0) {
 		gameData.isAutoCollecting = 0
@@ -1121,6 +1183,9 @@ function updateValues() {
 
 
 	checkShow(gameData.peelers, "peelerDiv")
+	checkShow(gameData.transferAlphaCoinsBulkUnlock, "transferAlphaCoinsBulk")
+	checkHide(gameData.transferAlphaCoinsBulkUnlock, "transferAlphaCoinsBulkUnlock")
+	checkHide(gameData.lightRobe, "lightRobe")
 
 
 
