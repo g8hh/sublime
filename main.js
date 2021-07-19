@@ -7,8 +7,8 @@ var numberOfSpecialAchievements = 2;
 mainVariables = ['limes', 'rottenLimes', 'coins', 'juice', 'megaCoins', 'alphaCoins', 'peeledLimes'];
 //Main variables change color in options and are updated as numbers.
 
-mainSkills = ['rottenWisdom', 'limebidextrous', 'knifebidextrous', 'intelligence', 'ambidextrous', 'keenEye', 'motivation'];
-//Uses: Restart bar after reloading. Sets the level to the max level if it somehow goes above. Updates test for level / levelMax. Updates aesthetic for the skill's button.
+mainSkills = ['keenEye', 'rottenWisdom', 'limebidextrous', 'intelligence', 'knifebidextrous', 'motivation', 'ambidextrous'];
+//Uses: Restart bar after reloading. Sets the level to the max level if it somehow goes above. Updates test for level / levelMax. Updates aesthetic for the skill's button. Creates HTML for the skill.
 
 mainSciences = ['watertight', 'surveying', 'benevolence'];
 //Uses: Updates time to complete science. Updates number of researchers allocated.
@@ -387,7 +387,7 @@ function getLimes() {
 		}
 		
 		
-		if (Math.random() <= (gameData.rottenWisdom / 100)) {
+		if (Math.random() <= (gameData.rottenWisdomSkillLevel / gameData.rottenWisdomSkillLevelMax)) {
 			if (Math.random() <= (gameData.limebidextrous / 100)) {
 				gameData.limes += gameData.limesPerClick
 				if (gameData.teachBar > 0 && gameData.teachBar < 100) {
@@ -495,7 +495,7 @@ function brokerApplicant(id, type) {
 		}
 		else if(type == 'max100')
 		{
-			if (gameData['maxBrokerApplicant' + id] > gameData['minBrokerApplicant' + id])
+			if (gameData['maxBrokerApplicant' + id] > gameData['minBrokerApplicant' + id] && gameData['maxBrokerApplicant' + id] >  100)
 			{
 				brokerApplicantPrice(id)
 				gameData['maxBrokerApplicant' + id] -= 100
@@ -582,11 +582,21 @@ function buyMegaCoins() {
     updateValues()
 }
 
-function buyMegaCoinsWithAlphaCoins() {
-    if (gameData.alphaCoins >= 10 && gameData.megaCoinsInBank < gameData.megaCoinsInBankMax) {
-        gameData.alphaCoins -= 10
-        gameData.megaCoinsInBank += 1
-    }
+function buyMegaCoinsWithAlphaCoins(amount) {
+	if(amount == 1)
+	{
+		if (gameData.alphaCoins >= 10 && gameData.megaCoinsInBank < gameData.megaCoinsInBankMax) {
+			gameData.alphaCoins -= 10
+			gameData.megaCoinsInBank += 1
+		}
+	}
+	else
+	{
+		if (gameData.alphaCoins >= 100 && gameData.megaCoinsInBank + 10 <= gameData.megaCoinsInBankMax) {
+			gameData.alphaCoins -= 100
+			gameData.megaCoinsInBank += 10
+		}
+	}
     updateValues()
 }
 
@@ -625,7 +635,15 @@ function travelToNextVillage() {
 		if (gameData.manuscripts > 0) {
 			saveBeforeWipe('respectMilestone1000')
 		} 
+		
+		if (gameData.saveAlphaCoinsUnlock) {
+			saveBeforeWipe('alphaCoins')
+		} 
+		
+		saveBeforeWipe('saveAlphaCoinsUnlock')
         saveBeforeWipe('manuscripts')
+		
+        saveBeforeWipe('lightRobe')
 
 		
         saveBeforeWipe('increaseJuicePricePermanance')
@@ -641,39 +659,57 @@ function travelToNextVillage() {
 			saveBeforeWipe('specialAchievement' + i)	
 		}
 		
-		saveBeforeWipe('surveillanceCamera2')		
-		saveBeforeWipe('versionNumber')
-		saveBeforeWipe('timePlayed')	
-		saveBeforeWipe('alphaCoins')
-		saveBeforeWipe('nationalJuiceMarketing')
-		saveBeforeWipe('creditScore2')
-		saveBeforeWipe('creditScore3')
-		saveBeforeWipe('coinsMax')
-		saveBeforeWipe('respectMilestone10000')
-        saveBeforeWipe('unlockBenevolence')
-        saveBeforeWipe('nationalTradeCert')
-        saveBeforeWipe('bigGloves')
-        saveBeforeWipe('desktopMode')
-        saveBeforeWipe('nutritionists')
-        saveBeforeWipe('megaCoinsInBankMax')
-        saveBeforeWipe('betterTraining')
-        saveBeforeWipe('autosave')
-        saveBeforeWipe('showBarPercent')
-        saveBeforeWipe('hideCompletedSkills')
-        saveBeforeWipe('hideMaxedPurchases')
-        saveBeforeWipe('researchers')
-        saveBeforeWipe('upgradeMoreStorage')
+		saveWipeValues = [
+		'surveillanceCamera2', 
+		'versionNumber', 
+		'nationalJuiceMarketing', 
+		'creditScore2', 
+		'creditScore3', 
+		'coinsMax', 
+		'respectMilestone10000', 
+		'unlockBenevolence', 
+		'nationalTradeCert', 
+		'bigGloves', 
+		'desktopMode', 
+		'nutritionists', 
+		'megaCoinsInBankMax', 
+		'betterTraining', 
+		'autosave', 
+		'showBarPercent', 
+		'hideCompletedSkills', 
+		'hideMaxedPurchases', 
+		'researchers', 
+		'upgradeMoreStorage', 
+		'changeResearchersBy10Unlock', 
+		'rottenActualWisdom', 
+		'timePlayed'];
+
+		for (let i = 0; i < saveWipeValues.length; i++) {
+			saveBeforeWipe(saveWipeValues[i])		
+		}
 
 
-        Object.assign(gameData, gameDataBase)
+
+
+		//Before Travel
+			Object.assign(gameData, gameDataBase)
+        //After Travel
 
 
 
-		if (increaseJuicePricePermananceNow == 1) {
+		saveAfterWipe('saveAlphaCoinsUnlock')
+		saveAfterWipe('megaCoins')	
+
+		if (gameData.saveAlphaCoinsUnlock) {
+			saveAfterWipe('alphaCoins')
+		} 
+
+		if (increaseJuicePricePermananceNow) {
 			saveAfterWipe('juicePricePrice')
 			saveAfterWipe('juicePriceCents')
 			saveAfterWipe('increaseJuicePricePermanance')
 		} 
+		
 		
         saveAfterWipe('manuscripts')
 		if (gameData.manuscripts > 0) {
@@ -686,37 +722,31 @@ function travelToNextVillage() {
 		for (i = 1; i <= numberOfSpecialAchievements; i++) {
 			saveAfterWipe('specialAchievement' + i)	
 		}
-		saveAfterWipe('surveillanceCamera2')		
-		saveAfterWipe('versionNumber')	
-		saveAfterWipe('timePlayed')	
-	    saveAfterWipe('upgradeMoreStorage')
-		saveAfterWipe('alphaCoins')
-		saveAfterWipe('creditScore2')
-		saveAfterWipe('creditScore3')
-		saveAfterWipe('nationalJuiceMarketing')
-		saveAfterWipe('coinsMax')		
-		saveAfterWipe('respectMilestone10000')
-        saveAfterWipe('unlockBenevolence')
-        saveAfterWipe('nationalTradeCert')
-        saveAfterWipe('researchers')
-        saveAfterWipe('megaCoins')
-        saveAfterWipe('bigGloves')
-        saveAfterWipe('desktopMode')
-        saveAfterWipe('nutritionists')
-        saveAfterWipe('megaCoinsInBankMax')
-        saveAfterWipe('betterTraining')
-        saveAfterWipe('autosave')
-        saveAfterWipe('showBarPercent')
-        saveAfterWipe('hideCompletedSkills')
-        saveAfterWipe('hideMaxedPurchases')
+		
+		
+
+		for (let i = 0; i < saveWipeValues.length; i++) {
+			saveBeforeWipe(saveWipeValues[i])		
+		}
+		
+
+
 
 
 		gameData.juicersMax = 100 + gameData.upgradeMoreStorage * 500
 		gameData.peelersMax = 500 + gameData.upgradeMoreStorage * 2500
+		
+		if (lightRobeNow) {
+			gameData.respect += 50
+		} 
+		
+		if(rottenActualWisdom)
+			gameData.rottenWisdomSkillLevelMax = 25
 
 
         gameData.villageNumber = 2
         saveGame()
+		
 
 
         location.reload();
@@ -726,6 +756,11 @@ function travelToNextVillage() {
 function stopActions(){
 	gameData.currentTask = 'none'
 	gameData.currentTask2 = 'none'
+}
+
+function rottenActualWisdom(){
+	universalBuy('rottenActualWisdom', 50 , 'megaCoins')
+	gameData.rottenWisdomSkillLevelMax = 25
 }
 
 function lookAround() {
