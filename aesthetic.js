@@ -5,10 +5,8 @@ accent0 = "#222222"; //Main Color
 accent1 = "#4DFE89"; //Accent Color
 accent2 = "gray"; //When buttons are toggled off
 accent3 = "#4DFE89"; //When buttons are toggled on
-accent4 = "#FFBB9A"; //Special Buttons
-accent4Dark = "#FF894C"; //Special Buttons Dark
-whiteBlue = "#99DEFF"; //White
-grayBlue = "#4DC3FF"; //White
+accent4 = "#DEAD85"; //Special Buttons
+accent4Dark = "#C67848"; //Special Buttons Dark
 
 
 grayAccent = "#50514F";
@@ -17,245 +15,259 @@ limesRelatedAccent = "#4DFE89";
 yellowAccent = "#FCFF4E";
 
 function addAesthetic() {
-
-    twoToggleButtons('deliveryToggleExpressButton', 'deliveryToggleStandardButton', gameData.deliveryTypeToggle)
-    twoToggleButtons('foodToggleRottenLimesButton', 'foodToggleLimesButton', gameData.foodTypeToggle)
-    twoToggleButtons('juicePeeledLimesToggleButton', 'juiceLimesToggleButton', gameData.limeTypeToJuice)
-    twoToggleButtons('hireBrokerToggleButton', 'hireEmployeeToggleButton', gameData.typeToHireToggle)
-
-
-    showOrHideClass("unlockDiseaseAreaSwamp")
-
-    basicToggle("skill", "Info")
-    basicToggle("limeDisease", "Info")
-    basicToggle("limeDiseaseControl", "Info")
-    basicToggle("teach", "Info")
-    basicToggle("employeeStats", "Info")
-    basicToggle("basket", "Info")
-
-
-    basicToggle("juicers", "Bulk")
-    basicToggle("peelers", "Bulk")
-    basicToggle("baskets", "Bulk")
-
-    toggleAesthetic("autoStartTask")
-    toggleAesthetic("autoStartSimulation")
-    toggleAesthetic("autoCheckSimulation")
-    toggleAesthetic("autoPlaceACivilian")
-    toggleAesthetic("benevolenceToggle")
-    toggleAesthetic("autoAdvertiseBroker")
-    toggleAesthetic("increaseJuicePricex10")
-
-	currentTaskAesthetic('usePeelers')		
-	currentTaskAesthetic('useMaxPeelers')	
+	var one = document.getElementById('skillsSection1')
+	var two = document.getElementById('skillsSection2')
+	var skills = document.getElementById('skills')
 	
-	currentTaskAesthetic('makeJuice')		
-	currentTaskAesthetic('makeMaxJuice')
+	if (gameData.desktopMode == 0) {
+		skills.style.width = '380px'
+		one.style.position = 'relative'
+		two.style.position = 'relative'
+		update("desktopModeButton", "In Mobile Mode")
+	} else {
+		skills.style.width = '760px'
+		one.style.top = '0'
+		one.style.position = 'absolute'
+		two.style.position = 'absolute'
+		two.style.right = '0'
+		update("desktopModeButton", "In Desktop Mode")
+	}
 	
-	currentTaskAesthetic('eatFood')	
-	currentTaskAesthetic('sellYourJuice')	
+	twoToggleButtons('foodToggleRottenLimesButton', 'foodToggleLimesButton', gameData.foodTypeToggle)
+	twoToggleButtons('juicePeeledLimesToggleButton', 'juiceLimesToggleButton', gameData.limeTypeToJuice)
 
-
-
-
-    var x = document.getElementsByClassName("changeResearchersBy10");
-    for (i = 0; i < x.length; i++) {
-		if (gameData.changeResearchersBy10Unlock)
-		{
-			x[i].style.display = 'inline-block';
-		}
+	var x = document.getElementsByClassName('unlockDiseaseAreaSwamp')
+	for (i = 0; i < x.length; i++) {
+		if (gameData.unlockDiseaseAreaSwamp)
+			x[i].style.display = "block";
 		else
-		{
+			x[i].style.display = "none";
+	}
+
+	basicToggle("skill", "Info")
+	basicToggle("limeDisease", "Info")
+	basicToggle("limeDiseaseControl", "Info")
+	basicToggle("teach", "Info")
+	basicToggle("employeeStats", "Info")
+	basicToggle("basket", "Info")
+	basicToggle("sellingPie", "Info")
+	basicToggle("pieMerchant", "Info")
+	basicToggle("juicers", "Bulk")
+	basicToggle("peelers", "Bulk")
+	basicToggle("baskets", "Bulk")
+	basicToggle("alphaCoinConvert", "Bulk")
+
+	toggleAesthetic("autoStartTask")
+	toggleAesthetic("autoStartSimulation")
+	toggleAesthetic("autoCheckSimulation")
+	toggleAesthetic("autoPlaceACivilian")
+	toggleAesthetic("benevolenceToggle")
+	toggleAesthetic("autoAdvertiseBroker")
+	toggleAesthetic("increaseJuicePricex10")
+	toggleAesthetic("pieConveyorBeltOn")
+	toggleAesthetic("dontToggle")
+	toggleAesthetic("textForA2BBrokerAmountToggle")
+
+	currentTaskAesthetic('peelerPeel')
+	currentTaskAesthetic('peelerPeelMax')
+	currentTaskAesthetic('makeJuice')
+	currentTaskAesthetic('makeMaxJuice')
+	currentTaskAesthetic('eat')
+	currentTaskAesthetic('delivery')
+	currentTaskAesthetic('findPieCustomers')
+
+	ifMaxDarkGray("basket")
+	ifMaxDarkGray("juicer")
+	ifMaxDarkGray("peeler")
+	
+	function ifMaxDarkGray(x) {
+		button = "buyA" + jsUcfirst(x) + "Button"
+
+		if (gameData[x + 's'] == gameData[x + 'sMax']) {
+			colorChanger(button, grayAccent)
+		} else {
+			colorChanger(button, accent4)
+		}
+	}
+
+	if (gameData.typeToHireToggle == 0) {
+		colorChanger('hireEmployeeToggleButton', accent3)
+		colorChanger('hireBrokerToggleButton', accent2)
+		colorChanger('hirePieMerchantToggleButton', accent2)
+	} else if (gameData.typeToHireToggle == 1) {
+		colorChanger('hireEmployeeToggleButton', accent2)
+		colorChanger('hireBrokerToggleButton', accent3)
+		colorChanger('hirePieMerchantToggleButton', accent2)
+	} else if (gameData.typeToHireToggle == 2) {
+		colorChanger('hireEmployeeToggleButton', accent2)
+		colorChanger('hireBrokerToggleButton', accent2)
+		colorChanger('hirePieMerchantToggleButton', accent3)
+	}
+	
+	button1 = 'deliveryToggleStandardButton'
+	button2 = 'deliveryToggleExpressButton'
+	button3 = 'deliveryToggleTrainButton'
+
+	if (gameData.deliveryTypeToggle == 0 || gameData.deliveryTypeToggle == 2) {
+		colorChanger(button1, accent3)
+		colorChanger(button2, accent2)
+		colorChanger(button3, accent2)
+	} else if (gameData.deliveryTypeToggle == 1) {
+		colorChanger(button1, accent2)
+		colorChanger(button2, accent3)
+		colorChanger(button3, accent2)
+	} else {
+		colorChanger(button1, accent2)
+		colorChanger(button2, accent2)
+		colorChanger(button3, accent3)
+	}
+
+
+	if (gameData.wheat)
+		colorChanger('winnowWheat', accent4)
+	else
+		colorChanger('winnowWheat', grayAccentLight)
+
+	if (gameData.wheatSeeds)
+		colorChanger('grindFlour', accent4)
+	else
+		colorChanger('grindFlour', grayAccentLight)
+
+
+	if (gameData.forestTreeType == 1) {
+		colorChanger('forestTree1', accent3)
+		colorChanger('forestTree2', accent2)
+	} else {
+		colorChanger('forestTree2', accent3)
+		colorChanger('forestTree1', accent2)
+	}
+
+	var x = document.getElementsByClassName("changeResearchersBy10");
+	for (i = 0; i < x.length; i++) {
+		if (gameData.changeResearchersBy10Unlock) {
+			x[i].style.display = 'inline-block';
+		} else {
 			x[i].style.display = 'none';
 		}
 
-    }
+	}
 
-    //Achievement
-    var x = document.getElementsByClassName("achievement");
-    for (i = 0; i < x.length; i++) {
-		if (gameData['achievement' + (i + 1)])
-		{
+	var x = document.getElementsByClassName("achievement");
+	for (i = 0; i < x.length; i++) {
+		if (gameData['achievement' + (i + 1)]) {
 			x[i].style.backgroundColor = limesRelatedAccent;
-		}
-		else
-		{
+		} else {
 			x[i].style.backgroundColor = grayAccent;
 		}
-        x[i].style.padding = "5px";
-        x[i].style['margin'] = "5px";
-    }
-	
-    //Special Achievement
-    var x = document.getElementsByClassName("specialAchievement");
-    for (i = 0; i < x.length; i++) {
-		if (gameData['specialAchievement' + (i + 1)])
-		{
+		x[i].style.padding = "5px";
+		x[i].style['margin'] = "5px";
+	}
+
+	var x = document.getElementsByClassName("specialAchievement");
+	for (i = 0; i < x.length; i++) {
+		if (gameData['specialAchievement' + (i + 1)]) {
 			x[i].style.backgroundColor = limesRelatedAccent;
-		}
-		else
-		{
+		} else {
 			x[i].style.backgroundColor = grayAccent;
 		}
-        x[i].style.padding = "5px";
-        x[i].style['margin'] = "5px";
-    }
+		x[i].style.padding = "5px";
+		x[i].style['margin'] = "5px";
+	}
 
-
-    if (gameData.diseaseControlFinished == 1) {
-		
+	if (gameData.diseaseControlFinished) {
 		colorChanger('decreaseLakesButton', grayAccentLight)
 		colorChanger('increaseLakesButton', grayAccentLight)
-	}
-	else
-	{
+	} else {
 		colorChanger('decreaseLakesButton', grayAccent)
 		colorChanger('increaseLakesButton', grayAccent)
 	}
-	
-	if (gameData.simulationTime == 1){
-		
+
+	if (gameData.simulationTime)
 		colorChanger('checkResultsButton', accent4)
-	}
 	else
-	{
 		colorChanger('checkResultsButton', grayAccent)
+
+	if (gameData.increaseJuicePricePermanance < 1)
+		colorChanger('increaseJuicePriceButton', accent4)
+	else
+		colorChanger('increaseJuicePriceButton', '#FF999A')
+
+	if (gameData.isAutoCollecting)
+		colorChanger('autoCollectingButton', grayAccent)
+	else
+		colorChanger('autoCollectingButton', accent4)
+
+	if (gameData.currentTask == 'coinsToAlphaClick' || gameData.currentTask2 == 'coinsToAlphaClick')
+		colorChanger('coinsToAlphaClickButton', '#F8FF01')
+	else
+		colorChanger('coinsToAlphaClickButton', '#FDFF9A')
+
+	if (gameData.currentTask == 'alphaToBetaClick' || gameData.currentTask2 == 'alphaToBetaClick')
+		colorChanger('alphaToBetaClickButton', '#F8FF01')
+	else
+		colorChanger('alphaToBetaClickButton', '#FDFF9A')
+
+	function currentTaskAesthetic(x) {
+		button = x + "Button"
+		if (gameData.currentTask == x || gameData.currentTask2 == x)
+			colorChanger(button, accent4Dark)
+		else
+			colorChanger(button, accent4)
 	}
 
-    if (gameData.autoCollectingBar == 0 || gameData.autoCollectingBar == (gameData.nourishment + 1) * 100) {
-        colorChanger("pickUpLimes", limesRelatedAccent)
-    } else {
-        colorChanger("pickUpLimes", grayAccent)
-    }
-	
-    if (gameData.increaseJuicePricePermanance < 1) {
-        colorChanger('increaseJuicePriceButton', accent4)
-    } else {
-        colorChanger('increaseJuicePriceButton', '#FF999A')
-	}	
+	function currentSkillAesthetic(x) {
+		button = x + "Button"
+		if (gameData.currentSkill == x)
+			colorChanger(button, accent4Dark)
+		else
+			colorChanger(button, accent4)
+	}
 
+	if (gameData.lookAround == 3)
+		hide('lookAroundButton')
+	else
+		tabs('lookAroundButton', "inline-block")
 
-    if (gameData.isAutoCollecting == 0) {
-        colorChanger('autoCollectingButton', accent4)
-    } else {
+	if (gameData.juiceBulkAmountToggle == 100 && gameData.deliveryTypeToggle < 2)
+		colorChanger('increaseJuiceSoldButton', grayAccent)
+	else
+		colorChanger('increaseJuiceSoldButton', grayAccentLight)
 
-        colorChanger('autoCollectingButton', grayAccent)
-    }	
-	
-	
+	if (gameData.juiceBulkAmountToggle == 0)
+		colorChanger('decreaseJuiceSoldButton', grayAccent)
+	else
+		colorChanger('decreaseJuiceSoldButton', grayAccentLight)
 
-    if (gameData.respect >= 50) {
-        showBasicDiv("storeTypesButtonsDiv")
-    } else {
-
-        hide("storeTypesButtonsDiv")
-    }
-	
-
-    ifMaxDarkGray("basket")
-    ifMaxDarkGray("juicer")
-    ifMaxDarkGray("peeler")
-
-
-	if (gameData.currentTask == 'autoCurrencyConversionBuy' || gameData.currentTask2 == 'autoCurrencyConversionBuy') {
-		colorChanger('currencyConvertAlphaCoinsButton', '#F8FF01')
+	var x = document.getElementsByClassName("skillButton");
+	if (gameData.multitasking) {
+		for (i = 0; i < x.length; i++) {
+			x[i].style['padding'] = "1px 10px 1px 10px";
+			x[i].style['border-radius'] = "12px";
+		}
+		for (let i = 0; i < mainSkills.length; i++) {
+			currentSkillAesthetic(mainSkills[i])
+		}
 	} else {
-		colorChanger('currencyConvertAlphaCoinsButton', '#FDFF9A')
-	}
-	
-	function currentTaskAesthetic(x){
-		
-		button = x + "Button"
-		if (gameData.currentTask == x || gameData.currentTask2 == x) {
-			colorChanger(button, accent4Dark)
-		} else {
-			colorChanger(button, accent4)
+		for (i = 0; i < x.length; i++) {
+			x[i].style.backgroundColor = accent4;
 		}
-		
 	}
 
-	function currentSkillAesthetic(x){
-		
-		button = x + "Button"
-		if (gameData.currentSkill == x) {
-			colorChanger(button, accent4Dark)
-		} else {
-			colorChanger(button, accent4)
+
+	var x = document.getElementsByClassName("currencyButton");
+	if (gameData.autoCurrencyConversionBuy) {
+		for (i = 0; i < x.length; i++) {
+			x[i].style['padding'] = "1px 10px 1px 10px";
+			x[i].style['border-radius'] = "12px";
 		}
-		
-	}
-
-    if (gameData.lookAround == 3) {
-        hide('lookAroundButton')
-    } else {
-        tabs('lookAroundButton', "inline-block")
-    }
-
-    if (gameData.juiceBulkAmountToggle == 100 && gameData.deliveryTypeToggle < 2) {
-        colorChanger('increaseJuiceSoldButton', grayAccent)
-
-    } else {
-        colorChanger('increaseJuiceSoldButton', grayAccentLight)
-    }
-
-    if (gameData.juiceBulkAmountToggle == 0) {
-        colorChanger('decreaseJuiceSoldButton', grayAccent)
-
-    } else {
-        colorChanger('decreaseJuiceSoldButton', grayAccentLight)
-    }
-	
-	
-    //Skill Button
-    var x = document.getElementsByClassName("skillButton");
-	if(gameData.multitasking){
-			for (i = 0; i < x.length; i++) {
-				x[i].style['margin'] = "5px";
-				x[i].style['padding'] = "1px 10px 1px 10px";
-				x[i].style['border-radius'] = "12px";
-			}
-			
-			
-			for (let i = 0; i < mainSkills.length; i++) {
-				currentSkillAesthetic(mainSkills[i])		
-			}			
-
-
-
-
+	} else {
+		for (i = 0; i < x.length; i++) {
+			x[i].style.backgroundColor = '#FDFF9A';
 		}
-		else{
-			for (i = 0; i < x.length; i++) {
-				x[i].style.backgroundColor = accent4;
-				x[i].style['margin'] = "5px 5px 5px 5px";
-			}
 	}
-	
-	
-    //Currency Button
-    var x = document.getElementsByClassName("currencyButton");
-	if(gameData.autoCurrencyConversionBuy){
-			for (i = 0; i < x.length; i++) {
-				
-				x[i].style['margin'] = "5px";
-				x[i].style['padding'] = "1px 10px 1px 10px";
-				x[i].style['border-radius'] = "12px";
-			}
-
-		}
-		else{
-			for (i = 0; i < x.length; i++) {
-				x[i].style.backgroundColor = '#FDFF9A';
-				x[i].style['margin'] = "5px 5px 5px 5px";
-			}
+	for (i = 0; i < x.length; i++) {
+		x[i].style['margin'] = "5px";
 	}
-
-
-    colorChanger('lookAroundButton', grayAccentLight)
-    colorChanger('deliveryProgress', accent0)
-    colorChanger('deliveryBar', accent3)
-
-
 }
 
 function twoToggleButtons(button1, button2, value) {
@@ -268,183 +280,51 @@ function twoToggleButtons(button1, button2, value) {
 	}
 }
 
-function addAestheticBase(){
-
-    colorChanger('sellYourLimesButton', yellowAccent)
-
-    colorChanger('backgroundForValues', "#000000")
-
-    colorChanger('sellMaxJuiceButton', grayAccentLight)
-
-    colorChanger('pickUpLimes', limesRelatedAccent)
-    colorChanger('application', accent4)    
-
-
-    colorChanger('mainBody', background)
-    colorChanger('inventoryKnifeLime', accent3)
-	
-    //Basic Div
-    var x = document.getElementsByClassName("basicDiv");
-    for (i = 0; i < x.length; i++) {
-        x[i].style.backgroundColor = accent0;
-        x[i].style.padding = "5px 5px 5px 5px";
-        x[i].style['margin'] = "10px 5px 10px 5px";
-
-    }
-
-    //Basic Div Size
-    var x = document.getElementsByClassName("basicDivSize");
-    for (i = 0; i < x.length; i++) {
-        x[i].style.padding = "5px 5px 5px 5px";
-        x[i].style['margin'] = "10px 5px 10px 5px";
-    }
-
-    //Basic Text
-    var x = document.getElementsByClassName("basicText");
-    for (i = 0; i < x.length; i++) {
-        x[i].style.backgroundColor = grayAccentLight;
-        x[i].style.padding = "5px";
-        x[i].style['margin'] = "5px";
-    }
-	
-    //Basic Text Yellow
-    var x = document.getElementsByClassName("basicTextYellow");
-    for (i = 0; i < x.length; i++) {
-        x[i].style.backgroundColor = '#FDFF9A';
-        x[i].style.padding = "5px";
-        x[i].style['margin'] = "5px";
-    }
-
-    //Basic Text Size
-    var x = document.getElementsByClassName("basicTextSize");
-    for (i = 0; i < x.length; i++) {
-        x[i].style.padding = "5px";
-        x[i].style['margin'] = "5px";
-    }
-
-    //Gray Button
-    var x = document.getElementsByClassName("grayButton");
-    for (i = 0; i < x.length; i++) {
-        x[i].style.backgroundColor = grayAccentLight;
-        x[i].style['margin'] = "5px";
-    }
-
-    //Basic Button
-    var x = document.getElementsByClassName("basicButton");
-    for (i = 0; i < x.length; i++) {
-        x[i].style.backgroundColor = accent3;
-        x[i].style['margin'] = "5px";
-    }
-
-    //Basic Button Size
-    var x = document.getElementsByClassName("basicButtonSize");
-    for (i = 0; i < x.length; i++) {
-        x[i].style['margin'] = "5px";
-    }
-
-    //Basic Button Size Round
-    var x = document.getElementsByClassName("basicButtonSizeRound");
-    for (i = 0; i < x.length; i++) {
-        x[i].style['margin'] = "5px";
-        x[i].style['padding'] = "1px 10px 1px 10px";
-        x[i].style['border-radius'] = "12px";
-
-
-    }
-
-    //Special Button
-    var x = document.getElementsByClassName("specialButton");
-    for (i = 0; i < x.length; i++) {
-        x[i].style.backgroundColor = accent4;
-        x[i].style['margin'] = "5px";
-    }
-	
-	
-    //Special Button Travel
-    var x = document.getElementsByClassName("specialButtonTravel");
-    for (i = 0; i < x.length; i++) {
-        x[i].style.backgroundColor = "#FF999A";
-        x[i].style['margin'] = "5px";
-    }
-
-    //Pin Button
-    var x = document.getElementsByClassName("pinButton");
-    for (i = 0; i < x.length; i++) {
-        x[i].style.backgroundColor = "#FF999A";
-        x[i].style.height = '25px';
-        x[i].style['margin'] = "5px";
-    }
-
-
-    //Skills
-
-    //Skill Progress
-    var x = document.getElementsByClassName("skillProgress");
-    for (i = 0; i < x.length; i++) {
-        x[i].style.backgroundColor = accent0;
-        x[i].style['margin'] = "5px";
-    }
-
-    //Vertical Progress
-    var x = document.getElementsByClassName("verticalProgress");
-    for (i = 0; i < x.length; i++) {
-        x[i].style.backgroundColor = accent0;
-        x[i].style['margin'] = "5px";
-    }	
-	
-	
+function addAestheticBase() {
+	selectedWheatItemAesthetic(gameData.selectedWheatItem)
 	changeVariablesColorAesthetic()
+	updateFieldTileAesthetic()
 	normalizeButtons()
 	pinButton()
 }
 
-function changeVariablesColor(){
-	switchValue('moreVisibleVariables')
+function changeVariablesColor() {
+	toggle('moreVisibleVariables')
 	changeVariablesColorAesthetic()
 }
 
-function changeVariablesColorAesthetic(){
-	
-	if(gameData.moreVisibleVariables)
-	{
-		color = whiteBlue
-		colorDark = grayBlue
-
+function changeVariablesColorAesthetic() {
+	for (let i = 0; i < mainVariables.length; i++) {
 		
-		for (let i = 0; i < mainVariables.length; i++) {
-			changeVariableColors("textFor" + jsUcfirst(mainVariables[i]), color, colorDark)
+		if (gameData.moreVisibleVariables) {
+			color = "#99DEFF"
+			colorDark = "#4DC3FF"
 		}
-
-
+		else
+		{
+			color = mainVariablesColor[i]
+			colorDark = mainVariablesColor2[i]
+		}
+		
+		colorChangerText('textFor' + jsUcfirst(mainVariables[i]) + 'Div', colorDark)
+		colorChangerText('textFor' + jsUcfirst(mainVariables[i]), color)
 	}
 	
-	else
-	{
-		changeVariableColorsPretty('Limes', '#00B300', '#00FF01')
-		changeVariableColorsPretty('RottenLimes', '#00B300', '#00FF01')
-		changeVariableColorsPretty('Coins', '#AEB301', '#F8FF01')
-		changeVariableColorsPretty('Juice', '#00B33D', '#00FF55')
-		changeVariableColorsPretty('MegaCoins', '#B40001', '#FE0000')
-		changeVariableColorsPretty('AlphaCoins', '#B37700', '#FFAA01')
-		changeVariableColorsPretty('PeeledLimes', '#72B301', '#A0FF01')
-		
+	for (let i = 0; i < avs.length; i++) {
+		for (let j = 0; j < avs[i].v.length; j++) {
+			if (gameData.moreVisibleVariables) {
+				color = "#99DEFF"
+				colorDark = "#4DC3FF"
+			}
+			else
+			{
+				color = avs[i].v[j].mainColor
+				colorDark = avs[i].v[j].darkColor
+			}
 
+			
+			colorChangerText('textFor' + avs[i].name + avs[i].v[j].name + 'Div', colorDark)
+			colorChangerText('textFor' + avs[i].name + avs[i].v[j].name, color)
+		}
 	}
-
-}
-
-function changeVariableColorsPretty(elem, colorDark, color){
-	colorChangerText('textFor' + elem + 'Div', colorDark)
-	colorChangerText('textFor' + elem, color)
-}
-
-function changeVariableColors(elem, color, colorDark){
-		  label = document.getElementById(elem+'Div')
-	  if (label)
-		  label.style.color = colorDark
-	  
-	  label = document.getElementById(elem)
-	  if (label)
-		  label.style.color = color
-
 }

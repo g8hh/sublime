@@ -1,80 +1,60 @@
 var loopNumberBasket = 0;
+var loopNumberGoldenLimes = 0;
 var loopNumberTimePlayed = 0;
 var loopNumbercurrentTask = 0;
 var numberOfBasicAchievements = 7;
 var numberOfSpecialAchievements = 2;
 
-mainVariables = ['limes', 'rottenLimes', 'coins', 'juice', 'megaCoins', 'alphaCoins', 'peeledLimes'];
-//Main variables change color in options and are updated as numbers.
+mainVariables       = ['limes'  , 'rottenLimes' , 'peeledLimes' , 'juice'  , 'coins'  , 'megaCoins' , 'alphaCoins' , 'betaCoins' , 'pies'   , 'pieCoins' , 'goldenLimes' ];
+mainVariablesNames  = ['Limes'  , 'Rotten Limes', 'Peeled Limes', 'Juice'  , 'Coins'  , 'Mega Coins', 'Alpha Coins', 'Beta Coins', 'Pies'   , 'Pie Coins', 'Golden Limes'];
 
-mainSkills = ['keenEye', 'rottenWisdom', 'limebidextrous', 'intelligence', 'knifebidextrous', 'motivation', 'ambidextrous'];
-//Uses: Restart bar after reloading. Sets the level to the max level if it somehow goes above. Updates test for level / levelMax. Updates aesthetic for the skill's button. Creates HTML for the skill.
+mainVariablesColor  = ['#00B300', '#00B300'     , '#72B301'     , '#00B33D', '#AEB301', '#B40001'   , '#B37700'    , '#AEB301'   , '#964D1A', '#964D1A'  , '#AEB301'     ];
+mainVariablesColor2 = ['#00FF01', '#00FF01'     , '#A0FF01'     , '#00FF55', '#F8FF01', '#FE0000'   , '#FFAA01'    , '#F8FF01'   , '#C67848', '#C67848'  , '#F8FF01'     ];
 
-mainSciences = ['watertight', 'surveying', 'benevolence'];
-//Uses: Updates time to complete science. Updates number of researchers allocated.
+mainSkills =      ['keenEye' , 'rottenWisdom' , 'limebidextrous', 'intelligence', 'knifebidextrous', 'motivation', 'ambidextrous', 'bitterSpeed' ];
+mainSkillsNames = ['Keen Eye', 'Rotten Wisdom', 'Limebidextrous', 'Intelligence', 'Knifebidextrous', 'Motivation', 'Ambidextrous', 'Bitter Speed'];
+
+//Area Variables
+avs       = [ 
+	{
+		area: 'serf',
+		name: 'Serf',
+		backgroundColor: '#DEAD85',
+		//variables
+		v: [
+			{
+				id: 'rice',
+				name: 'Rice',
+				mainColor: '#DEAD85',
+				darkColor: '#BBBBBB',
+
+			},
+			{
+				id: 'coins',
+				name: 'Coins',
+				mainColor: '#B37700',
+				darkColor: '#B37700',
+
+			},
+		],
+	},
+]
 
 function mainGameLoopSlow() {
-	
-	if (gameData.autoStartSimulation)
-		startSimulation()
-	
-	if (gameData.autoStartTask) 
-		diseaseControlTask()
-	
-	if (gameData.autoCheckSimulation)
-		checkResults()
-	
-	if (gameData.autoAdvertiseBroker)
-	{
-		if (gameData.currencyApplicantSpeed > gameData.autoAdvertiseSpeedValue || (gameData.smarterAdvertisingManagerBroker && gameData.currencyApplicantTransferAmount < gameData.autoAdvertiseAmountValue))
-		{
-			advertise()
-		}
-	}
-
-	if(gameData.numberOfTiles >= 17)
-	{
-		tabs('mapTile-4-0', 'inline-block')
-	}
-	if(gameData.numberOfTiles >= 18)
-	{
-		tabs('mapTile-4-1', 'inline-block')
-	}
-	if(gameData.numberOfTiles >= 19)
-	{
-		tabs('mapTile-4-2', 'inline-block')
-	}
-	if(gameData.numberOfTiles >= 20)
-	{
-		tabs('mapTile-4-3', 'inline-block')
-	}
-	if(gameData.numberOfTiles >= 21)
-	{
-		gameData.numberOfTiles = 20
-	}
-
-	startCurrentTask(gameData.currentTask)	
-	startCurrentTask(gameData.currentTask2)	
 
 	
-	if(gameData.currentSkill !== 'none')
-		barStartGranularSkillBasic(gameData.currentSkill)
-
-		
-	if(gameData.bachelorsDegreeFinance)
+	if(gameData.maps > 4)
 	{
-		if(beckyRandom(2) == 1 && gameData.alphaCoinsExchangeRate < 200)
-			gameData.alphaCoinsExchangeRate += 1
-		else if (gameData.alphaCoinsExchangeRate > 50)
-			gameData.alphaCoinsExchangeRate -= 1
+		if(beckyRandom(2) == 1 && gameData.betaCoinsExchangeRate < 5000)
+			gameData.betaCoinsExchangeRate += 50
+		else if (gameData.betaCoinsExchangeRate > 500)
+			gameData.betaCoinsExchangeRate -= 50
 	}
 	
 	gameData.achievementBar = 0
-    for (i = 1; i < 7; i++) {
-		
-		if (gameData['achievement' + i]) {
-			gameData.achievementBar += 100 / 7
-		}
+    for (i = 1; i <= numberOfBasicAchievements; i++) {
+		if (gameData['achievement' + i])
+			gameData.achievementBar += 100 / numberOfBasicAchievements
 	}
 	
 	gameData.lastSaveTime = Date.now()
@@ -84,24 +64,73 @@ function mainGameLoopSlow() {
 		gameData.timePlayed += 1 
 		loopNumberTimePlayed = 0
 	}
+	
+	if(gameData.isThereACustomer)
+	{
+		if(gameData.customerWaitTime < 5)
+			update("customerButton", ":)")
+		else if(gameData.customerWaitTime >= 5 && gameData.customerWaitTime < 10)
+			update("customerButton", ":l")
+		else if(gameData.customerWaitTime >= 10 && gameData.customerWaitTime < 15)
+			update("customerButton", ":(")
+		else if (gameData.customerWaitTime == 15)
+		{
+			gameData.isThereACustomer = 0
+			gameData.customerWaitTime = 0
+			update("customerButton", "  ")
+			update("couldFindCustomer", "The customer left")	
+		}
+	}
+	else
+	{
+		update("customerButton", "  ")
+	}
+		
+	updatePieStuffSlow()
+	updateBrokerStuffSlow()
+	updateDiseaseStuffSlow()
 
+	
+	gameData.customerWaitTime += 1
 	moveBar('achievement')
 	updateMapTileAesthetic()
+	
+	
+	
+	saveGame()
 	setTimeout(mainGameLoopSlow, 500)
 }
 
 function mainGameLoop() {
 	
 	loopNumberBasket += 1	
-	
-	 if (gameData.basketBar < 100 && loopNumberBasket >= 24) {
-        gameData.basketBar += 0.2;
-		loopNumberBasket = 0
-    }
+	loopNumberGoldenLimes += 1	
 
 	
+	if (gameData.basketBar < 100 && loopNumberBasket >= 24) {
+        gameData.basketBar += 0.2;
+		loopNumberBasket = 0
+		
+		if(beckyRandom(100) == 1 && gameData.forestTreeType == 2)
+			gameData.goldenLimesInBaskets += 1
+    }
+	
+	if (loopNumberGoldenLimes >= 200) {
+        if(gameData.goldenLimes > 0)
+		{
+			gameData.goldenLimes -= 1
+		}
+		
+		loopNumberGoldenLimes = 0
+
+    }
+	   
 	setTimeout(mainGameLoop, 50)
-    updateValues()
+}
+
+function mainGameLoopFast() {
+	updateValues()
+	setTimeout(mainGameLoopFast, 15)
 }
 
 function calculateOfflineProgress(){
@@ -127,53 +156,13 @@ function calculateOfflineProgress(){
 		gameData.workingBar = 0
 
 	}
-	if(gameData.surveillanceCamera2 && secondsOffline > 60)
-	{
-		
-		for (let i = 0; i < mainSciences.length; i++) {
-			
-			var barFilled   = gameData[mainSciences[i] + "Bar"]
-			var researchers = gameData[mainSciences[i] + "Researchers"]
-			
-			if (researchers > 0 && barFilled != 0)
-			{
-				if (mainSciences[i] == 'benevolence')
-					x = benevolenceEquation
-				if (mainSciences[i] == 'surveying')
-					x = surveyingEquation
-				if (mainSciences[i] == 'watertight')
-					x = watertightEquation
-
-				//0.5 makes it add half a bar.
-
-				amountToAdd = Math.floor(secondsOffline * 0.5 * researchers / x)
-				
-				if(barFilled + amountToAdd < 100)
-				{
-					gameData[mainSciences[i] + "Bar"] += amountToAdd
-				}
-				else
-				{
-					gameData[mainSciences[i] + "Bar"] = 0
-					
-					if (mainSciences[i] == 'surveying' && gameData.numberOfTiles < 20)
-						gameData.numberOfTiles += 1
-					else if (mainSciences[i] == 'watertight' && gameData.peeledLimesPerJuice > 1)
-						gameData.peeledLimesPerJuice -= 1
-					else
-						gameData[mainSciences[i]] += 1
-
-				}
-				moveBar(mainSciences[i])
-			}
 	
-		}
-	
-	}
+	surveillanceCamera2()
 	
 	saveGame()
 
 }
+
 
 function sellMaxJuice() {
     if (gameData.juice < gameData.juiceBulkAmountMax) {
@@ -187,51 +176,13 @@ function sellMaxJuice() {
 
 function collectingUpgrade() {
     if (gameData.limes >= gameData.nourishmentPrice) {
-
         gameData.limes -= gameData.nourishmentPrice
         gameData.nourishment += 1
         gameData.autoCollectingBar = 0
-
     }
 
     updateValues()
 }
-
-function randomizeApplication() {
-	if(gameData.typeToHire == 0){
-		
-		if (gameData.firstApplicant == 1) {
-			gameData.applicantSpeed = 100
-			gameData.applicantPrice = 0
-			gameData.applicantWage = 5
-			gameData.applicantHunger = 1
-
-			gameData.firstApplicant = 0
-		} else {
-			gameData.applicantSpeed = (Math.floor(Math.random() * (10 + gameData.betterTraining) + 1) * 100)
-			gameData.applicantPrice = Math.floor(Math.random() * 200)
-			gameData.applicantWage = Math.floor(Math.random() * 16) + 5
-			gameData.applicantHunger = Math.floor(Math.random() * 20) + 1
-		}
-		
-		gameData.applicationType = 0
-	}
-	else{
-		gameData.currencyApplicantFee = beckyRandomMinMax(gameData.minBrokerApplicantFee, gameData.maxBrokerApplicantFee)
-		gameData.currencyApplicantSpeed = beckyRandomMinMax(gameData.minBrokerApplicantSpeed, gameData.maxBrokerApplicantSpeed)
-		gameData.currencyApplicantPrice = (Math.floor(Math.random() * 20) + 1) * 10000
-		gameData.currencyApplicantTransferAmount = beckyRandomMinMax(gameData.minBrokerApplicantAmount, gameData.maxBrokerApplicantAmount)
-		
-		gameData.applicationType = 1
-
-	}
-
-
-    updateValues()
-}
-
-
-
 
 function deliveryToggleStandard() {
     if (gameData.fasterTransport == 0) {
@@ -241,22 +192,21 @@ function deliveryToggleStandard() {
         gameData.deliveryTypeToggle = 2
         gameData.deliveryPrice = 50
     }
-    updateValues()
 }
 
 function deliveryToggleExpress() {
     gameData.deliveryTypeToggle = 1
     gameData.deliveryPrice = 5
-    updateValues()
+}
+
+function deliveryToggleTrain() {
+    gameData.deliveryTypeToggle = 3
+    gameData.deliveryPrice = 5000
 }
 
 function motivateEmployee() {
-	if(gameData.employeeWorking > 0 && gameData.workingBar < 99 - gameData.motivationSkillLevel / 20)
-	{
+	if(gameData.employeeWorking > 0)
 	    gameData.workingBar += gameData.motivationSkillLevel / 20
-	}
-
-    updateValues()
 }
 
 function foodToggleLimes() {
@@ -269,7 +219,6 @@ function foodToggleRottenLimes() {
     updateValues()
 }
 
-
 function payEmployee() {
     if (gameData.coins >= gameData.employeeWage && gameData.employeeWorking < gameData.employeeWorkingMax) {
         gameData.employeeWorking += 1
@@ -277,51 +226,6 @@ function payEmployee() {
         working()
     }
 
-    updateValues()
-}
-
-function hireApplicant() {
-	if(gameData.applicationType == 0){
-		if (gameData.coins >= gameData.applicantPrice && gameData.applicationReady == 1) {
-			gameData.applicationReady = 0
-			gameData.employeeWorking = 0
-			gameData.workingBar = 0
-
-			gameData.coins -= gameData.applicantPrice
-
-			gameData.employeeHunger = gameData.applicantHunger
-			gameData.employeeSpeed = gameData.applicantSpeed
-			gameData.employeePrice = gameData.applicantPrice
-			gameData.employeeWage = gameData.applicantWage
-
-			gameData.employeeCurrentSpeed = -(gameData.employeeHunger * 60)
-
-			gameData.employees = 1
-
-			gameData.employeeIsWorking = 0
-			gameData.workingBar = 0
-			
-			update("speedEmployee", "Speed: " + gameData.employeeSpeed.toLocaleString() + "% of what I'm taught.")
-			update("wageEmployee", "Wages: " + gameData.employeeWage.toLocaleString() + " Coins per minute.")
-			update("hungerEmployee", "Hunger: " + gameData.employeeHunger.toLocaleString() + " Limes per second.")
-		}
-	}
-	else{
-		if (gameData.coins >= gameData.currencyApplicantPrice && gameData.applicationReady == 1) {
-			gameData.applicationReady = 0
-			gameData.doesHaveCurrencyBroker = 1
-
-			gameData.coins -= gameData.currencyApplicantPrice
-
-			gameData.currencyBrokerFee = gameData.currencyApplicantFee
-			gameData.currencyBrokerSpeed = gameData.currencyApplicantSpeed
-			gameData.currencyBrokerPrice = gameData.currencyApplicantPrice
-			gameData.currencyBrokerTransferAmount = gameData.currencyApplicantTransferAmount
-			
-			gameData.coinsToAlphaBar = 0
-
-		}
-	}
     updateValues()
 }
 
@@ -372,9 +276,7 @@ function getLimesButton() {
 
 	}
 	
-    if (gameData.autoCollectingBar == 0 || gameData.autoCollectingBar == (gameData.nourishment + 1) * 100) {
-        getLimes()
-    }
+    getLimes()
 
 }
 
@@ -408,8 +310,6 @@ function getLimes() {
 		if ((gameData.lookAround < 1 && gameData.collectLimesAtBeginning < 10) || gameData.lookAround >= 1)
 			update("newInfo", "Couldn't find any limes...")
 	}
-		
-    updateValues()
 }
 
 function peelLime() {
@@ -421,7 +321,6 @@ function peelLime() {
         }
         gameData.peeledLimes += 1
     }
-    updateValues()
 }
 
 function buyTome() {
@@ -439,12 +338,6 @@ function buyTome() {
 			gameData.tomes = 2
 		}
 	}
-    updateValues()
-}
-
-function typeToHire(id) {
-	gameData.typeToHireToggle = id
-	updateValues()
 }
 
 function buyAFork() {
@@ -453,7 +346,6 @@ function buyAFork() {
         gameData.fork = 1
         gameData.eatBar = 0
     }
-    updateValues()
 }
 
 function buyARobe() {
@@ -462,78 +354,6 @@ function buyARobe() {
         gameData.silkRobe = 1
         gameData.respect += 50
     }
-    updateValues()
-}
-
-function brokerApplicant(id, type) {
-
-	if(gameData.alphaCoins >= gameData['brokerApplicant'+ id + 'Price'])
-	{
-		if(type == 'max')
-		{
-			if (gameData['maxBrokerApplicant' + id] > gameData['minBrokerApplicant' + id]) {
-				
-				brokerApplicantPrice(id)
-
-
-				gameData['maxBrokerApplicant' + id] -= 1
-			}
-		}
-		else if(type == 'maxup')
-		{
-			brokerApplicantPrice(id)
-			gameData['maxBrokerApplicant' + id] += 1
-		}
-		else if(type == 'minup')
-		{
-			if (gameData['maxBrokerApplicant' + id] > gameData['minBrokerApplicant' + id]) {
-				
-				brokerApplicantPrice(id)
-
-				gameData['minBrokerApplicant' + id] += 1
-			}
-		}
-		else if(type == 'max100')
-		{
-			if (gameData['maxBrokerApplicant' + id] > gameData['minBrokerApplicant' + id] && gameData['maxBrokerApplicant' + id] >  100)
-			{
-				brokerApplicantPrice(id)
-				gameData['maxBrokerApplicant' + id] -= 100
-			}
-		}
-		else if(type == 'min100')
-		{
-			if (gameData['minBrokerApplicant' + id] > 0) {
-				
-				brokerApplicantPrice(id)
-
-				gameData['minBrokerApplicant' + id] -= 100
-			}
-		}
-		else
-		{
-			if (gameData['minBrokerApplicant' + id] > 1) {
-				
-				brokerApplicantPrice(id)
-				
-				gameData['minBrokerApplicant' + id] -= 1
-			}
-		}
-	}
-    updateValues()
-}
-
-function brokerApplicantPrice(id){
-	gameData.alphaCoins -= gameData['brokerApplicant'+ id + 'Price']
-	gameData['brokerApplicant'+ id + 'Price'] += 5
-}
-
-function buyAdvertisingManager(){
-    if (gameData.alphaCoins >= 10) {
-        gameData.alphaCoins -= 10
-        gameData.advertisingManagerBroker = 1
-    }
-    updateValues()
 }
 
 function increaseCreditScore() {
@@ -541,7 +361,6 @@ function increaseCreditScore() {
         gameData.megaCoins -= 2
         gameData.megaCoinsInBankMax += 30
     }
-    updateValues()
 }
 
 function increaseCreditScore2() {
@@ -551,7 +370,6 @@ function increaseCreditScore2() {
         gameData.creditScore2 = 1
 
     }
-    updateValues()
 }
 
 function increaseCreditScore3() {
@@ -561,7 +379,6 @@ function increaseCreditScore3() {
         gameData.creditScore3 = 1
 
     }
-    updateValues()
 }
 
 function buyABiggerWallet() {
@@ -570,7 +387,6 @@ function buyABiggerWallet() {
         gameData.coinsMax += 1e6
 
     }
-    updateValues()
 }
 
 function buyMegaCoins() {
@@ -579,7 +395,6 @@ function buyMegaCoins() {
         gameData.megaCoinsInBank += 5
 		gameData.buyMegaCoinsTimes += 1
     }
-    updateValues()
 }
 
 function buyMegaCoinsWithAlphaCoins(amount) {
@@ -597,7 +412,6 @@ function buyMegaCoinsWithAlphaCoins(amount) {
 			gameData.megaCoinsInBank += 10
 		}
 	}
-    updateValues()
 }
 
 
@@ -606,22 +420,15 @@ function buyBetterTraining() {
         gameData.megaCoins -= gameData.betterTraining
         gameData.betterTraining += 1
     }
-    updateValues()
 }
 
 function upgradeMoreStorage() {
     if (gameData.megaCoins >= upgradeMoreStoragePrice) {
-		
         gameData.megaCoins -= upgradeMoreStoragePrice
-
 		gameData.juicersMax +=  500
 		gameData.peelersMax +=  2500
-
 		gameData.upgradeMoreStorage += 1
-
-
     }
-    updateValues()
 }
 
 function travelToNextVillage() {
@@ -674,7 +481,6 @@ function travelToNextVillage() {
 		'nutritionists', 
 		'megaCoinsInBankMax', 
 		'betterTraining', 
-		'autosave', 
 		'showBarPercent', 
 		'hideCompletedSkills', 
 		'hideMaxedPurchases', 
@@ -682,6 +488,7 @@ function travelToNextVillage() {
 		'upgradeMoreStorage', 
 		'changeResearchersBy10Unlock', 
 		'rottenActualWisdom', 
+		'tickspeed',
 		'timePlayed'];
 
 		for (let i = 0; i < saveWipeValues.length; i++) {
@@ -726,7 +533,7 @@ function travelToNextVillage() {
 		
 
 		for (let i = 0; i < saveWipeValues.length; i++) {
-			saveBeforeWipe(saveWipeValues[i])		
+			saveAfterWipe(saveWipeValues[i])		
 		}
 		
 
@@ -740,7 +547,7 @@ function travelToNextVillage() {
 			gameData.respect += 50
 		} 
 		
-		if(rottenActualWisdom)
+		if(rottenActualWisdomNow)
 			gameData.rottenWisdomSkillLevelMax = 25
 
 
@@ -759,8 +566,11 @@ function stopActions(){
 }
 
 function rottenActualWisdom(){
-	universalBuy('rottenActualWisdom', 50 , 'megaCoins')
-	gameData.rottenWisdomSkillLevelMax = 25
+    if (gameData.megaCoins >= 50) {
+        gameData.megaCoins -= 50
+        gameData.rottenActualWisdom += 1
+		gameData.rottenWisdomSkillLevelMax = 25
+    }
 }
 
 function lookAround() {
@@ -773,19 +583,19 @@ function lookAround() {
     }
 
     if (gameData.lookAround == 0) {
-        if (gameData.lookAroundNumber == 10 || gameData.difficulty >= 1) {
+        if (gameData.lookAroundNumber == 5) {
             update("newInfo", "You see a nearby market.")
             gameData.lookAround = 1
 
         }
     } else if (gameData.lookAround == 1) {
-        if (gameData.lookAroundNumber == 20 || gameData.difficulty >= 1) {
+        if (gameData.lookAroundNumber == 10) {
             update("newInfo", "You find a merchant willing to buy limes.")
             gameData.lookAround = 2
 
         }
     } else if (gameData.lookAround == 2) {
-        if (gameData.lookAroundNumber == 30 || gameData.difficulty >= 1) {
+        if (gameData.lookAroundNumber >= 15) {
             update("newInfo", "You find a merchant selling various items.")
             gameData.lookAround = 3
         }
@@ -822,16 +632,11 @@ function storageJuicersUnlock() {
 	
 	if(gameData.confirmStorage)
 	{
-		if (window.prompt("你确定吗？如果你确定，请输入 'yes'") == "yes")
-		{	
+		if (window.prompt("你确定吗? 如果你确定，请输入 'yes'") == "yes")
 			storageJuicersUnlockDo()
-		}
 	}
 	else
-	{
 		storageJuicersUnlockDo()
-	}
-    updateValues()
 }
 
 function storageJuicersUnlockDo() {
@@ -849,15 +654,11 @@ function storageJuicersUnlockDo() {
 function storagePeelersUnlock() {
 	if(gameData.confirmStorage)
 	{
-		if (window.prompt("你确定吗？如果你确定，请输入 'yes'") == "yes")
-		{	
+		if (window.prompt("你确定吗? 如果你确定，请输入 'yes'") == "yes")
 			storagePeelersUnlock()
-		}
 	}
 	else
-	{
 		storagePeelersUnlock()
-	}
     updateValues()
 }
 
@@ -896,7 +697,7 @@ function juiceLimesToggle() {
 
 function benevolenceToggle(){
 	if (gameData.diseaseControlFinished)
-		switchValue('benevolenceToggle')
+		toggle('benevolenceToggle')
 }
 
 function juicePeeledLimesToggle() {
@@ -912,7 +713,6 @@ function increaseJuicePrice() {
 				gameData.coins -= gameData.juicePricePrice
 				gameData.juicePriceCents += 1
 				gameData.juicePricePrice = gameData.juicePriceCents + 1
-
 			}
 		}
 	}
@@ -920,9 +720,6 @@ function increaseJuicePrice() {
 	{
 		if (gameData.coins >= gameData.juicePricePrice) {
 			gameData.coins -= gameData.juicePricePrice
-
-
-
 			gameData.juicePriceCents += 1
 		}
 	}
@@ -946,6 +743,8 @@ function increaseJuiceSold() {
     if (gameData.juiceBulkAmountToggle < 100) {
         gameData.juiceBulkAmountToggle += 1
     } else if (gameData.juiceBulkAmountToggle < 500 && gameData.deliveryTypeToggle == 2 && gameData.fasterTransport > 0) {
+        gameData.juiceBulkAmountToggle += 10
+    } else if (gameData.juiceBulkAmountToggle < 2000 && gameData.deliveryTypeToggle == 3) {
         gameData.juiceBulkAmountToggle += 10
     }
     updateValues()
@@ -972,4 +771,39 @@ function buyABasket() {
 
     gameData.basketBar -= gameData.basketBar / (gameData.baskets + 1)
     bulkableBuyMax('baskets', 2)
+}
+
+function throwPieCoinsWell(){
+	if(gameData.pieCoinsInWell + gameData.pieCoins <= 200)
+	{
+		gameData.pieCoinsInWell += gameData.pieCoins
+		gameData.pieCoins = 0
+	}
+	else
+	{
+		gameData.pieCoinsInWell = 200
+		gameData.pieCoins -= (200 - gameData.pieCoinsInWell)
+	}
+
+	moveWell()
+}
+
+function moveWell() {
+    var elem = document.getElementById("wellBar");
+    elem.style.height = (gameData.pieCoinsInWell / 2) + "%";
+    elem.innerHTML = Math.floor(gameData.pieCoinsInWell / 2) + "%";
+}
+
+function enterTheWell(){
+	gameData.endScreen = 1
+}
+
+function soulArea(uwu){
+	
+	if (typeof uwu == 'number')
+		gameData.soulArea = avs[uwu].name
+	else
+		gameData.soulArea = uwu
+	
+	gameData.endScreen = 0
 }
