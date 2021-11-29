@@ -15,13 +15,6 @@ var gameDataBase = {
     howMuchJuice: 0,
     exploreLevel: 0,
 	achievementBar: 0,
-    achievement1: 0,
-    achievement2: 0,
-    achievement3: 0,
-    achievement4: 0,
-    achievement5: 0,
-    achievement6: 0,
-    achievement7: 0,
     specialAchievement1: 0,
     specialAchievement2: 0,
 
@@ -33,9 +26,6 @@ var gameDataBase = {
     limeTypeToJuiceToggle: 0,
     lookAround: 0,
     rottenLimes: 0,
-
-	
-	
 	
     learnANewSkillBar: 0,
     learnANewSkill: -2,
@@ -62,7 +52,6 @@ var gameDataBase = {
     deliveryType: 0,
     deliveryTypeToggle: 0,
     deliveryPrice: 2,
-    deliveryOngoing: 0,
     juiceBulkAmountToggle: 1,
     tomes: 0,
 
@@ -72,6 +61,10 @@ var gameDataBase = {
 
     eat: 0,
     eatBar: 0,
+    eatBarRunning: false,
+    juicerBarRunning: false,
+    peelerBarRunning: false,
+
 
     autoCollectingBar: 0,
 
@@ -96,6 +89,7 @@ var gameDataBase = {
 
     firstApplicant: 1,
     teachInfoToggle: 0,
+    sellingPieInfoToggle: 1,
     employeeStatsInfoToggle: 0,
 
     bulkBuyUnlock: 0,
@@ -149,6 +143,8 @@ var gameDataBase = {
     hasAdvertised: 0,
 
     betterTraining: 0,
+	
+	respectBillboard: 0,
 
     civiliansPlaced: 0,
     civiliansTotal: 2,
@@ -163,7 +159,7 @@ var gameDataBase = {
     benevolenceBar: 0,
     benevolenceResearchers: 0,
     unlockBenevolence: 0,
-	benevolenceToggle: 0,
+	benevolenceToggle: 1,
 
 
 
@@ -199,13 +195,10 @@ var gameDataBase = {
 	
     fork: 0,
     shoes: 0,
-	
-	isCurrentlyJuicing: 0,
 
     pin: "none",
     pinUnlock: 0,
 	
-	hideRottenLimes: 0,
 	hideKnife: 0,
 	manuscripts: 0,
 
@@ -223,13 +216,17 @@ var gameDataBase = {
 	knifebidextrousSkillLevelMax: 20,
 	rottenWisdomSkillLevelMax:    50,
 	motivationSkillLevelMax:     100,
-	ambidextrousSkillLevelMax:   100,
+	ambidextrousSkillLevelMax:   20,
+	bitterSpeedSkillLevelMax:   200,
+
 		
 	knifebidextrous: 0,
     limebidextrous: 0,
 	
 	
     desktopMode: 1,
+	shiftClickOption: 0,
+	dontToggle: 0,
 	
 	isAutoCollecting: 0,
 	
@@ -259,6 +256,9 @@ var gameDataBase = {
 	confirmStorage: 0,
 	smarterAdvertisingManagerBroker: 0,
 	convertedCoinsSinceTravel: 0,
+	transferAlphaCoinBags: 0,
+	alphaCoinConvertBulkToggle: 0,
+	alphaCoinConvertBulkToggleSet: 0,
 	
 	lastSaveTime: Date.now(),
 
@@ -308,13 +308,14 @@ var gameDataBase = {
 	autoAdvertiseSpeedValueMax: 60,
 	autoAdvertiseAmountValue: 5, 
 	advertisePrice: 10,
+	advertisePriceType: 'coins',
 	isAdvertising: 0,
 	basketScarecrow: 0,
-	mainTab: 'null',
 	moreVisibleVariables: 0,
 	invertText: 0,
 	surveillanceCamera: 0,
 	surveillanceCamera2: 0,
+	skillTrainer: 0,
 
 	timePlayed: 0,
 
@@ -323,56 +324,203 @@ var gameDataBase = {
 	transferAlphaCoinsBulkUnlock: 0,
 	lightRobe: 0,
 	rottenActualWisdom: 0,
+	
+	forestTree2: 0,
+	forestTreeType: 1,
+	goldenLimes: 0,
+	goldenLimesInBaskets: 0,
+	eatGoldenLimeBar: 100,
+	bitterSpeeding: 0,
 
-    autosave: 1,
+	
+	//Beta Coins
+	betaCoins: 0,
+	betaCoinsExchangeRate: 2500,
+	betaCoinTransferAmount: 1,
+	alphaToBetaBar: 0,
+	basicAlphaToBetaBroker: 0,
+	basicA2BBrokerRule: 1000,
+	basicA2BBrokerAmount: 1,
+	increaseBasicA2BBrokerAmountPrice: 2,
+	textForA2BBrokerAmountToggle: 0,
+	
+	//Pie
+	pies: 0,
+	hasGottenPies: 0,
+	piePrice: 1,
+	findPieCustomersBar: 0,
+	couldFindCustomer: 2,
+	isFindingPieCustomers: 0,
+	isThereACustomer: 0,
+	customerWaitTime: 0,
+	hasSoldPie: 0,
+	pieConveyorBelt : 0,
+	pieConveyorBeltOn: 0,
+	isPieBaking: 0,
+	
+	pieBucket: 0,
+	pieFlourBucket: 0,
+
+	juiceInPieBucket: 0,
+	flourInPieBucket: 0,
+	
+	pieBucketNozzle: 0,	
+	pieFlourBucketNozzle: 0,
+	
+	bucketThinSteelPlating: 0,
+
+	juiceBucketHoleSize: 10,
+	flourBucketHoleSize: 10,
+	
+	bellows: 0,
+	bellowsBar: 0,
+	bellowsCurrentlyBlowing: 0,
+	
+	upgradeNozzles: 0,
+	
+	//Pie Employee
+	pieEmployee: 0,
+	pieEmployeeSalesLeft: 0,
+	
+	pieApplicantPieCoinPrice: 0,
+	pieApplicantBetaCoinPrice: 0,
+	pieApplicantMaxPay: 0,
+	pieApplicantCharm: 0,
+
+	pieMerchantPieCoinPrice: 5,
+	pieMerchantBetaCoinPrice: 0,
+	pieMerchantMaxPay: 10,
+	pieMerchantCharm: 0,
+	
+	pieApplicantPrice: 0,
+	doesHavePieMerchant: 0,
+	usingBetaCoinWage: 0,
+	pieMerchantInfoToggle: 0,
+
+
+	//Wheat
+	wheatField: 0,
+	wheat: 0,
+	wheatSeeds: 0,
+    wheatFieldArray: [
+        [59, 59, 59, 59, 59],
+        [59, 59, 59, 59, 59],
+        [59, 59, 59, 59, 59],
+        [59, 59, 59, 59, 59],
+        [59, 59, 59, 59, 59]
+    ],
+	mortarAndPestle: 0,
+	flour: 0,
+	pieOven: 0,
+	bakePieBar: 0,
+	juiceAsPieIngredient: 0,
+	flourAsPieIngredient: 0,
+	pieCoins: 0,
+	advancedPieHiring: 0,
+	
+	wheatHarvesters: 0,
+	seedDrills: 0,
+	hasGottenFieldTools: 0,
+	
+	selectedWheatItem: 'seed',
+	nextPlotPrice: 4,
+	sellPlotPrice: 0,
+	selectedPlotX: 0,
+	selectedPlotY: 0,
+
+	
+	//New People
+	forestWell: 0,
+	pieCoinsInWell: 0,
+	
+	trainTransport: 0,
+	
 
     //Should be 0 for normal game, 1 if you want to go faster :)
     difficulty: 0,
 
     //default is 1 :D
     tickspeed: 1,
+	
+	mainTab: 'null',
+	marketTab: 'marketMain',
+
+	endScreen: 0,
+	soulArea: 'start',
+	trueLimes: 0,
+	
+	
+	serf: {
+		rice: 0,
+		coins: 0,
+		lordsRice: 1000000000,
+		lordsCoins: 1000000000,
+		health: 20,
+		riceOwed: 5,
+
+	},
+
+	harvestRiceBar: 0,
+	serfHealthBar: 0,
+	newBakerySerf: 0,
+
 }
 
 
+	for (let i = 1; i <= 7; i++) {
+		gameDataBase['achievement' + i] = 0
+	}
+	
 	for (let i = 0; i < mainSkills.length; i++) {
 		gameDataBase[mainSkills[i] + 'Bar'] = 0
 		gameDataBase[mainSkills[i] + 'SkillLevel'] = 0
+		gameDataBase[mainSkills[i] + 'BarRunning'] = false
 	}
 
-
+	for (let i = 0; i < mainVariables.length; i++) {
+		gameDataBase[mainVariables[i] + 'ShowVariable'] = true
+		gameDataBase[mainVariables[i] + 'UnlockedVariable'] = false
+	}
+	
+	for (let i = 0; i < avs.length; i++) {
+		for (let j = 0; j < avs[i].v.length; j++) {
+			gameDataBase[avs[i].area][avs[i].v[j].id + 'ShowVariable'] = true
+			gameDataBase[avs[i].area][avs[i].v[j].id + 'UnlockedVariable'] = false
+		}
+	}
 
 
 var gameData = {}
 
 
+
 function gameStart() {
 	
 	addHTML()
-
-
+		
 	surveyingBarDoMove = 0
 	benevolenceBarDoMove = 0
 	watertightBarDoMove = 0
+	findPieCustomersBarDoMove = 0
+
+    loadStuff(JSON.parse(localStorage.getItem("mathAdventureSave")))
 
 
-
-    Object.assign(gameData, gameDataBase)
-	
-
-    loadGame()
 	
     mainGameLoop()
 	
     mainGameLoopSlow()
+	
+    mainGameLoopFast()
 
 	addAestheticBase()
-
 	
     updateValues()
-    autosave()
+	
+	
 
 	tab(gameData.mainTab)
-    tabMarket("marketMain")
+    tabMarket(gameData.marketTab)
     tabStore("plebian")
     tabTasks("earn")
     tabScience("research")
@@ -395,6 +543,9 @@ function tab(tabby) {
     tabs("company", "none")
     tabs("forest", "none")
     tabs("science", "none")
+    tabs("bakery", "none")
+    tabs("field", "none")
+
 
 	
 	colorChanger('scienceButton', '#9ABBFF')
@@ -407,6 +558,8 @@ function tab(tabby) {
 	colorChanger('tasksButton', '#FF98DD')
 	colorChanger('companyButton', '#BBBBBB')
 	colorChanger('forestButton', '#BBBBBB')
+	colorChanger('bakeryButton', '#BBBBBB')
+	colorChanger('fieldButton', '#C67848')
 
 
 
@@ -434,6 +587,8 @@ function tab(tabby) {
 			colorChanger(tabby + "Button", "#FF4DFF")
 		if(tabby == 'megaCoinUpgrades')
 			colorChanger(tabby + "Button", "#FF4D4D")
+		if(tabby == 'field')
+			colorChanger(tabby + "Button", "#964D1A")
 
     }
 
@@ -446,6 +601,8 @@ function tabManager(id){
 
 function tabMarket(tabby) {
 	
+	gameData.marketTab = tabby
+
 	tabManager('marketStore')	
 	tabManager('marketMain')	
 	tabManager('hiringArea')	
@@ -485,19 +642,6 @@ function tabStore(tabby) {
 
 }
 
-function tabScience(tabby) {
-    tabs("research", "none")
-    tabs("researchers", "none")
-	
-	colorChanger('researchButton', '#BBBBBB')
-	colorChanger('researchersButton', '#BBBBBB')		
-	
-	colorChanger(tabby + "Button", "#898989")
-	
-    document.getElementById(tabby).style.display = "block"
-}
-
-
 function tabOptions(tabby) {
     tabs("gameOptions", "none")
     tabs("uiOptions", "none")
@@ -505,4 +649,172 @@ function tabOptions(tabby) {
 
 	
     document.getElementById(tabby).style.display = "block"
+}
+
+function fixOverMaxedVariables(){
+	if (gameData.knifebidextrousSkillLevel > gameData.knifebidextrousSkillLevelMax) {
+        gameData.knifebidextrousSkillLevel = gameData.knifebidextrousSkillLevelMax
+    }
+
+    if (gameData.juiceBulkAmountToggle > 100 && gameData.deliveryTypeToggle < 2) {
+        gameData.juiceBulkAmountToggle = 100
+    }
+
+    if (gameData.juiceBulkAmountToggle > gameData.juiceBulkAmountMax) {
+        gameData.juiceBulkAmountToggle = gameData.juiceBulkAmountMax
+    }
+
+
+    if (gameData.coins > gameData.coinsMax) {
+        gameData.coins = gameData.coinsMax
+    }
+	
+    if (gameData.alphaCoins > 1e5) {
+        gameData.alphaCoins = 1e5
+    }
+	
+    if (gameData.eat > 100) {
+        gameData.eat = 100
+    }
+	
+    if (gameData.limes < 0) {
+        gameData.limes = 0
+    }
+	
+    if (gameData.basketBar > 100) {
+        gameData.basketBar = 100
+    }
+	
+    if (gameData.eatBar > 100) {
+        gameData.eatBar = 100
+    }
+	
+    if (gameData.respect < 0) {
+        gameData.respect = 0
+    }
+	
+    if (gameData.workingBar > 100) {
+        gameData.workingBar = 100
+    }
+	
+    if (gameData.coinsToAlphaBar > 100) {
+        gameData.coinsToAlphaBar = 100
+    }
+	
+    if (gameData.megaCoinsInBank > gameData.megaCoinsInBankMax) {
+        gameData.megaCoinsInBank = gameData.megaCoinsInBankMax
+    }
+	
+    if (gameData.deliveryBar > 100) {
+        gameData.deliveryBar = 100
+    }
+
+    if (gameData.learnANewSkillBar > 100) {
+        gameData.learnANewSkillBar = 100
+    }
+
+    if (gameData.employeeWorking > gameData.employeeWorkingMax) {
+        gameData.employeeWorking = gameData.employeeWorkingMax
+    }
+
+    overMaximum("baskets")
+    overMaximum("juicers")
+    overMaximum("peelers")
+    overMaximum("intelligenceSkillLevel")
+	
+	preventNegative('coins')
+	preventNegative('limes')
+	preventNegative('respect')
+}
+
+function addHTML(){
+	
+	for (let i = 0; i < mainSkills.length; i++) {
+	
+		var name = mainSkills[i]
+		var div = document.getElementById(name + "Div")
+		
+		var skillLevel       = document.createElement("p");
+		    skillLevel.id    = name + "SkillLevel";
+		    skillLevel.classList.add("basicText");
+		    div.appendChild(skillLevel);
+			
+		var skillProgressSpan                = document.createElement("span")
+		skillProgressSpan.innerHTML          = '<div class="skillProgress" id="' + name + 'Progress"><div class="skillBar" , id="' + name + 'Bar">0%</div></div>';
+		insert(div, skillProgressSpan)
+		
+		
+		var skillButtonSpan                  = document.createElement("span")
+		skillButtonSpan.innerHTML            = '<button class="skillButton" id="' + name + "Button" + '" onclick="pickCurrentSkill(&apos;' + name + '&apos;)">' + mainSkillsNames[i] + '</button>';
+		insert(div, skillButtonSpan)
+
+
+	}
+
+	for (let i = 1; i < mainVariables.length; i++) {	
+		var e = $("<button />", {
+			class: "specialButton",
+			id: "currencyDisplay(" + i + ")",
+			onclick: "currencyDisplay(" + i + ")",
+			style: "width:167px;"
+		})
+		$(document.getElementById('backpackDiv')).append(e)
+		update("currencyDisplay(" + i + ")", "Show " + mainVariablesNames[i])
+	}
+	
+	for (let i = 0; i < mainVariables.length; i++) {	
+		var id = jsUcfirst(mainVariables[i])
+		var stat                  = document.createElement("span")
+		stat.innerHTML            = '<div class="stat" id="textFor' + id + 'Div">' + mainVariablesNames[i] + ' </div><div class="stat ar" id="textFor' + id + '"  style="display:none ; ">0</div><p id="textFor' + id + 'P"  style="display:none ; "> </p><br  id="textFor' + id + 'Br"   style="display:none ; "/>';
+		document.getElementById('backgroundForValues').append(stat)
+	}
+	
+	for (let i = 0; i < avs.length; i++) {
+		
+		
+		var e = $("<div />", {
+			id: "backgroundForValues" + avs[i].area,
+			style: "padding:10px;background-color:#000000;width:100px;display:inline-block;",
+		})
+
+		$(document.getElementById('soulArea' + avs[i].name)).prepend(e);
+		
+		e = $("<button />", {
+			class: "basicButtonSize",
+			style: "width:99%;display:block;",
+			onclick: "soulArea(" + i + ")",
+			id: 'soulArea' + avs[i].name + 'WellButton'
+		})
+
+		$(document.getElementById('wellField')).append(e)
+		update('soulArea' + avs[i].name + 'WellButton', avs[i].name)
+
+
+
+		for (let j = 0; j < avs[i].v.length; j++) {
+			var avsStat = document.createElement("span")
+			var fullName = avs[i].name + avs[i].v[j].name
+			avsStat.innerHTML = '<div class="stat" id="textFor' + fullName + 'Div">' + avs[i].v[j].name + ' </div><div class="stat ar" id="textFor' + fullName + '"  style="display:none ; ">0</div><p id="textFor' + fullName + 'P"  style="display:none ; "> </p><br  id="textFor' + fullName + 'Br"   style="display:none ; "/>';
+			document.getElementById('backgroundForValues' + avs[i].area).append(avsStat)
+		}
+	}
+	
+	document.getElementById('textForBetaCoinsDiv').style.textDecoration = 'underline'
+	document.getElementById('textForPieCoinsDiv').style.textDecoration = 'underline'
+
+	function insert(div, thing)
+	{
+		div.insertBefore(thing, div.firstChild);
+	}
+	
+	for (let y = 0; y < 5; y++) {	
+		for (let x = 0; x < 5; x++) {	
+			var fieldTile                  = document.createElement("span")
+			fieldTile.innerHTML            = '<button ondragstart="return false;" class="fieldTile" id="fieldTile' + x + '-' + y + '" onclick="fieldTile(' + x + ', ' + y + ')">‎‏‏‎<img style="width:70px;height:70px;" id="fieldTile' + x + '-' + y + 'img" src="images/emptyField.png"></button>'
+			document.getElementById('fullField').append(fieldTile)
+		}
+	}
+	
+
+	
 }

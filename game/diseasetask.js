@@ -245,17 +245,26 @@ function updateMapTileAesthetic() {
 function updateDiseaseStuffSlow(){
 	
 	if(gameData.numberOfTiles >= 17)
-		show('mapTile-4-0', 'inline')
+	{
+		tabs('mapTile-4-0', 'inline-block')
+	}
 	if(gameData.numberOfTiles >= 18)
-		show('mapTile-4-1', 'inline')
+	{
+		tabs('mapTile-4-1', 'inline-block')
+	}
 	if(gameData.numberOfTiles >= 19)
-		show('mapTile-4-2', 'inline')
+	{
+		tabs('mapTile-4-2', 'inline-block')
+	}
 	if(gameData.numberOfTiles >= 20)
-		show('mapTile-4-3', 'inline')
-	
+	{
+		tabs('mapTile-4-3', 'inline-block')
+	}
 	if(gameData.numberOfTiles >= 21)
+	{
 		gameData.numberOfTiles = 20
-
+	}
+	
 	if (gameData.autoStartSimulation)
 		startSimulation()
 	
