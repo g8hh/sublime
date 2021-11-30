@@ -1,5 +1,5 @@
 function importGame() {
-	var savegame = JSON.parse(atob(prompt("Import Code: ")))
+	var savegame = JSON.parse(atob(prompt("导入存档: ")))
 	if (savegame !== null) {
 		loadStuff(savegame)
 		console.log('loaded')
