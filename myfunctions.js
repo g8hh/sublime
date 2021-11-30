@@ -1,5 +1,5 @@
 function importGame() {
-	var savegame = JSON.parse(atob(prompt("Import Code: ")))
+	var savegame = JSON.parse(atob(prompt("导入存档: ")))
 	if (savegame !== null) {
 		loadStuff(savegame)
 		console.log('loaded')
@@ -18,7 +18,7 @@ function loadStuff(savegame) {
 		Object.assign(gameData.serf, savegame.serf)
 		
 		backwardsCompatibility(gameData.versionNumber)
-		gameData.versionNumber = 165
+		gameData.versionNumber = 166
 		updateAfterLoad()
 	} else {
 		update("newInfo", "Save File Empty.")
