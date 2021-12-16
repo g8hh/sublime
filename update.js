@@ -1,4 +1,5 @@
 function updateAfterLoad() {
+
 	calculateOfflineProgress()
 
 	for (let i = 0; i < mainSkills.length; i++) {
@@ -191,7 +192,6 @@ function updateValues() {
 	,'hasGottenJuice'        , 'juiceMarket'
 	,'upgradeMoreStorage'    , 'upgradeMoreLand'
 	,'betterTraining'        , 'upgradeBetterTraining'
-	,'forestWell'            , 'forestWellDiv'
 	,'bitterSpeedSkillLevel' , 'eatGoldenLimeProgress'
 	,'bitterSpeedSkillLevel' , 'eatGoldenLime'
 	]
@@ -215,7 +215,7 @@ function updateValues() {
 
 
 	if (gameData.villageNumber > 1 || gameData.betterTraining > 0 || gameData.increaseJuicePricePermanance == 1)
-		tabs("megaCoinUpgradesButton", "block")
+		showBasicDiv("megaCoinUpgradesButton")
 	else
 		hide("megaCoinUpgradesButton")
 
@@ -315,8 +315,16 @@ function updateValues() {
 	else
 		hide("upgradeWallet")
 
-
-
+	if (gameData.forestWell)
+	{
+		document.getElementById('forest').style.width = '760px'
+		tabs("forestWellDiv", 'inline-block')
+	}
+	else
+	{
+		document.getElementById('forest').style.width = '380px'
+		hide("forestWellDiv")
+	}
 
 	checkRespectMilestone(10, 'lime', 'Automatically start tasks', 'autoStartTaskButton')
 	checkRespectMilestone(25, 'lime', 'Automatically start simulation', 'autoStartSimulationButton')
@@ -338,7 +346,13 @@ function updateValues() {
 				else
 					tabs(id, "inline-block")
 			}
-			update(number + 'RespectMilestone', number.toLocaleString() + ' Respect: ' + text)
+			
+			elem = ''
+			if(number == 10000)
+				elem = '<span class="tooltiptext">Yes, you have this unlocked. The red means that it is permanent.</span>'
+			update(number + 'RespectMilestone', number.toLocaleString() + ' Respect: ' + text + elem)
+			
+			
 			if (color == 'lime')
 				colorChanger(milestone, limesRelatedAccent)
 			if (color == 'red')
@@ -350,10 +364,10 @@ function updateValues() {
 		}
 	}
 
-	if (gameData.respect >= 50)
-		showBasicDiv("storeTypesButtonsDiv")
+	if (gameData.respectMilestone50)
+		showBasicDiv("patrician")
 	else
-		hide("storeTypesButtonsDiv")
+		hide("patrician")
 
 	if (gameData.increaseJuicePricePermanance < 1) {
 		tabs("increaseJuicePricePermanance", "inline-block")
@@ -448,11 +462,11 @@ function updateValues() {
 
 	if (gameData.shiftClickOption) {
 		update("shiftClickOption", "Don't Toggle: Shift Click")
-		tabs("dontToggleButton", "none")
+		tabs("toggleActionsButton", "none")
 	} else {
 		update("shiftClickOption", "Don't Toggle: Button Option")
 		if(gameData.learnANewSkill > -2)
-			tabs("dontToggleButton", "inline-block")
+			tabs("toggleActionsButton", "inline-block")
 	}
 
 	if (gameData.deliveryManager == 0) {
@@ -489,13 +503,13 @@ function updateValues() {
 	
 	if (gameData.maps > 0) {
 		tabs("marketMainButtonsDiv", "inline-block")
-		tabs("marketStoreButton", "inline-block")
+		tabs("marketStore", "inline-block")
 		document.getElementById("marketMainButtonsDiv").style.width = "360px"
 	}
 
 	if (gameData.maps > 1) {
 		tabs("hiringAreaButton", "inline-block")
-		tabs("marketStoreButton", "inline-block")
+		tabs("marketStore", "inline-block")
 		hide("buyAnotherMapDiv")
 	}
 

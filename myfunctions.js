@@ -2,23 +2,21 @@ function importGame() {
 	var savegame = JSON.parse(atob(prompt("导入存档: ")))
 	if (savegame !== null) {
 		loadStuff(savegame)
-		console.log('loaded')
 		saveGame()
-		console.log('saved')
 		location.reload();
 	}
 }
 
 function loadStuff(savegame) {
+	
 	Object.assign(gameData, gameDataBase)
 	if (savegame !== null) {
 		Object.assign(gameData, savegame)
-		
 		gameData.serf = JSON.parse(JSON.stringify(gameDataBase.serf))
 		Object.assign(gameData.serf, savegame.serf)
-		
+
 		backwardsCompatibility(gameData.versionNumber)
-		gameData.versionNumber = 166
+		gameData.versionNumber = 180
 		updateAfterLoad()
 	} else {
 		update("newInfo", "Save File Empty.")
@@ -26,7 +24,32 @@ function loadStuff(savegame) {
 }
 
 function saveGame() {
-	localStorage.setItem('mathAdventureSave', JSON.stringify(gameData))
+	if (ableToSave)
+		localStorage.setItem('mathAdventureSave', JSON.stringify(gameData))
+}
+
+function exportGame() {
+	update("exportCode", btoa(JSON.stringify(gameData)))
+}
+
+function resetGame() {
+	if (window.prompt("Are you sure? Type 'yes' if you are") == "yes") {
+		ableToSave = false
+		Object.assign(gameData, gameDataBase)
+		localStorage.setItem('mathAdventureSave', JSON.stringify(gameData))
+		location.reload();
+	}
+}
+
+function backwardsCompatibility(versionNumber) {
+	if (gameData.pin == 'sellYourJuiceButton')
+		gameData.pin = 'deliveryButton'
+	
+	if (gameData.versionNumber < 142)
+	{
+		gameData.currentTask = 'none'
+		gameData.currentTask2 = 'none'
+	}
 }
 
 function preventNegative(id) {
@@ -86,7 +109,7 @@ function pickCurrentTask(x) {
 	taskOne = gameData.currentTask
 	taskTwo = gameData.currentTask2
 
-	if (!event.shiftKey && !gameData.dontToggle) {
+	if (!event.shiftKey && gameData.toggleActions) {
 
 		if (gameData.ambidextrousSkillLevel == gameData.ambidextrousSkillLevelMax) {
 			if (taskOne == x && taskOne !== "none" && taskTwo !== x) {
@@ -114,7 +137,7 @@ function pickCurrentTask(x) {
 }
 
 function pickCurrentSkill(x) {
-	if (!gameData.dontToggle && !event.shiftKey && gameData.multitasking) {
+	if (gameData.toggleActions && !event.shiftKey && gameData.multitasking) {
 		if (gameData.currentSkill == x && gameData.currentSkill !== "none") {
 			gameData.currentSkill = "none"
 		} else {
@@ -182,9 +205,9 @@ function moveBar(x) {
 	if(gameData[i] > 100)
 		gameData[i] = 100
 
-    var elem = document.getElementById(i);
-    elem.style.width = gameData[i] + "%";
-    elem.innerHTML = "  " + Math.ceil(eval("gameData." + i)) + "%";
+    var elem = document.getElementById(i)
+    elem.style.width = gameData[i] + "%"
+    elem.innerHTML = "" + Math.ceil(gameData[i]) + "%"
 }
 
 function toggle(x) {
@@ -206,33 +229,6 @@ function universalBuy(id, price, currency) {
 	if (gameData[currency] >= price) {
 		gameData[currency] -= price
 		gameData[id] += 1
-	}
-}
-
-function addResearchers(id, amount) {
-	if (amount > 0) {
-		if (researchersAvailable - amount >= 0) {
-			gameData[id + "Researchers"] += amount
-			researchersAvailable -= amount
-		} else {
-			gameData[id + "Researchers"] += researchersAvailable
-			researchersAvailable = 0
-		}
-	} else if (amount < 0 && gameData[id + "Researchers"] > 0) {
-		if (researchersAvailable - amount <= gameData.researchers) {
-			gameData[id + "Researchers"] += amount
-			researchersAvailable -= amount
-		} else {
-			researchersAvailable += gameData[id + "Researchers"]
-			gameData[id + "Researchers"] = 0
-		}
-	}
-}
-
-function hireResearcher() {
-	if (gameData.megaCoins >= 1) {
-		gameData.megaCoins -= 1
-		gameData.researchers += 1
 	}
 }
 
@@ -268,7 +264,6 @@ function beckyRandomMinMax(min, max) {
 	return Math.floor(Math.random() * (max - min)) + min;
 }
 
-//Recurring function for continuing a loading bar.
 function basicBarSkill(variable, speed) {
 
 	variableBar = variable + "Bar"
@@ -276,12 +271,12 @@ function basicBarSkill(variable, speed) {
 	
 	if (gameData[variableBar] < 100) {
 
-		gameData[variableBar] += 0.5
+		gameData[variableBar] += 0.25
 
 		if (speed == 'slow')
-			setTimeout(variableBar + "()", (1000 / (gameData.intelligenceSkillLevel * 2 / 20 + 1)) / gameData.tickspeed)
+			setTimeout(variableBar + "()", (500 / (gameData.intelligenceSkillLevel * 2 / 20 + 1)) / gameData.tickspeed)
 		else
-			setTimeout(variableBar + "()", (100 / (gameData.intelligenceSkillLevel * 2 / 20 + 1)) / gameData.tickspeed)
+			setTimeout(variableBar + "()", (50 / (gameData.intelligenceSkillLevel * 2 / 20 + 1)) / gameData.tickspeed)
 
 	} else {
 		gameData[variable + 'BarRunning'] = false
@@ -321,10 +316,9 @@ function barStart(variable) {
 	}
 }
 
-//Starts a granular loading bar for basic skills.
 function barStartGranularSkillBasic(variable, useSkillTrainer) {
 	variableBar = variable + "Bar"
-	if ((gameData[variableBar] == 100 || gameData[variableBar] == 0) && gameData[variable + "SkillLevel"] < gameData[variable + "SkillLevelMax"] && gameData.eat >= gameData[variable + "SkillLevel"] && !gameData[variable + 'BarRunning']) {
+	if (canStartBar(variable) && gameData[variable + "SkillLevel"] < gameData[variable + "SkillLevelMax"] && gameData.eat >= gameData[variable + "SkillLevel"]) {
 		gameData.eat -= gameData[variable + "SkillLevel"]
 		if (gameData.skillTrainer == 1 && useSkillTrainer == true) {
 			gameData[variableBar] = 100
@@ -335,8 +329,25 @@ function barStartGranularSkillBasic(variable, useSkillTrainer) {
 	}
 }
 
+function canStartBar(id) {
+	if ((gameData[id + 'Bar'] == 100 || gameData[id + 'Bar'] == 0) && !gameData[id + 'BarRunning'])
+		return true
+}
+
+hasUpdatedObj = {}
+
 function update(id, content) {
-	document.getElementById(id).innerHTML = content
+	stringy = id.replace(/[()-]/g, 'uwu')
+
+	if (typeof hasUpdatedObj[stringy] == undefined)
+		hasUpdatedObj[stringy] = 'noneOwO'
+
+	
+	if (hasUpdatedObj[stringy] != content)
+	{
+		document.getElementById(id).innerHTML = content
+		hasUpdatedObj[stringy] = content
+	}
 }
 
 function updateNumber(id) {
@@ -482,29 +493,6 @@ function saveBeforeWipe(id) {
 
 function saveAfterWipe(id) {
 	eval('gameData.' + id + '=' + id + 'Now')
-}
-
-function exportGame() {
-	update("exportCode", btoa(JSON.stringify(gameData)))
-}
-
-function resetGame() {
-	if (window.prompt("你确定吗？请输入 'yes' 以确定") == "yes") {
-		Object.assign(gameData, gameDataBase)
-		localStorage.setItem('mathAdventureSave', JSON.stringify(gameData))
-		location.reload();
-	}
-}
-
-function backwardsCompatibility(versionNumber) {
-	if (gameData.pin == 'sellYourJuiceButton')
-		gameData.pin = 'deliveryButton'
-	
-	if (gameData.versionNumber < 142)
-	{
-		gameData.currentTask = 'none'
-		gameData.currentTask2 = 'none'
-	}
 }
 
 function setValue(id, amount) {

@@ -38,23 +38,8 @@ function startSimulation() {
 }
 
 function diseaseControlQuit() {
-
 	diseaseControlFailed = 1
-	gameData.diseaseControlFinished = 1
-	diseaseControlReset("hard")
-
-	if (gameData.autoStartTask == 1) {
-		diseaseControlTask()
-	}
-
-	if (gameData.benevolenceToggle)
-		gameData.respect -= gameData.limeDiseaseLakes + 1 + benevolenceRespectIncrease
-	else
-		gameData.respect -= gameData.limeDiseaseLakes + 1
-
-	updateMapTileAesthetic()
-	updateValues()
-
+	countPoints(1)
 }
 
 function checkResults() {
@@ -71,40 +56,46 @@ function checkResults() {
 				}
 			}
 		}
-
-		gameData.diseaseControlFinished = 1
-		diseaseControlReset("hard")
-		if (gameData.autoStartTask == 1) {
-			diseaseControlTask()
-		}
-
-		if (diseaseControlFailed == 0) {
-			if (gameData.benevolenceToggle)
-				gameData.respect += gameData.limeDiseaseLakes + 1 + benevolenceRespectIncrease + gameData.respectBillboard
-			else
-				gameData.respect += gameData.limeDiseaseLakes + 1 + gameData.respectBillboard
-
-		} else {
-			if (gameData.benevolenceToggle)
-				gameData.respect -= gameData.limeDiseaseLakes + 1 + benevolenceRespectIncrease + gameData.respectBillboard
-			else
-				gameData.respect -= gameData.limeDiseaseLakes + 1 + gameData.respectBillboard
-
-		}
-
-		updateMapTileAesthetic()
-		updateValues()
+		
+		countPoints(diseaseControlFailed)
 	}
+}
+
+function countPoints(diseaseControlFailed) {
+
+	if (gameData.limeDiseaseLakesSet < 10)
+		benevolenceRespectIncrease = 0
+	else
+		benevolenceRespectIncrease = (Math.pow(2, gameData.limeDiseaseLakesSet - 10)) * gameData.benevolence
+	
+	
+	
+	
+	if (gameData.benevolenceToggle)
+		points = gameData.limeDiseaseLakesSet + 1 + benevolenceRespectIncrease + gameData.respectBillboard
+	else
+		points = gameData.limeDiseaseLakesSet + 1 + gameData.respectBillboard
+
+	
+	if (diseaseControlFailed) 
+		gameData.respect -= points
+	else
+		gameData.respect += points
 
 
+	gameData.diseaseControlFinished = 1
+	
+	diseaseControlReset()
+	
+	if (gameData.autoStartTask)
+		diseaseControlTask()
+	
+	updateMapTileAesthetic()
 }
 
 function mapTile(x, y) {
 
-
-	whichButton = "mapTile-" + x + "-" + y
-
-	if (gameData.diseaseControlFinished == 0) {
+	if (!gameData.diseaseControlFinished) {
 		if (gameData.diseaseArray[x][y] == 0 && gameData.civiliansPlaced < gameData.civiliansTotal) {
 			gameData.diseaseArray[x][y] = 1
 			gameData.civiliansPlaced += 1
@@ -113,6 +104,7 @@ function mapTile(x, y) {
 			gameData.civiliansPlaced -= 1
 		}
 	}
+	
 	if (gameData.autoStartSimulation)
 		startSimulation()
 
@@ -121,12 +113,13 @@ function mapTile(x, y) {
 
 function diseaseControlTask() {
 
-	if (gameData.diseaseControlFinished == 1) {
-		diseaseControlReset("soft")
+	if (gameData.diseaseControlFinished) {
 		gameData.diseaseControlFinished = 0
 		gameData.civiliansTotal = beckyRandom(4)
 
 		tiles = gameData.numberOfTiles - 16
+		
+		gameData.limeDiseaseLakesSet = gameData.limeDiseaseLakes
 
 
 		for (gameData.limeDiseaseLakesCurrent = 0; gameData.limeDiseaseLakesCurrent < gameData.limeDiseaseLakes; gameData.limeDiseaseLakesCurrent) {
@@ -154,54 +147,26 @@ function diseaseControlTask() {
 			}
 		}
 		updateMapTileAesthetic()
-		updateValues()
 	}
 }
 
-function diseaseControlReset(type) {
+function diseaseControlReset() {
 
-	for (x = 0; x < 5; x++) {
-
-		for (y = 0; y < 5; y++) {
-
-			if (gameData.diseaseArray[x][y] !== 4 || type == "hard") {
-				gameData.diseaseArray[x][y] = 0
-			}
-		}
-	}
+	for (x = 0; x < 5; x++)
+		for (y = 0; y < 5; y++)
+			gameData.diseaseArray[x][y] = 0
+		
 	gameData.civiliansPlaced = 0
 	gameData.simulationTime = 0
 	updateMapTileAesthetic()
 }
 
 function changeLakeAmount(x) {
-
-	if (gameData.diseaseControlFinished == 1) {
-
-		if (gameData.limeDiseaseLakes < gameData.numberOfTiles && x == 1) {
-
-			gameData.limeDiseaseLakes += x
-
-		} else if (gameData.limeDiseaseLakes > 0 && x == -1) {
-
-			gameData.limeDiseaseLakes += x
-
-		}
-	}
-
-	updateValues()
+	if ((gameData.limeDiseaseLakes < gameData.numberOfTiles && x == 1) || (gameData.limeDiseaseLakes > 0 && x == -1))
+		gameData.limeDiseaseLakes += x
 }
 
 function updateMapTileAesthetic() {
-	//Map Tile
-	var x = document.getElementsByClassName("mapTile");
-	for (i = 0; i < x.length; i++) {
-		x[i].style['width'] = "40px";
-		x[i].style['height'] = "40px";
-		x[i].style.padding = "5px 5px 5px 5px";
-		x[i].style['margin'] = "5px 0px 0px 0px";
-	}
-
 	for (x = 0; x < 5; x++) {
 		for (y = 0; y < 5; y++) {
 
