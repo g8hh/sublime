@@ -64,6 +64,7 @@ var gameDataBase = {
     eatBarRunning: false,
     juicerBarRunning: false,
     peelerBarRunning: false,
+    autoCollectingBarRunning: false,
 
 
     autoCollectingBar: 0,
@@ -139,6 +140,8 @@ var gameDataBase = {
     limeDiseaseControlInfoToggle: 1,
     limeDiseaseLakes: 0,
     limeDiseaseLakesCurrent: 0,
+    limeDiseaseLakesSet: 0,
+
 
     hasAdvertised: 0,
 
@@ -226,7 +229,7 @@ var gameDataBase = {
 	
     desktopMode: 1,
 	shiftClickOption: 0,
-	dontToggle: 0,
+	toggleActions: 0,
 	
 	isAutoCollecting: 0,
 	
@@ -413,6 +416,7 @@ var gameDataBase = {
 	flour: 0,
 	pieOven: 0,
 	bakePieBar: 0,
+	bakePieBarRunning: false,
 	juiceAsPieIngredient: 0,
 	flourAsPieIngredient: 0,
 	pieCoins: 0,
@@ -492,10 +496,10 @@ var gameDataBase = {
 
 var gameData = {}
 
-
+ableToSave = true
 
 function gameStart() {
-	
+		
 	addHTML()
 		
 	surveyingBarDoMove = 0
@@ -504,7 +508,6 @@ function gameStart() {
 	findPieCustomersBarDoMove = 0
 
     loadStuff(JSON.parse(localStorage.getItem("mathAdventureSave")))
-
 
 	
     mainGameLoop()
@@ -521,7 +524,6 @@ function gameStart() {
 
 	tab(gameData.mainTab)
     tabMarket(gameData.marketTab)
-    tabStore("plebian")
     tabTasks("earn")
     tabScience("research")
 	tabOptions("gameOptions")
@@ -603,7 +605,6 @@ function tabMarket(tabby) {
 	
 	gameData.marketTab = tabby
 
-	tabManager('marketStore')	
 	tabManager('marketMain')	
 	tabManager('hiringArea')	
 	tabManager('travel')	
@@ -628,18 +629,6 @@ function tabTasks(tabby) {
 	
 	colorChanger(tabby + "Button", "#898989")
     document.getElementById(tabby).style.display = "block"
-}
-
-function tabStore(tabby) {
-    tabs("plebian", "none")
-    tabs("patrician", "none")
-	
-	colorChanger('plebianButton', '#BBBBBB')
-	colorChanger('patricianButton', '#BBBBBB')
-	
-    document.getElementById(tabby).style.display = "block"
-	colorChanger(tabby + "Button", "#898989")
-
 }
 
 function tabOptions(tabby) {

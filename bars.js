@@ -46,7 +46,7 @@ function teachBar() {
 function teachBarEnd() {}
 
 function eat() {
-    if ((gameData.eatBar == 100 || gameData.eatBar == 0) && gameData.eat < 100 && gameData.eatBarRunning == false) {
+    if (canStartBar('eat') && gameData.eat < 100) {
         if (gameData.foodTypeToggle == 0 && gameData.limes > 0) {
             gameData.limes -= 1
             gameData.foodType = 5
@@ -70,7 +70,7 @@ function eat() {
 }
 
 function eatBar() {
-	barMoverAdvanced('eat', 0.5 * (gameData.fork + 1), 10)
+	barMoverAdvanced('eat', 0.1 * (gameData.fork + 1), 2)
 }
 
 function eatBarEnd() {
@@ -212,7 +212,7 @@ function learnANewSkillBarEnd() {
 }
 
 function delivery() {
-    if (!gameData.deliveryBarRunning && (gameData.deliveryBar >= 99.9 || gameData.deliveryBar == 0) && gameData.coins >= gameData.deliveryPrice && gameData.juice >= gameData.juiceBulkAmountToggle) {
+    if ((gameData.deliveryBar >= 99.9 || gameData.deliveryBar == 0) && gameData.coins >= gameData.deliveryPrice && gameData.juice >= gameData.juiceBulkAmountToggle) {
         gameData.deliveryType = gameData.deliveryTypeToggle
         gameData.juiceBulkAmount = gameData.juiceBulkAmountToggle
         gameData.coins -= gameData.deliveryPrice
